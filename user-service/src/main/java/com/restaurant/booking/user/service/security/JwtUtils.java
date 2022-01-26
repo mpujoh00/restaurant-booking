@@ -1,5 +1,6 @@
 package com.restaurant.booking.user.service.security;
 
+import com.restaurant.booking.user.model.Role;
 import com.restaurant.booking.user.model.User;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -25,6 +28,7 @@ public class JwtUtils {
 
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
+                .claim("authorities", userPrincipal.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -33,6 +37,11 @@ public class JwtUtils {
 
     public String getUsernameFromJwtToken(String token){
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<String> getRolesFromJwtToken(String token){
+        return (List<String>) Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("authorities");
     }
 
     public boolean validateJwtToken(String authToken) {
