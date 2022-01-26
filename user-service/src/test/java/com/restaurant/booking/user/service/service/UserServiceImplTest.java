@@ -6,6 +6,7 @@ import com.restaurant.booking.user.model.RoleName;
 import com.restaurant.booking.user.model.User;
 import com.restaurant.booking.user.service.exception.UserAlreadyExistsException;
 import com.restaurant.booking.user.service.exception.UserNotFoundException;
+import com.restaurant.booking.user.service.repository.RoleRepository;
 import com.restaurant.booking.user.service.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,9 @@ public class UserServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private RoleRepository roleRepository;
 
     @Mock
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -83,12 +87,15 @@ public class UserServiceImplTest {
                 .email("micaela@gmail.com").password("encoded").fullname("micaela").roles(Set.of(new Role(RoleName.ROLE_ADMIN))).build();
 
         Mockito.when(userRepository.findByEmail("micaela@gmail.com")).thenReturn(Optional.empty());
+        Mockito.when(roleRepository.findByName(RoleName.ROLE_ADMIN)).thenReturn(Optional.of(new Role(RoleName.ROLE_ADMIN)));
         Mockito.when(bCryptPasswordEncoder.encode("1234")).thenReturn("encoded");
         Mockito.when(userRepository.save(Mockito.eq(expected))).then(returnsFirstArg());
+
 
         User result = userService.register(request);
 
         Mockito.verify(userRepository).findByEmail("micaela@gmail.com");
+        Mockito.verify(roleRepository).findByName(RoleName.ROLE_ADMIN);
         Mockito.verify(bCryptPasswordEncoder).encode("1234");
         Mockito.verify(userRepository).save(Mockito.eq(expected));
 
