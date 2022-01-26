@@ -3,6 +3,7 @@ package com.restaurant.booking.user.service.service;
 import com.restaurant.booking.user.model.RegistrationRequest;
 import com.restaurant.booking.user.model.Role;
 import com.restaurant.booking.user.model.User;
+import com.restaurant.booking.user.service.exception.RoleNotFoundException;
 import com.restaurant.booking.user.service.exception.UserAlreadyExistsException;
 import com.restaurant.booking.user.service.exception.UserNotFoundException;
 import com.restaurant.booking.user.service.repository.RoleRepository;
@@ -61,8 +62,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             log.info("User with email: " + request.getEmail() + " already exists");
             throw new UserAlreadyExistsException(request.getEmail());
         }
-
-        Role role = roleRepository.findByName(request.getRole()).get(); // TODO role not found ex
+        Role role = roleRepository.findByName(request.getRole()).orElseThrow(() -> new RoleNotFoundException(request.getRole().name()));
 
         User user = User.builder().
                 email(request.getEmail()).password(request.getPassword()).fullname(request.getFullname()).roles(Set.of(role))
