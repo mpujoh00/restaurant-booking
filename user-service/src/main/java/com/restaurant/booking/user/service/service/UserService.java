@@ -4,8 +4,16 @@ import com.restaurant.booking.user.model.RegistrationRequest;
 import com.restaurant.booking.user.model.User;
 import com.restaurant.booking.user.service.exception.UserAlreadyExistsException;
 
+import java.util.List;
+
 
 public interface UserService {
+
+    /**
+     *
+     * @return
+     */
+    List<User> findAllUsers();
 
     /**
      *
@@ -26,4 +34,6 @@ public interface UserService {
      * @return
      */
     User register(RegistrationRequest request) throws UserAlreadyExistsException;
+
+
 }
