@@ -12,7 +12,6 @@
         <module>user-service</module>
         <module>user-model</module>
         <module>naming-server</module>
-        <module>authorization-server</module>
     </modules>
 
     <properties>
