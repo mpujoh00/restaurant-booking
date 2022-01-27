@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
@@ -117,7 +118,7 @@ public class UserServiceImplTest {
         Mockito.verify(userRepository).findByEmail("micaela@gmail.com");
     }
 
-    /*@Test
+    @Test
     void loadUserByUsername_userNotFound(){
         Mockito.when(userRepository.findByEmail("micaela@gmail.com")).thenReturn(Optional.empty());
 
@@ -125,5 +126,5 @@ public class UserServiceImplTest {
         Assertions.assertEquals("User with email: micaela@gmail.com not found", exception.getMessage());
 
         Mockito.verify(userRepository).findByEmail("micaela@gmail.com");
-    }*/
+    }
 }

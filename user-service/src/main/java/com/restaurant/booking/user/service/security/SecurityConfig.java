@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -36,9 +37,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
                 })).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers(HttpMethod.POST, "/auth/**").permitAll()
+                .authorizeRequests()
+                    .antMatchers(HttpMethod.POST, "/auth/**").permitAll()
+                    .antMatchers("/api-docs/**").permitAll()
                 .anyRequest().authenticated().and()
                 .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/swagger-ui.html")
+                .antMatchers("/swagger-ui/**");
     }
 
     @Override @Bean
