@@ -1,0 +1,16 @@
+
+X__sonar_lambda_2$com.restaurant.booking.user.service.controller.AuthenticationController¬
+¡C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java9@ 9(e"1*Ì
+1¬
+¡C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java9M 9(VÊÇ
+¬
+¡C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java9M 9(e
+%14java.lang.String"Sorg.springframework.security.core.GrantedAuthority#getAuthority()Ljava/lang/String;*
+
+	authority	!capture!2getAuthority()"Ê
+¬
+¡C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java9M 9(e
+
+%14java.lang.String:
+	authority	!capture!B
+java.util.function.Function

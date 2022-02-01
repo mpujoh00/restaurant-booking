@@ -1,0 +1,221 @@
+
+®com.restaurant.booking.user.service.controller.AuthenticationController#login(Lcom/restaurant/booking/user/model/LoginRequest;)Lorg/springframework/http/ResponseEntity;¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java/ /(""startingBlock*Á
+startingBlock¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java/" /(Qv
+t
+
+__unknown_file (
+%21"__id*K*I
+>
+loginRequest.com.restaurant.booking.user.model.LoginRequest"
+emaily
+w
+
+__unknown_file (
+%22"__id*N*L
+>
+loginRequest.com.restaurant.booking.user.model.LoginRequest"
+
+passwordá
+Ñ
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java/# /(/
+%23"
+__annotate*75
+3org.springframework.web.bind.annotation.RequestBody*
+
+%22Í
+Á
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java/0 /(6
+%24"
+__annotate*
+javax.validation.Valid*
+
+%22†
+ù
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java/D /(PL
+>
+loginRequest.com.restaurant.booking.user.model.LoginRequest"
+
+password"__annotation*
+
+%23*
+
+%24á
+Ñ
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java/# /(/
+%25"
+__annotate*75
+3org.springframework.web.bind.annotation.RequestBody*
+
+%21Í
+Á
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java/0 /(6
+%26"
+__annotate*
+javax.validation.Valid*
+
+%21ù
+ö
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java/D /(PI
+>
+loginRequest.com.restaurant.booking.user.model.LoginRequest"
+email"__annotation*
+
+%25*
+
+%26*
+1*ôH
+1¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java0 0(È
+Ê
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java2( 2(=G
+%0Aorg.springframework.security.authentication.AuthenticationManager"__id*f*dI
+Gcom.restaurant.booking.user.service.controller.AuthenticationController"
+authenticationManagerÂ‚
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java38 3(O
+%1java.lang.String"Kcom.restaurant.booking.user.model.LoginRequest#getEmail()Ljava/lang/String;*@
+>
+loginRequest.com.restaurant.booking.user.model.LoginRequest2
+getEmail()ÎË
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java3Q 3(k
+%2java.lang.String"Ncom.restaurant.booking.user.model.LoginRequest#getPassword()Ljava/lang/String;*@
+>
+loginRequest.com.restaurant.booking.user.model.LoginRequest2getPassword()⁄◊
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java3 3(7U
+%3Oorg.springframework.security.authentication.UsernamePasswordAuthenticationToken"Oorg.springframework.security.authentication.UsernamePasswordAuthenticationTokenƒ
+¡
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java3 3(l
+%4"}org.springframework.security.authentication.UsernamePasswordAuthenticationToken#<init>(Ljava/lang/Object;Ljava/lang/Object;)V*W
+U
+%3Oorg.springframework.security.authentication.UsernamePasswordAuthenticationToken*
+
+%1java.lang.String*
+
+%2java.lang.StringáÑ
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java2( 3(m6
+%50org.springframework.security.core.Authentication"¥org.springframework.security.authentication.AuthenticationManager#authenticate(Lorg/springframework/security/core/Authentication;)Lorg/springframework/security/core/Authentication;*I
+G
+%0Aorg.springframework.security.authentication.AuthenticationManager*W
+U
+%3Oorg.springframework.security.authentication.UsernamePasswordAuthenticationToken2@authenticate(Lorg/springframework/security/core/Authentication;)∂
+≥
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java2 3(nB
+authentication0org.springframework.security.core.Authentication"__id*8
+6
+%50org.springframework.security.core.Authentication¬
+ø
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java5 5(*?
+%69org.springframework.security.core.context.SecurityContext"áorg.springframework.security.core.context.SecurityContextHolder#getContext()Lorg/springframework/security/core/context/SecurityContext;*C"A
+?org.springframework.security.core.context.SecurityContextHolderëé
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java5 5(L
+
+%7void"Äorg.springframework.security.core.context.SecurityContext#setAuthentication(Lorg/springframework/security/core/Authentication;)V*A
+?
+%69org.springframework.security.core.context.SecurityContext*D
+B
+authentication0org.springframework.security.core.Authentication2EsetAuthentication(Lorg/springframework/security/core/Authentication;)–
+Õ
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java7 7(";
+%85com.restaurant.booking.user.service.security.JwtUtils"__id*Y*WI
+Gcom.restaurant.booking.user.service.controller.AuthenticationController"
+
+jwtUtils§°
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java7 7(C
+%9java.lang.String"åcom.restaurant.booking.user.service.security.JwtUtils#generateJwtToken(Lorg/springframework/security/core/Authentication;)Ljava/lang/String;*=
+;
+%85com.restaurant.booking.user.service.security.JwtUtils*D
+B
+authentication0org.springframework.security.core.Authentication2DgenerateJwtToken(Lorg/springframework/security/core/Authentication;)
+Ì
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java7 7(D
+jwtTokenjava.lang.String"__id*
+
+%9java.lang.StringÙÒ
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java8 8(8
+%10java.lang.Object"Qorg.springframework.security.core.Authentication#getPrincipal()Ljava/lang/Object;*D
+B
+authentication0org.springframework.security.core.Authentication2getPrincipal()É
+Ä
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java8 8(9.
+user&com.restaurant.booking.user.model.User"__id*
+
+%10java.lang.Object‚ﬂ
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java9 9(2
+%11java.util.Collection"Mcom.restaurant.booking.user.model.User#getAuthorities()Ljava/util/Collection;*0
+.
+user&com.restaurant.booking.user.model.User2getAuthorities()≥∞
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java9 9(;
+%12java.util.stream.Stream"6java.util.Collection#stream()Ljava/util/stream/Stream;*
+
+%11java.util.Collection2stream()«
+ƒ
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java9@ 9(e"
+%13java.util.function.Function"__declareFunction*\Z
+X__sonar_lambda_2$com.restaurant.booking.user.service.controller.AuthenticationControllerìê
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java9 9(f
+%15java.util.stream.Stream"Sjava.util.stream.Stream#map(Ljava/util/function/Function;)Ljava/util/stream/Stream;* 
+
+%12java.util.stream.Stream*$
+"
+%13java.util.function.Function2"map(Ljava/util/function/Function;)π
+∂
+≠
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java9o 9(Ç!
+%16java.util.stream.Collector"@java.util.stream.Collectors#toList()Ljava/util/stream/Collector;*"
+java.util.stream.CollectorsâÜ
+≠
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java9 9(É
+%17java.util.List"Ojava.util.stream.Stream#collect(Ljava/util/stream/Collector;)Ljava/lang/Object;* 
+
+%15java.util.stream.Stream*#
+!
+%16java.util.stream.Collector2%collect(Ljava/util/stream/Collector;)ß§
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java;% ;(8<
+%185com.restaurant.booking.user.model.AuthenticationToken"5com.restaurant.booking.user.model.AuthenticationTokenÏ
+È
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java;! ;(B
+%19"Qcom.restaurant.booking.user.model.AuthenticationToken#<init>(Ljava/lang/String;)V*>
+<
+%185com.restaurant.booking.user.model.AuthenticationToken*
+
+jwtTokenjava.lang.String∏
+µ
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java; ;(C.
+%20'org.springframework.http.ResponseEntity"gorg.springframework.http.ResponseEntity#ok(Ljava/lang/Object;)Lorg/springframework/http/ResponseEntity;*+")
+'org.springframework.http.ResponseEntity*>
+<
+%185com.restaurant.booking.user.model.AuthenticationToken"·
+¨
+°C:/Users/kaela/Desktop/universidad/TFG/restaurant-booking/user-service/src/main/java/com/restaurant/booking/user/service/controller/AuthenticationController.java; ;(D0
+.
+%20'org.springframework.http.ResponseEntity:>
+loginRequest.com.restaurant.booking.user.model.LoginRequestBKI
+Gcom.restaurant.booking.user.service.controller.AuthenticationController

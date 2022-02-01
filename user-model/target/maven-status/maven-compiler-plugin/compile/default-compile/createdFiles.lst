@@ -1,0 +1,7 @@
+com\restaurant\booking\user\model\LoginRequest.class
+com\restaurant\booking\user\model\RoleName.class
+com\restaurant\booking\user\model\User$UserBuilder.class
+com\restaurant\booking\user\model\Role.class
+com\restaurant\booking\user\model\AuthenticationToken.class
+com\restaurant\booking\user\model\RegistrationRequest.class
+com\restaurant\booking\user\model\User.class
