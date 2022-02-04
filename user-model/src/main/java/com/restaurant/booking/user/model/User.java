@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Builder
+@ToString
 @Document(collection = "users")
 public class User implements UserDetails {
 
