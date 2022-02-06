@@ -8,7 +8,7 @@
                     </v-avatar>
                     <h2 class="pa-1 pink--text text--lighten-2">Login</h2>
                 </div>
-                <v-form class="pt-2" @submit.prevent="loginSubmit" ref="form">
+                <v-form class="pt-2" @submit.prevent="loginSubmit">
                     <v-text-field 
                         v-model="email" 
                         label="Email" 
@@ -25,10 +25,11 @@
                         color="grey" prepend-inner-icon="mdi-lock-outline" 
                         :append-icon="showPassword ?  'mdi-eye-outline': 'mdi-eye-off-outline'"
                         @click:append="showPassword = !showPassword"/>
-                    <v-btn type="submit" color="pink lighten-3">
+                    <v-btn type="submit" :loading="loggingIn" color="pink lighten-3">
                         <span class="px-8">Login</span>
                     </v-btn>
                 </v-form>
+                <v-snackbar v-model="loginError">{{ loginError }}</v-snackbar>
             </v-card>
         </v-col>
     </v-layout>
@@ -41,7 +42,7 @@
 </style>
 
 <script>
-import UserService from '@/services/UserService'
+import { mapState, mapActions } from 'vuex'
 
 export default {
     name: 'Login',
@@ -60,22 +61,21 @@ export default {
             ],
         }
     },
+    computed: {
+        ...mapState([
+            'loggingIn',
+            'loginError'
+        ])
+    },
     methods: {
-        async loginSubmit(){
-            this.$refs.form.validate()
-
-            console.log("Logging user with email " + this.email)
-            const response = UserService.login(
-            {
+        ...mapActions([
+            'doLogin'
+        ]),
+        loginSubmit(){
+            this.doLogin({
                 email: this.email,
                 password: this.password
             })
-            //.then(this.$router.push('/account'))  // AND get TOKEN
-            .catch( e => {
-                console.log(e)
-                alert(e)
-            })
-            console.log(response)
         }
     }
 }

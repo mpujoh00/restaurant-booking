@@ -1,5 +1,7 @@
 <template>
   <v-app>
+    <!-- CREAR DISTINTAS BARS PARA NO LOGGED, USER, ADMIN -->
+
     <v-app-bar app color="pink lighten-3" dense elevation="3">
       <!--icono-->
       <v-app-bar-title style="margin-left: 10px; margin-right: 40px;">Restaurant Booking</v-app-bar-title>
@@ -46,14 +48,15 @@
 </style>
 
 <script>
+
 export default {
   data() {
     return {
       menus:[
-        {title: 'Home', route:'/'},
+        {title: 'Home', route:'/home'},
         {title: 'About', route:'/about'}
       ]
     }
-  },
+  }
 }
 </script>
