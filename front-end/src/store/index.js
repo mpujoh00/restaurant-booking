@@ -10,7 +10,8 @@ export default new Vuex.Store({
     // Login state
     logginIn: false,
     loginError: null,
-    token: null
+    token: null,
+    currentUser: null,
   },
   mutations: {
     // Login
@@ -22,14 +23,21 @@ export default new Vuex.Store({
     updateToken: (state, token) => {
       state.token = token
     },
-    logout: state => state.token = null,
+    logout: state => {
+      state.token = null
+      state.currentUser = null
+    },
+    updateCurrentUser: (state, user) => {
+      state.currentUser = user
+      localStorage.setItem('currentUser', JSON.stringify(user))
+    }
   },
   actions: {
     // Login
-    doLogin({ commit }, loginData) {
+    login({ commit }, loginData) {
       console.log("Logging user with email " + loginData.email)
 
-      commit('loginStart')  // Executes (commits) loginStart mutation
+      commit('loginStart')  // executes (commits) loginStart mutation
 
       UserService.login(loginData)
       .then(response => {
@@ -38,6 +46,11 @@ export default new Vuex.Store({
         // correct login
         commit('updateToken', response.data.token)
         commit('loginStop', null)
+        commit('updateCurrentUser', {
+          email: response.data.user.email,
+          fullname: response.data.user.fullname,
+          role: response.data.user.roles[0].name
+        })
         // redirects to account page
         router.push('/account')
       })
@@ -45,19 +58,33 @@ export default new Vuex.Store({
         commit('loginStop', error)
         // incorrect login
         commit('updateToken', null)
+        commit('updateCurrentUser', null)
       })
     },
     // executed everytime the application is loaded (in App.vue created())
     fetchToken({ commit }) {
       commit('updateToken', localStorage.getItem('token'))
+      commit('updateCurrentUser', JSON.parse(localStorage.getItem('currentUser')))
     },
     logout({ commit }) {
       // removes user's token
       localStorage.removeItem('token')
+      localStorage.removeItem('currentUser')
       commit('logout')
       router.push('/login')
+    },
+    modifyUser({ commit }, modifiedUser) {
+      console.log("Modifying user with email " + modifiedUser.email)
+      UserService.modifyUser(modifiedUser)
+      .then(response => {
+        // updates user
+        commit('updateCurrentUser', {
+          email: response.data.user.email,
+          fullname: response.data.user.fullname,
+          role: response.data.user.roles[0].name
+        })
+      })
+      .catch(error => console.log(error))
     }
-  },
-  modules: {
   }
 })

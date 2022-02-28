@@ -1,7 +1,0 @@
-organization=mpujoh00
-projectKey=mpujoh00_restaurant-booking
-serverUrl=https://sonarcloud.io
-serverVersion=8.0.0.26327
-dashboardUrl=https://sonarcloud.io/dashboard?id=mpujoh00_restaurant-booking
-ceTaskId=AX6XojUeSlZ3cGmhh5tf
-ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AX6XojUeSlZ3cGmhh5tf

@@ -33,13 +33,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(((request, response, authException) -> {
-                    log.error("Unauthorized request, {}", authException.getMessage());
+                    log.info("Unauthorized request, {}", authException.getMessage());
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
                 })).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                     .antMatchers(HttpMethod.POST, "/auth/**").permitAll()
-                    .antMatchers("/api-docs/**").permitAll()
                 .anyRequest().authenticated().and()
                 .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }

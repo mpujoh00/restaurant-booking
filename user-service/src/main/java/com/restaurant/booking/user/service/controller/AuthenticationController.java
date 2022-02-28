@@ -22,6 +22,5 @@ public interface AuthenticationController {
 
     @Operation(description = "Registers and returns user", operationId = "register")
     @PostMapping("/register")
-    ResponseEntity<User> register(@RequestBody @Valid RegistrationRequest request);
-
+    ResponseEntity<User> register(@RequestBody @Valid RegistrationRequest registrationRequest);
 }

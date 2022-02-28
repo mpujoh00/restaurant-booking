@@ -10,10 +10,6 @@ const routes = [
     component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue')  // only loads components when accessed (faster app)
   },
   {
-    path: '/about',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/About.vue')
-  },
-  {
     path: '/login',
     component: () => import(/* webpackChunkName: "login" */ '@/views/Login.vue')
   },

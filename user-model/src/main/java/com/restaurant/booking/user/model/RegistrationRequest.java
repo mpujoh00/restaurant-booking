@@ -12,14 +12,14 @@ import javax.validation.constraints.Size;
 @ToString
 public class RegistrationRequest {
 
-    @NotEmpty // can add messages
+    @NotEmpty
     @Size(min = 10)
-    private final String email;
+    private String email;
     @NotEmpty
     @Size(min = 8)
-    private final String password;
+    private String password;
     @NotEmpty
-    private final String fullname;
+    private String fullname;
     @NotNull
-    private final RoleName role;
+    private RoleName role;
 }

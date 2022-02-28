@@ -10,6 +10,10 @@ class UserService {
         return http.get('/users', email)
     }
 
+    modifyUser(data){
+        return http.put('/users', data)
+    }
+
     register(data){
         return http.post('/auth/register', data)
     }
@@ -18,6 +22,9 @@ class UserService {
         return http.post('/auth/login', data)
     }
 
+    modifyPassword(data){
+        return http.put('/users/changePassword', data)
+    }
 }
 
 export default new UserService()

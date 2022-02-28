@@ -1,6 +1,6 @@
 package com.restaurant.booking.user.service.controller;
 
-import com.restaurant.booking.user.model.AuthenticationToken;
+import com.restaurant.booking.user.model.LoginResponse;
 import com.restaurant.booking.user.model.LoginRequest;
 import com.restaurant.booking.user.model.RegistrationRequest;
 import com.restaurant.booking.user.model.User;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 @Log4j2
-@CrossOrigin(origins = "*", maxAge = 3600)
+//@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class AuthenticationControllerImpl implements AuthenticationController{
 
@@ -34,7 +34,7 @@ public class AuthenticationControllerImpl implements AuthenticationController{
     }
 
     @Override
-    public ResponseEntity<AuthenticationToken> login(LoginRequest loginRequest){
+    public ResponseEntity<LoginResponse> login(LoginRequest loginRequest){
         log.info("Logging in");
 
         Authentication authentication = authenticationManager.authenticate(
@@ -44,11 +44,13 @@ public class AuthenticationControllerImpl implements AuthenticationController{
 
         String jwtToken = jwtUtils.generateJwtToken(authentication);
 
-        return ResponseEntity.ok(new AuthenticationToken(jwtToken));
+        User loggedUser = userService.findByEmail(loginRequest.getEmail());
+
+        return ResponseEntity.ok(new LoginResponse(jwtToken, loggedUser));
     }
 
     @Override
-    public ResponseEntity<User> register(RegistrationRequest request){
-        return new ResponseEntity<>(userService.register(request), HttpStatus.CREATED);
+    public ResponseEntity<User> register(RegistrationRequest registrationRequest){
+        return new ResponseEntity<>(userService.register(registrationRequest), HttpStatus.CREATED);
     }
 }

@@ -43,7 +43,7 @@ public class AuthenticationControllerTest {
         Mockito.when(authenticationManager.authenticate(userPassAuthToken)).thenReturn(authentication);
         Mockito.when(jwtUtils.generateJwtToken(authentication)).thenReturn("JWT-TOKEN");
 
-        ResponseEntity<AuthenticationToken> responseEntity = authenticationController.login(request);
+        ResponseEntity<LoginResponse> responseEntity = authenticationController.login(request);
 
         Mockito.verify(authenticationManager).authenticate(userPassAuthToken);
         Mockito.verify(jwtUtils).generateJwtToken(authentication);

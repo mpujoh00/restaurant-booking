@@ -1,19 +1,18 @@
 <template>
   <v-app>
     <!-- CREAR DISTINTAS BARS PARA NO LOGGED, USER, ADMIN -->
-
-    <v-app-bar app color="pink lighten-3" dense elevation="3">
+    <v-app-bar app color="#ff99a8" dense elevation="3">
       <!--icono-->
-      <v-app-bar-title style="margin-left: 10px; margin-right: 40px;">Restaurant Booking</v-app-bar-title>
+      <v-app-bar-title class="appBarTitle">Restaurant Booking</v-app-bar-title>
       <!-- secciones -->
-      <v-list class="d-flex align-center menu" style="background: transparent">
-        <v-list-item v-for="(menu, index) in menus" :key="index" :to="menu.route">
+      <v-list class="d-flex align-center menu" style="background: transparent; font-weight: 550;">
+        <v-list-item v-for="(menu, index) in getMenus()" :key="index" :to="menu.route">
           <v-list-item-title>{{menu.title}}</v-list-item-title>
         </v-list-item>
       </v-list>      
       <v-spacer/>
       <!-- login, usuario -->
-      <v-btn to="/login" plain>
+      <v-btn :to="currentUser ? '/account': '/login'" plain>
         <v-icon large>mdi-account-circle-outline</v-icon>
       </v-btn>
     </v-app-bar>
@@ -27,36 +26,51 @@
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  align-content: center;
 }
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+.appBarTitle {
+  margin-left: 2%;
+  margin-right: 3%;
+  text-align: center;
+  font-weight: bold;
 }
 </style>
 
 <script>
+import { mapState } from 'vuex'
 
 export default {
   data() {
     return {
       menus:[
+        {title: 'Home', route:'/home'}
+      ],
+      clientMenus:[
         {title: 'Home', route:'/home'},
-        {title: 'About', route:'/about'}
+      ],
+      adminMenus:[
+        {title: 'Home', route:'/home'},
       ]
     }
-  }
+  },
+  computed: {
+      ...mapState([
+          'currentUser'
+      ])
+  },
+  methods: {
+    getMenus() {
+      if(!this.currentUser){
+        return this.menus
+      }
+      else if(this.currentUser.role == "ROLE_ADMIN"){
+        return this.adminMenus
+      }
+      else if(this.currentUser.role == "ROLE_CLIENT"){
+        return this.clientMenus
+      }
+    }
+  },
 }
 </script>
