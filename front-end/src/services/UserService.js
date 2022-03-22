@@ -1,29 +1,29 @@
-import http from '@/http-common'
+import {authAxios, noAuthAxios} from '@/http-common'
 
 class UserService {
 
     getAllUsers() {
-        return http.get('/users')
+        return authAxios.get('/users')
     }
 
     getUser(email) {
-        return http.get('/users', email)
+        return authAxios.get('/users', email)
     }
 
     modifyUser(data){
-        return http.put('/users', data)
+        return authAxios.put('/users', data)
     }
 
     register(data){
-        return http.post('/auth/register', data)
+        return noAuthAxios.post('/auth/register', data)
     }
 
     login(data){
-        return http.post('/auth/login', data)
+        return noAuthAxios.post('/auth/login', data)
     }
 
     modifyPassword(data){
-        return http.put('/users/changePassword', data)
+        return authAxios.put('/users/change-password', data)
     }
 }
 

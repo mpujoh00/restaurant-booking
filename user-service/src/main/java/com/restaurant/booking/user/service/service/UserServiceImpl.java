@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User save(User user){
-        log.info("Saving new user with email: {} and roles: {}", user.getEmail(), user.getRoles());
+        log.info("Saving new user with email: {} and roles: {}", user.getEmail(), user.getRoles().toString());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("Registering user with email: {}", request.getEmail());
 
         if(userRepository.findByEmail(request.getEmail()).isPresent()){
-            log.info("User with email: " + request.getEmail() + " already exists");
+            log.error("User with email: {} already exists", request.getEmail());
             throw new UserAlreadyExistsException(request.getEmail());
         }
         Role role = roleRepository.findByName(request.getRole()).orElseThrow(() -> new RoleNotFoundException(request.getRole().name()));

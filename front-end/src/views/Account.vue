@@ -11,6 +11,7 @@
                     <h2 class="cardTitle">Account</h2>
                 </div>
                 <v-form class="form" @submit.prevent="loginSubmit">  <!-- TODO: FIX prevent with multiple buttons -->
+                    <!-- modify user -->
                     <div v-if="!editPassword">
                         <v-text-field 
                             v-model="user.fullname" 
@@ -86,9 +87,8 @@
                         </v-btn>
                     </div>
                 </v-form>
+                <v-snackbar v-if="editPassword" v-model="editPasswordError">{{ editPasswordError }}</v-snackbar>
             </v-card>
-
-            
         </v-col>
         
     </v-layout>
@@ -125,7 +125,6 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import UserService from '@/services/UserService'
 
 export default {
     data() {
@@ -150,18 +149,20 @@ export default {
             currentPasswordConfirmationRules: [
                 v => v == this.currentPassword || 'Passwords do not match'
             ],
-            user: null,
+            user: null
         }
     },
     computed: {
         ...mapState([
-            'currentUser'
+            'currentUser',
+            'editPasswordError'
         ])
     },
     methods: {
         ...mapActions([
             'logout',
-            'modifyUser'
+            'modifyUser',
+            'modifyPassword'
         ]),
         editUser(){
             this.nonEditable = !this.nonEditable
@@ -174,14 +175,23 @@ export default {
                 email: this.user.email,
                 fullname: this.user.fullname
             })
+            .then(error => {
+                console.log(error)
+                this.cancel()
+            })
             this.nonEditable = !this.nonEditable
         },
         savePassword(){
-            console.log("Modifying password of user with email " + this.currentUser.email)
-            UserService.modifyPassword({
-                email: this.currentUser.email,
+            this.modifyPassword({
                 currentPassword: this.currentPassword,
                 newPassword: this.newPassword
+            })
+            .then(() => {
+                this.nonEditable = true
+                this.editPassword = false
+            })
+            .catch(error => {
+                console.log(error)
             })
         },
         cancel(){

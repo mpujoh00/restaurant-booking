@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Tag(name = "User")
-@RequestMapping("/users")
+@RequestMapping("/api/v1/users")
 public interface UserController {
 
     @Operation(description = "Returns a list of all users", operationId = "getAllUsers")
@@ -30,6 +30,6 @@ public interface UserController {
     ResponseEntity<User> updateUser(@RequestBody @Valid UpdateRequest updateRequest);
 
     @Operation(description = "Returns the updated user", operationId = "updateUserPassword")
-    @PutMapping("/changePassword")
-    ResponseEntity<User> updateUserPassword(@RequestBody @Valid UpdatePasswordRequest updatePasswordRequest);
+    @PutMapping("/change-password")
+    ResponseEntity<String> updateUserPassword(@RequestBody @Valid UpdatePasswordRequest updatePasswordRequest);
 }

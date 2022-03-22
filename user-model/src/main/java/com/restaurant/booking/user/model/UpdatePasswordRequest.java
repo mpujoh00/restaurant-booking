@@ -15,9 +15,6 @@ import javax.validation.constraints.Size;
 public class UpdatePasswordRequest {
 
     @NotEmpty
-    @Size(min = 10)
-    private String email;
-    @NotEmpty
     @Size(min = 8)
     private String currentPassword;
     @NotEmpty

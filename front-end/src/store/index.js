@@ -12,6 +12,7 @@ export default new Vuex.Store({
     loginError: null,
     token: null,
     currentUser: null,
+    editPasswordError: null
   },
   mutations: {
     // Login
@@ -30,6 +31,9 @@ export default new Vuex.Store({
     updateCurrentUser: (state, user) => {
       state.currentUser = user
       localStorage.setItem('currentUser', JSON.stringify(user))
+    },
+    editPasswordError: (state, errorMessage) => {
+      state.editPasswordError = errorMessage
     }
   },
   actions: {
@@ -54,8 +58,8 @@ export default new Vuex.Store({
         // redirects to account page
         router.push('/account')
       })
-      .catch(error => {
-        commit('loginStop', error)
+      .catch(() => {
+        commit('loginStop', "Incorrect credentials")
         // incorrect login
         commit('updateToken', null)
         commit('updateCurrentUser', null)
@@ -74,17 +78,47 @@ export default new Vuex.Store({
       router.push('/login')
     },
     modifyUser({ commit }, modifiedUser) {
-      console.log("Modifying user with email " + modifiedUser.email)
-      UserService.modifyUser(modifiedUser)
-      .then(response => {
-        // updates user
-        commit('updateCurrentUser', {
-          email: response.data.user.email,
-          fullname: response.data.user.fullname,
-          role: response.data.user.roles[0].name
+      console.log("Modifying user")
+      return new Promise((resolve, reject) => {
+        UserService.modifyUser(modifiedUser)
+        .then(response => {
+          console.log("updating user..")
+          console.log(response.data)
+          // updates user
+          commit('updateCurrentUser', {
+            email: response.data.email,
+            fullname: response.data.fullname,
+            role: response.data.roles[0].name
+          })
+          resolve()
         })
-      })
-      .catch(error => console.log(error))
+        .catch(error => {
+          console.log(error)
+          reject(error)
+        })
+      })      
+    },
+    modifyPassword({ commit }, modifiedPassword) {
+      console.log("Modifying password")
+      return new Promise((resolve, reject) => {
+        UserService.modifyPassword({
+          currentPassword: modifiedPassword.currentPassword,
+          newPassword: modifiedPassword.newPassword
+        })
+        .then(response => {
+          console.log(response)
+          // saves updated token
+          commit('updateToken', response.data)
+          commit('editPasswordError', null)
+          resolve()
+        })
+        .catch(error => {
+          if(error.response.status === 400){
+            commit('editPasswordError', error.response.data)
+            reject(error.response.data)
+          }
+        })
+      })      
     }
   }
 })

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.validation.Valid;
 
 @Tag(name = "Authentication")
-@RequestMapping("/auth")
+@RequestMapping("/api/v1/auth")
 public interface AuthenticationController {
 
     @Operation(description = "Logs user and returns authentication token", operationId = "login")
