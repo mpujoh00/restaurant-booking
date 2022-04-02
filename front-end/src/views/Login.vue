@@ -1,6 +1,7 @@
 <template>
-    <v-layout class="layout">
-        <v-col cols="6">
+    <v-layout class="layout" align-center>
+        <!-- Login option -->
+        <v-col cols="5">
             <v-card class="card">
                 <div class="cardHeader">
                     <v-avatar size="50" color="#ffe6e9">
@@ -25,11 +26,35 @@
                         color="grey" prepend-inner-icon="mdi-lock-outline" 
                         :append-icon="showPassword ?  'mdi-eye-outline': 'mdi-eye-off-outline'"
                         @click:append="showPassword = !showPassword"/>
-                    <v-btn type="submit" :loading="loggingIn" color="#ff99a8">
+                    <v-btn type="submit" :loading="loggingIn" class="button" color="#ff99a8">
                         <span class="button">Login</span>
                     </v-btn>
                 </v-form>
                 <v-snackbar v-model="loginError">{{ loginError }}</v-snackbar>
+            </v-card>
+        </v-col>
+        <v-col cols="4">
+            <!-- Registration option -->
+            <v-card class="card">
+                <!-- TODO fix diferencia altura headers -->
+                <div class="cardHeader">
+                    <v-avatar size="50" color="#ffe6e9">
+                        <v-icon size="35" color="#ff99a8">mdi-account-plus</v-icon>
+                    </v-avatar>
+                    <h2 class="cardTitle">Registration</h2>
+                </div>
+                <div class="registrationButtons">
+                    <div>
+                        <v-btn class="button" color="#ff99a8" @click="registration('ROLE_CLIENT')">
+                            <span class="buttonText">Register client</span>
+                        </v-btn>
+                    </div>
+                    <div>
+                        <v-btn class="button" color="#ff99a8" @click="registration('ROLE_RESTAURANT')">
+                            <span class="buttonText">Register restaurant</span>
+                        </v-btn>
+                    </div> 
+                </div>
             </v-card>
         </v-col>
     </v-layout>
@@ -41,9 +66,12 @@
 .layout {
     align-content: center;
     justify-content: center;
+    height: 80vh;
 }
 .card {
-    padding: 4%;
+    padding: 5%;
+    margin: 2%;
+    height: 47vh;
 }
 .cardHeader {
     text-align: center;
@@ -57,13 +85,21 @@
     padding-top: 2%;
 }
 .button {
+    margin: 3%;
+    width: 25vh;
+}
+.buttonText {
     padding-left: 8%;
     padding-right: 8%;
+}
+.registrationButtons {
+    padding-top: 5vh;
 }
 </style>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import router from '@/router'
 
 export default {
     data() {
@@ -96,6 +132,10 @@ export default {
                 email: this.email,
                 password: this.password
             })
+        },
+        registration(roleName){
+            console.log('Going to register a user with ' + roleName)
+            router.push({name: 'registration', params: {role: roleName}})
         }
     }
 }

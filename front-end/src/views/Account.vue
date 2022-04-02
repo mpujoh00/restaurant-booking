@@ -10,7 +10,7 @@
                     </v-avatar>
                     <h2 class="cardTitle">Account</h2>
                 </div>
-                <v-form class="form" @submit.prevent="loginSubmit">  <!-- TODO: FIX prevent with multiple buttons -->
+                <v-form class="form" >  <!-- TODO: FIX prevent with multiple buttons -->
                     <!-- modify user -->
                     <div v-if="!editPassword">
                         <v-text-field 
@@ -28,25 +28,25 @@
                             readonly
                             color="grey" class="mb-5" prepend-inner-icon="mdi-at"/>
 
-                            <div v-if="nonEditable">
-                                <v-btn v-if="nonEditable" @click="editUser" color="#ff99a8" class="button">
-                                    <span class="buttonText">Edit</span>    
-                                </v-btn>
-                                <v-btn v-if="nonEditable" @click="changePassword" color="#ff99a8" class="button">
-                                    <span class="buttonText">Change password</span>    
-                                </v-btn>
-                                <v-btn v-if="nonEditable" @click="logout" color="#ff99a8" class="button">
-                                    <span class="buttonText">Logout</span>    
-                                </v-btn>
-                            </div>    
-                            <div v-else-if="!nonEditable">                                
-                                <v-btn v-if="!nonEditable" @click="saveUser" color="#ff99a8" class="button">
-                                    <span class="buttonText">Save</span>    
-                                </v-btn>
-                                <v-btn v-if="!nonEditable" @click="cancel" color="#ff99a8" class="button">
-                                    <span class="buttonText">Cancel</span>    
-                                </v-btn>
-                            </div>                        
+                        <div v-if="nonEditable">
+                            <v-btn v-if="nonEditable" @click="editUser" color="#ff99a8" class="button">
+                                <span class="buttonText">Edit</span>    
+                            </v-btn>
+                            <v-btn v-if="nonEditable" @click="changePassword" color="#ff99a8" class="button">
+                                <span class="buttonText">Change password</span>    
+                            </v-btn>
+                            <v-btn v-if="nonEditable" @click="logout" color="#ff99a8" class="button">
+                                <span class="buttonText">Logout</span>    
+                            </v-btn>
+                        </div>    
+                        <div v-else-if="!nonEditable">                                
+                            <v-btn v-if="!nonEditable" @click="saveUser" color="#ff99a8" class="button">
+                                <span class="buttonText">Save</span>    
+                            </v-btn>
+                            <v-btn v-if="!nonEditable" @click="cancel" color="#ff99a8" class="button">
+                                <span class="buttonText">Cancel</span>    
+                            </v-btn>
+                        </div>                        
                     </div>
                     <!-- password change -->
                     <div v-else-if="editPassword">

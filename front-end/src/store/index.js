@@ -77,6 +77,28 @@ export default new Vuex.Store({
       commit('logout')
       router.push('/login')
     },
+    // Registration
+    registerUser({ dispatch }, user){
+      console.log("Registering user with email " + user.email + " and role " + user.role)
+      // registers user
+      UserService.register({
+        email: user.email,
+        password: user.password,
+        fullname: user.fullname,
+        role: user.role
+      })
+      .then(() => {
+        // login
+        dispatch('login', {
+          email: user.email,
+          password: user.password
+        })
+      })
+      .catch(() => {
+        console.log("Couldn't register user")
+      })
+    },
+    // Modification of the user
     modifyUser({ commit }, modifiedUser) {
       console.log("Modifying user")
       return new Promise((resolve, reject) => {
