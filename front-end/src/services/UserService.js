@@ -25,6 +25,10 @@ class UserService {
     modifyPassword(data){
         return authAxios.put('/users/change-password', data)
     }
+
+    deleteUser(email){
+        return authAxios.delete('/users/delete/' + email)
+    }
 }
 
 export default new UserService()

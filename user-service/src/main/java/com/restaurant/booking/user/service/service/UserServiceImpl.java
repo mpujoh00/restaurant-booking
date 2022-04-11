@@ -87,4 +87,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new UsernameNotFoundException("User with email: " + email + " not found");
         }
     }
+
+    @Override
+    public String delete(String email) {
+        log.info("Deleting user with email {}", email);
+
+        if(userRepository.findByEmail(email).isEmpty()){
+            log.error("User with email {} doesn't exist", email);
+            throw new UserNotFoundException(email);
+        }
+        userRepository.deleteByEmail(email);
+        return email;
+    }
 }

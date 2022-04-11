@@ -12,7 +12,8 @@ export default new Vuex.Store({
     loginError: null,
     token: null,
     currentUser: null,
-    editPasswordError: null
+    editPasswordError: null,
+    deleteUserError: null
   },
   mutations: {
     // Login
@@ -34,6 +35,9 @@ export default new Vuex.Store({
     },
     editPasswordError: (state, errorMessage) => {
       state.editPasswordError = errorMessage
+    },
+    deleteUserError: (state, errorMessage) => {
+      state.deleteUserError = errorMessage
     }
   },
   actions: {
@@ -113,6 +117,7 @@ export default new Vuex.Store({
             role: response.data.roles[0].name
           })
           resolve()
+          router.push('/login')
         })
         .catch(error => {
           console.log(error)
@@ -141,6 +146,26 @@ export default new Vuex.Store({
           }
         })
       })      
+    }, 
+    deleteUser({ commit }, userEmail) {
+      console.log("Deleting user")
+      return new Promise((resolve, reject) => {
+        UserService.deleteUser(userEmail)
+        .then(() => {
+          console.log("User deleted")
+          commit('logout')
+          resolve()
+        })
+        .catch(error => {
+          if(error.response.status == 404){ // user not found
+            commit('deleteUserError', "Can't delete, user not found")
+          }
+          else{ // user not the same as logged in
+            commit('deleteUserError', "Can't delete other user than self")
+          }
+          reject()
+        })
+      })
     }
   }
 })

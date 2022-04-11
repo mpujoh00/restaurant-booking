@@ -42,4 +42,10 @@ public interface UserService {
      * @return
      */
     User update(User user);
+
+    /**
+     *
+     * @param email
+     */
+    String delete(String email);
 }

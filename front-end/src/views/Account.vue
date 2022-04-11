@@ -27,23 +27,27 @@
                             :rules="emailRules"
                             readonly
                             color="grey" class="mb-5" prepend-inner-icon="mdi-at"/>
-
+                        <!-- default mode buttons -->
                         <div v-if="nonEditable">
-                            <v-btn v-if="nonEditable" @click="editUser" color="#ff99a8" class="button">
+                            <v-btn v-if="nonEditable" @click="editUser" class="button" color="#ff99a8">
                                 <span class="buttonText">Edit</span>    
                             </v-btn>
-                            <v-btn v-if="nonEditable" @click="changePassword" color="#ff99a8" class="button">
+                            <v-btn v-if="nonEditable" @click="changePassword" class="button" color="#ff99a8">
                                 <span class="buttonText">Change password</span>    
                             </v-btn>
-                            <v-btn v-if="nonEditable" @click="logout" color="#ff99a8" class="button">
+                            <v-btn v-if="nonEditable" @click="logout" class="button" color="#ff99a8">
                                 <span class="buttonText">Logout</span>    
                             </v-btn>
+                            <v-btn v-if="nonEditable" @click="deleteUserDialog" class="button" color="#ff99a8">
+                                <span class="buttonText">Delete</span>    
+                            </v-btn>
                         </div>    
+                        <!-- edit mode buttons -->
                         <div v-else-if="!nonEditable">                                
-                            <v-btn v-if="!nonEditable" @click="saveUser" color="#ff99a8" class="button">
+                            <v-btn v-if="!nonEditable" @click="saveUser" class="button" color="#ff99a8">
                                 <span class="buttonText">Save</span>    
                             </v-btn>
-                            <v-btn v-if="!nonEditable" @click="cancel" color="#ff99a8" class="button">
+                            <v-btn v-if="!nonEditable" @click="cancel" class="button" color="#ff99a8">
                                 <span class="buttonText">Cancel</span>    
                             </v-btn>
                         </div>                        
@@ -79,18 +83,19 @@
                             @click:append="showNewPassword = !showNewPassword"
                             color="grey" class="mb-5" prepend-inner-icon="mdi-at"/>
 
-                        <v-btn @click="savePassword" color="#ff99a8" class="button">
+                        <v-btn @click="savePassword" class="button" color="#ff99a8">
                             <span class="buttonText">Save</span>    
                         </v-btn>
-                        <v-btn @click="cancel" color="#ff99a8" class="button">
+                        <v-btn @click="cancel" class="button" color="#ff99a8">
                             <span class="buttonText">Cancel</span>    
                         </v-btn>
                     </div>
                 </v-form>
-                <v-snackbar v-if="editPassword" v-model="editPasswordError">{{ editPasswordError }}</v-snackbar>
+                <v-snackbar v-model="editPasswordError">{{ editPasswordError }}</v-snackbar>
+                <v-snackbar v-model="deleteUserError">{{ deleteUserError }}</v-snackbar>
             </v-card>
         </v-col>
-        
+        <ConfirmationDialog ref="confirm"/>
     </v-layout>
 </template>
 
@@ -127,6 +132,9 @@
 import { mapState, mapActions } from 'vuex'
 
 export default {
+    components: {
+        ConfirmationDialog: () => import("@/components/ConfirmationDialog.vue")
+    },
     data() {
         return {
             nonEditable: true,
@@ -155,14 +163,16 @@ export default {
     computed: {
         ...mapState([
             'currentUser',
-            'editPasswordError'
+            'editPasswordError',
+            'deleteUserError'
         ])
     },
     methods: {
         ...mapActions([
             'logout',
             'modifyUser',
-            'modifyPassword'
+            'modifyPassword',
+            'deleteUser'
         ]),
         editUser(){
             this.nonEditable = !this.nonEditable
@@ -202,6 +212,18 @@ export default {
             this.currentPassword = ''
             this.currentPasswordConfirmation = ''
             this.newPassword = ''
+        },
+        async deleteUserDialog() {
+            this.$refs.confirm.open("Confirm", "Are you sure you want to delete your account?")
+            .then(() => {
+                // if clicked on yes
+                console.log("Deleting account")
+                this.deleteUser(this.currentUser.email)
+                .catch(() => {
+                    console.log(this.deleteUserError)
+                })
+            })
+
         },
         resetUser(){
             this.user = JSON.parse(JSON.stringify(this.currentUser))

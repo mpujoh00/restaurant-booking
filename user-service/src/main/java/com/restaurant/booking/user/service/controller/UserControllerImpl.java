@@ -3,6 +3,7 @@ package com.restaurant.booking.user.service.controller;
 import com.restaurant.booking.user.model.UpdatePasswordRequest;
 import com.restaurant.booking.user.model.UpdateRequest;
 import com.restaurant.booking.user.model.User;
+import com.restaurant.booking.user.service.exception.UserNotFoundException;
 import com.restaurant.booking.user.service.security.JwtUtils;
 import com.restaurant.booking.user.service.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -48,11 +49,16 @@ public class UserControllerImpl implements UserController{
 
     @Override
     public ResponseEntity<User> updateUser(UpdateRequest updateRequest) {
-        // TODO check if it is the current user
-
         log.info("Updating user with email {}", updateRequest.getEmail());
 
-        // gets current user (unmodified)
+        // checks if it is the current user
+        if(isNotCurrentUser(updateRequest.getEmail())){
+            // can't update another user
+            log.error("Can't update another user diferent than self");
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        // gets user (unmodified)
         User user = userService.findByEmail(updateRequest.getEmail());
 
         // modifies user
@@ -90,8 +96,33 @@ public class UserControllerImpl implements UserController{
         }
         catch (Exception e){
             log.error("Password is incorrect");
-            return new ResponseEntity("Incorrect password", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Incorrect password", HttpStatus.BAD_REQUEST);
         }
     }
-    // TODO cambiar todos los stings de + a {}
+
+    @Override
+    public ResponseEntity<Void> deleteUser(String email) {
+        log.info("Deleting user with email {}", email);
+
+        // checks if it is the current user
+        if(isNotCurrentUser(email)){
+            // can't update another user
+            log.error("Can't delete another user diferent than self");
+            return ResponseEntity.badRequest().build();
+        }
+
+        try{
+            userService.delete(email);
+            return ResponseEntity.ok().build();
+        }
+        catch (UserNotFoundException e){
+            log.error("User with email {} not found", email);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    public boolean isNotCurrentUser(String emailRequest){
+        String userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return !userEmail.equals(emailRequest);
+    }
 }

@@ -29,7 +29,11 @@ public interface UserController {
     @PutMapping
     ResponseEntity<User> updateUser(@RequestBody @Valid UpdateRequest updateRequest);
 
-    @Operation(description = "Returns the updated user", operationId = "updateUserPassword")
+    @Operation(description = "Returns the new token for the updated user", operationId = "updateUserPassword")
     @PutMapping("/change-password")
     ResponseEntity<String> updateUserPassword(@RequestBody @Valid UpdatePasswordRequest updatePasswordRequest);
+
+    @Operation(description = "Returns the email of the deleted user", operationId = "deleteUser")
+    @DeleteMapping("/delete/{email}")
+    ResponseEntity<Void> deleteUser(@PathVariable String email);
 }
