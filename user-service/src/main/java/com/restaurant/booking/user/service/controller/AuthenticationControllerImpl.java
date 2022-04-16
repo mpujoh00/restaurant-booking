@@ -1,12 +1,12 @@
 package com.restaurant.booking.user.service.controller;
 
-import com.restaurant.booking.user.model.LoginResponse;
 import com.restaurant.booking.user.model.LoginRequest;
+import com.restaurant.booking.user.model.LoginResponse;
 import com.restaurant.booking.user.model.RegistrationRequest;
 import com.restaurant.booking.user.model.User;
 import com.restaurant.booking.user.service.security.JwtUtils;
 import com.restaurant.booking.user.service.service.UserService;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +17,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
-@Log4j2
-//@CrossOrigin(origins = "*", maxAge = 3600)
+@Slf4j
+@CrossOrigin(origins = "http://localhost:8080", maxAge = 3600)
 @RestController
 public class AuthenticationControllerImpl implements AuthenticationController{
 

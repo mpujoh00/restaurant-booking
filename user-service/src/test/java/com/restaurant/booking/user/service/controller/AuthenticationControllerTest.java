@@ -28,6 +28,9 @@ public class AuthenticationControllerTest {
     private AuthenticationManager authenticationManager;
 
     @Mock
+    private Authentication authentication;
+
+    @Mock
     private JwtUtils jwtUtils;
 
     @InjectMocks
@@ -38,7 +41,6 @@ public class AuthenticationControllerTest {
         LoginRequest request = new LoginRequest("micaela@gmail.com", "1234");
         UsernamePasswordAuthenticationToken userPassAuthToken =
                 new UsernamePasswordAuthenticationToken("micaela@gmail.com", "1234");
-        Authentication authentication = Mockito.mock(Authentication.class);
 
         Mockito.when(authenticationManager.authenticate(userPassAuthToken)).thenReturn(authentication);
         Mockito.when(jwtUtils.generateJwtToken(authentication)).thenReturn("JWT-TOKEN");
