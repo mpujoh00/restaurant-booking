@@ -107,7 +107,7 @@ public class UserControllerImpl implements UserController{
         // checks if it is the current user
         if(isNotCurrentUser(email)){
             // can't update another user
-            log.error("Can't delete another user diferent than self");
+            log.error("Can't delete another user different than self");
             return ResponseEntity.badRequest().build();
         }
 

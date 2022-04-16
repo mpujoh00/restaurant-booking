@@ -3,6 +3,8 @@ package com.restaurant.booking.user.service.controller;
 import com.restaurant.booking.user.model.UpdatePasswordRequest;
 import com.restaurant.booking.user.model.UpdateRequest;
 import com.restaurant.booking.user.model.User;
+import com.restaurant.booking.user.service.exception.UserNotFoundException;
+import com.restaurant.booking.user.service.security.JwtUtils;
 import com.restaurant.booking.user.service.service.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,7 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
-public class UserControllerTest {
+class UserControllerTest {
 
     @Mock
     private UserServiceImpl userService;
@@ -37,6 +40,9 @@ public class UserControllerTest {
 
     @Mock
     private AuthenticationManager authenticationManager;
+
+    @Mock
+    private JwtUtils jwtUtils;
 
     @Test
     void getAllUsers(){
@@ -85,7 +91,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void updateUser_isNotCurrentUser(){
+    void updateUser_notCurrentUser(){
         UpdateRequest updateRequest = new UpdateRequest("another@gmail.com", "contraseña", "Micaela Pujol");
 
         Mockito.when(authentication.getPrincipal()).thenReturn("micaela@gmail.com");
@@ -103,11 +109,93 @@ public class UserControllerTest {
     @Test
     void updateUserPassword(){
         UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest("contraseña vieja", "contraseña nueva");
+        UsernamePasswordAuthenticationToken authenticationTokenOld =
+                new UsernamePasswordAuthenticationToken("micaela@gmail.com", "contraseña vieja");
+        UsernamePasswordAuthenticationToken authenticationTokenNew =
+                new UsernamePasswordAuthenticationToken("micaela@gmail.com", "contraseña nueva");
+        User userOld = User.builder().email("micaela@gmail.com").password("contraseña vieja").build();
+        User userNew = User.builder().email("micaela@gmail.com").password("contraseña nueva").build();
+
+        Mockito.when(authentication.getPrincipal()).thenReturn("micaela@gmail.com");
+        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        Mockito.when(authenticationManager.authenticate(authenticationTokenOld)).thenReturn(authentication);
+        Mockito.when(userService.findByEmail("micaela@gmail.com")).thenReturn(userOld);
+        Mockito.when(authenticationManager.authenticate(authenticationTokenNew)).thenReturn(authentication);
+        Mockito.when(jwtUtils.generateJwtToken(authentication)).thenReturn("NEW-JWT-TOKEN");
+
+        String obtainedToken = userController.updateUserPassword(updatePasswordRequest).getBody();
+
+        Mockito.verify(securityContext).getAuthentication();
+        Mockito.verify(authentication).getPrincipal();
+        Mockito.verify(authenticationManager).authenticate(authenticationTokenOld);
+        Mockito.verify(userService).findByEmail("micaela@gmail.com");
+        Mockito.verify(userService).save(userNew);
+        Mockito.verify(authenticationManager).authenticate(authenticationTokenNew);
+        Mockito.verify(securityContext).setAuthentication(authentication);
+        Assertions.assertEquals("NEW-JWT-TOKEN", obtainedToken);
+    }
+
+    @Test
+    void updateUserPassword_incorrectPassword(){
+        UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest("contraseña vieja mal", "contraseña nueva");
+        UsernamePasswordAuthenticationToken authenticationTokenOld =
+                new UsernamePasswordAuthenticationToken("micaela@gmail.com", "contraseña vieja mal");
 
         Mockito.when(authentication.getPrincipal()).thenReturn("micaela@gmail.com");
         Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
 
+        ResponseEntity<String> responseEntity = userController.updateUserPassword(updatePasswordRequest);
+
+        Mockito.verify(securityContext).getAuthentication();
+        Mockito.verify(authentication).getPrincipal();
+        Mockito.verify(authenticationManager).authenticate(authenticationTokenOld);
+        Assertions.assertEquals("Incorrect password", responseEntity.getBody());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    @Test
+    void deleteUser(){
+        Mockito.when(authentication.getPrincipal()).thenReturn("micaela@gmail.com");
+        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        Mockito.when(userService.delete("micaela@gmail.com")).thenReturn(null);
+
+        ResponseEntity<Void> responseEntity = userController.deleteUser("micaela@gmail.com");
+
+        Mockito.verify(securityContext).getAuthentication();
+        Mockito.verify(authentication).getPrincipal();
+        Mockito.verify(userService).delete("micaela@gmail.com");
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+
+    @Test
+    void deleteUser_notCurrentUser(){
+        Mockito.when(authentication.getPrincipal()).thenReturn("micaela@gmail.com");
+        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+
+        ResponseEntity<Void> responseEntity = userController.deleteUser("another@gmail.com");
+
+        Mockito.verify(securityContext).getAuthentication();
+        Mockito.verify(authentication).getPrincipal();
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    @Test
+    void deleteUser_notFound(){
+        Mockito.when(authentication.getPrincipal()).thenReturn("micaela@gmail.com");
+        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        Mockito.when(userService.delete("micaela@gmail.com")).thenThrow(new UserNotFoundException(""));
+
+        ResponseEntity<Void> responseEntity = userController.deleteUser("micaela@gmail.com");
+
+        Mockito.verify(securityContext).getAuthentication();
+        Mockito.verify(authentication).getPrincipal();
+        Mockito.verify(userService).delete("micaela@gmail.com");
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 
     @Test

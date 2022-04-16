@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import java.util.Optional;
 
 @DataMongoTest
-public class UserRepositoryTest {
+class UserRepositoryTest {
 
     @Autowired
     UserRepository userRepository;
@@ -40,5 +40,15 @@ public class UserRepositoryTest {
 
         Assertions.assertTrue(userRepository.existsByEmail("micaela@gmail.com"));
         Assertions.assertFalse(userRepository.existsByEmail("false@gmail.com"));
+    }
+
+    @Test
+    void deleteByEmail(){
+
+        User savedUser = userRepository.save(User.builder().email("micaela@gmail.com").build());
+        Assertions.assertTrue(userRepository.findById(savedUser.getId()).isPresent());
+
+        userRepository.deleteByEmail("micaela@gmail.com");
+        Assertions.assertFalse(userRepository.findById(savedUser.getId()).isPresent());
     }
 }

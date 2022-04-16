@@ -90,10 +90,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public String delete(String email) {
-        log.info("Deleting user with email {}", email);
+        log.info("Deleting user with email: {}", email);
 
         if(userRepository.findByEmail(email).isEmpty()){
-            log.error("User with email {} doesn't exist", email);
+            log.error("User with email: {} doesn't exist", email);
             throw new UserNotFoundException(email);
         }
         userRepository.deleteByEmail(email);

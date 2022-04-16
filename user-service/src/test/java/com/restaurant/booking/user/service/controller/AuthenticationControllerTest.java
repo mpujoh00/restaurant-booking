@@ -19,7 +19,7 @@ import org.springframework.security.core.Authentication;
 import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
-public class AuthenticationControllerTest {
+class AuthenticationControllerTest {
 
     @Mock
     private UserServiceImpl userService;

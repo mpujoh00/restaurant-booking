@@ -4,6 +4,7 @@ import com.restaurant.booking.user.model.RegistrationRequest;
 import com.restaurant.booking.user.model.Role;
 import com.restaurant.booking.user.model.RoleName;
 import com.restaurant.booking.user.model.User;
+import com.restaurant.booking.user.service.exception.RoleNotFoundException;
 import com.restaurant.booking.user.service.exception.UserAlreadyExistsException;
 import com.restaurant.booking.user.service.exception.UserNotFoundException;
 import com.restaurant.booking.user.service.repository.RoleRepository;
@@ -18,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -39,7 +41,21 @@ public class UserServiceImplTest {
     private UserServiceImpl userService;
 
     @Test
-    void findUserByEmail(){
+    void findAllUsers(){
+        List<User> users = List.of(
+                User.builder().email("micaela@gmail.com").build(),
+                User.builder().email("pepe@gmail.com").build());
+
+        Mockito.when(userRepository.findAll()).thenReturn(users);
+
+        List<User> obtainedUsers = userService.findAllUsers();
+
+        Mockito.verify(userRepository).findAll();
+        Assertions.assertEquals(users, obtainedUsers);
+    }
+
+    @Test
+    void findByEmail(){
         User user = User.builder().email("micaela@gmail.com").build();
 
         // specifies what the mock userRepository has to return when a method (and args) is called
@@ -54,7 +70,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void findUserByEmail_userNotFound(){
+    void findByEmail_userNotFound(){
         Mockito.when(userRepository.findByEmail("micaela@gmail.com")).thenReturn(Optional.empty());
 
         UserNotFoundException exception = Assertions.assertThrows(UserNotFoundException.class, () -> userService.findByEmail("micaela@gmail.com"));
@@ -78,6 +94,18 @@ public class UserServiceImplTest {
         Mockito.verify(userRepository).save(Mockito.eq(expected));
 
         Assertions.assertEquals(expected, result);
+    }
+
+    @Test
+    void update(){
+        User user = User.builder().email("micaela@gmail.com").build();
+
+        Mockito.when(userRepository.save(user)).thenReturn(user);
+
+        User obtainedUser = userService.update(user);
+
+        Mockito.verify(userRepository).save(user);
+        Assertions.assertEquals(user, obtainedUser);
     }
 
     @Test
@@ -119,6 +147,22 @@ public class UserServiceImplTest {
     }
 
     @Test
+    void register_roleNotFound(){
+        RegistrationRequest request = new RegistrationRequest
+                ("micaela@gmail.com", "1234", "micaela", RoleName.ROLE_ADMIN);
+
+        Mockito.when(userRepository.findByEmail("micaela@gmail.com")).thenReturn(Optional.empty());
+        Mockito.when(roleRepository.findByName(RoleName.ROLE_ADMIN)).thenReturn(Optional.empty());
+
+        RoleNotFoundException exception = Assertions.assertThrows(RoleNotFoundException.class,
+                () -> userService.register(request));
+        Assertions.assertEquals("Role ROLE_ADMIN not found", exception.getMessage());
+
+        Mockito.verify(userRepository).findByEmail("micaela@gmail.com");
+        Mockito.verify(roleRepository).findByName(RoleName.ROLE_ADMIN);
+    }
+
+    @Test
     void loadUserByUsername_userNotFound(){
         Mockito.when(userRepository.findByEmail("micaela@gmail.com")).thenReturn(Optional.empty());
 
@@ -126,5 +170,28 @@ public class UserServiceImplTest {
         Assertions.assertEquals("User with email: micaela@gmail.com not found", exception.getMessage());
 
         Mockito.verify(userRepository).findByEmail("micaela@gmail.com");
+    }
+
+    @Test
+    void delete(){
+        User user = User.builder().email("micaela@gmail.com").build();
+
+        Mockito.when(userRepository.findByEmail("micaela@gmail.com")).thenReturn(Optional.of(user));
+
+        String deletedEmail = userService.delete("micaela@gmail.com");
+
+        Mockito.verify(userRepository).findByEmail("micaela@gmail.com");
+        Mockito.verify(userRepository).deleteByEmail("micaela@gmail.com");
+        Assertions.assertEquals("micaela@gmail.com", deletedEmail);
+    }
+
+    @Test
+    void delete_userNotFound(){
+        Mockito.when(userRepository.findByEmail("micaela@gmail.com")).thenReturn(Optional.empty());
+
+        UserNotFoundException exception = Assertions.assertThrows(UserNotFoundException.class, () -> userService.delete("micaela@gmail.com"));
+
+        Mockito.verify(userRepository).findByEmail("micaela@gmail.com");
+        Assertions.assertEquals("User with email: micaela@gmail.com not found", exception.getMessage());
     }
 }
