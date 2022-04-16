@@ -1,6 +1,7 @@
 package com.restaurant.booking.user.service.controller;
 
 import com.restaurant.booking.user.model.LoginRequest;
+import com.restaurant.booking.user.model.LoginResponse;
 import com.restaurant.booking.user.model.RegistrationRequest;
 import com.restaurant.booking.user.model.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,7 +19,7 @@ public interface AuthenticationController {
 
     @Operation(description = "Logs user and returns authentication token", operationId = "login")
     @PostMapping("/login")
-    ResponseEntity<?> login(@RequestBody @Valid LoginRequest loginRequest);
+    ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest loginRequest);
 
     @Operation(description = "Registers and returns user", operationId = "register")
     @PostMapping("/register")

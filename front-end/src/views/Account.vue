@@ -10,7 +10,7 @@
                     </v-avatar>
                     <h2 class="cardTitle">Account</h2>
                 </div>
-                <v-form class="form" >  <!-- TODO: FIX prevent with multiple buttons -->
+                <v-form class="form" >
                     <!-- modify user -->
                     <div v-if="!editPassword">
                         <v-text-field 
@@ -35,11 +35,11 @@
                             <v-btn v-if="nonEditable" @click="changePassword" class="button" color="#ff99a8">
                                 <span class="buttonText">Change password</span>    
                             </v-btn>
-                            <v-btn v-if="nonEditable" @click="logout" class="button" color="#ff99a8">
-                                <span class="buttonText">Logout</span>    
-                            </v-btn>
                             <v-btn v-if="nonEditable" @click="deleteUserDialog" class="button" color="#ff99a8">
                                 <span class="buttonText">Delete</span>    
+                            </v-btn>
+                            <v-btn v-if="nonEditable" @click="logout" class="button" color="#ff99a8">
+                                <span class="buttonText">Logout</span>    
                             </v-btn>
                         </div>    
                         <!-- edit mode buttons -->
@@ -54,7 +54,6 @@
                     </div>
                     <!-- password change -->
                     <div v-else-if="editPassword">
-                        <!-- TODO: (improvement) fix autofilled passwords with username and pass -->
                         <v-text-field 
                             v-model="currentPassword" 
                             label="Password" 

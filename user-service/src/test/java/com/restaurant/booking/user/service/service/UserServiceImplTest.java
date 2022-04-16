@@ -26,7 +26,7 @@ import java.util.Set;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceImplTest {
+class UserServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
@@ -85,13 +85,12 @@ public class UserServiceImplTest {
         User expected = User.builder().email("micaela@gmail.com").password("encoded").roles(Set.of(new Role(RoleName.ROLE_ADMIN))).build();
 
         Mockito.when(bCryptPasswordEncoder.encode("1234")).thenReturn("encoded");
-        Mockito.when(userRepository.save(Mockito.eq(expected))).then(returnsFirstArg());
-        // Mockito.any(User.class)
+        Mockito.when(userRepository.save(expected)).then(returnsFirstArg());
 
         User result = userService.save(user);
 
         Mockito.verify(bCryptPasswordEncoder).encode("1234");
-        Mockito.verify(userRepository).save(Mockito.eq(expected));
+        Mockito.verify(userRepository).save(expected);
 
         Assertions.assertEquals(expected, result);
     }
@@ -118,15 +117,14 @@ public class UserServiceImplTest {
         Mockito.when(userRepository.findByEmail("micaela@gmail.com")).thenReturn(Optional.empty());
         Mockito.when(roleRepository.findByName(RoleName.ROLE_ADMIN)).thenReturn(Optional.of(new Role(RoleName.ROLE_ADMIN)));
         Mockito.when(bCryptPasswordEncoder.encode("1234")).thenReturn("encoded");
-        Mockito.when(userRepository.save(Mockito.eq(expected))).then(returnsFirstArg());
-
+        Mockito.when(userRepository.save(expected)).then(returnsFirstArg());
 
         User result = userService.register(request);
 
         Mockito.verify(userRepository).findByEmail("micaela@gmail.com");
         Mockito.verify(roleRepository).findByName(RoleName.ROLE_ADMIN);
         Mockito.verify(bCryptPasswordEncoder).encode("1234");
-        Mockito.verify(userRepository).save(Mockito.eq(expected));
+        Mockito.verify(userRepository).save(expected);
 
         Assertions.assertEquals(expected, result);
     }
