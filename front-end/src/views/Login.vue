@@ -1,0 +1,142 @@
+<template>
+    <v-layout class="layout" align-center>
+        <!-- Login option -->
+        <v-col cols="5">
+            <v-card class="card">
+                <div class="cardHeader">
+                    <v-avatar size="50" color="#ffe6e9">
+                        <v-icon size="40" color="#ff99a8">mdi-account-circle</v-icon>
+                    </v-avatar>
+                    <h2 class="cardTitle">Login</h2>
+                </div>
+                <v-form class="form" @submit.prevent="loginSubmit">
+                    <v-text-field 
+                        v-model="email" 
+                        label="Email" 
+                        type="email" 
+                        required
+                        :rules="emailRules"
+                        color="grey" prepend-inner-icon="mdi-at"/>
+                    <v-text-field 
+                        v-model="password" 
+                        label="Password" 
+                        :type="showPassword ? 'text': 'password'" 
+                        required
+                        :rules="passwordRules"
+                        color="grey" prepend-inner-icon="mdi-lock-outline" 
+                        :append-icon="showPassword ?  'mdi-eye-outline': 'mdi-eye-off-outline'"
+                        @click:append="showPassword = !showPassword"/>
+                    <v-btn type="submit" :loading="loggingIn" class="button" color="#ff99a8">
+                        <span class="button">Login</span>
+                    </v-btn>
+                </v-form>
+                <v-snackbar v-model="loginError">{{ loginError }}</v-snackbar>
+            </v-card>
+        </v-col>
+        <v-col cols="4">
+            <!-- Registration option -->
+            <v-card class="card">
+                <!-- TODO fix diferencia altura headers -->
+                <div class="cardHeader">
+                    <v-avatar size="50" color="#ffe6e9">
+                        <v-icon size="35" color="#ff99a8">mdi-account-plus</v-icon>
+                    </v-avatar>
+                    <h2 class="cardTitle">Registration</h2>
+                </div>
+                <div class="registrationButtons">
+                    <div>
+                        <v-btn class="button" color="#ff99a8" @click="registration('ROLE_CLIENT')">
+                            <span class="buttonText">Register client</span>
+                        </v-btn>
+                    </div>
+                    <div>
+                        <v-btn class="button" color="#ff99a8" @click="registration('ROLE_RESTAURANT')">
+                            <span class="buttonText">Register restaurant</span>
+                        </v-btn>
+                    </div> 
+                </div>
+            </v-card>
+        </v-col>
+    </v-layout>
+</template>
+
+
+<!-- TO DO: extract style from template -->
+<style scoped>
+.layout {
+    align-content: center;
+    justify-content: center;
+    height: 80vh;
+}
+.card {
+    padding: 5%;
+    margin: 2%;
+    height: 47vh;
+}
+.cardHeader {
+    text-align: center;
+    padding: 2%;
+}
+.cardTitle {
+    padding: 1%;
+    color: #ff99a8;
+}
+.form {
+    padding-top: 2%;
+}
+.button {
+    margin: 3%;
+    width: 25vh;
+}
+.buttonText {
+    padding-left: 8%;
+    padding-right: 8%;
+}
+.registrationButtons {
+    padding-top: 5vh;
+}
+</style>
+
+<script>
+import { mapState, mapActions } from 'vuex'
+import router from '@/router'
+
+export default {
+    data() {
+        return {
+            showPassword: false,
+            email: '',
+            emailRules: [
+                v => !!v || 'Email is required',
+                v => (v && v.length >= 10) || 'Email must be at least 10 characters'
+            ],
+            password: '',
+            passwordRules: [
+                v => !!v || 'Password is required',
+                v => (v && v.length >= 8) || 'Password must be at least 8 characters'
+            ],
+        }
+    },
+    computed: {
+        ...mapState([
+            'loggingIn',
+            'loginError'
+        ])
+    },
+    methods: {
+        ...mapActions([
+            'login'
+        ]),
+        loginSubmit(){
+            this.login({
+                email: this.email,
+                password: this.password
+            })
+        },
+        registration(roleName){
+            console.log('Going to register a user with ' + roleName)
+            router.push({name: 'registration', params: {role: roleName}})
+        }
+    }
+}
+</script>

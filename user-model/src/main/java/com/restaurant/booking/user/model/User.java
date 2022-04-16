@@ -1,9 +1,7 @@
 package com.restaurant.booking.user.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -22,13 +20,14 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Builder
+@ToString
 @Document(collection = "users")
 public class User implements UserDetails {
 
     @Id
     private String id;
 
-    @Indexed(unique = true, direction = IndexDirection.DESCENDING)
+    @Indexed(unique = true)
     private String email;
     private String password;
     private String fullname;

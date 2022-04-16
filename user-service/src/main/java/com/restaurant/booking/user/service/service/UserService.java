@@ -23,6 +23,7 @@ public interface UserService {
     User findByEmail(String email);
 
     /**
+     * Saves new user or updates existing one
      * @param user
      * @return
      */
@@ -35,5 +36,16 @@ public interface UserService {
      */
     User register(RegistrationRequest request) throws UserAlreadyExistsException;
 
+    /**
+     *
+     * @param user
+     * @return
+     */
+    User update(User user);
 
+    /**
+     *
+     * @param email
+     */
+    String delete(String email);
 }

@@ -48,9 +48,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User save(User user){
-        log.info("Saving user with email: {} and role: {}", user.getEmail(), user.getRoles());
-        // saves user to database with encoded password
+        log.info("Saving new user with email: {} and roles: {}", user.getEmail(), user.getRoles().toString());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User update(User user) {
+        log.info("Updating user with email: {} and roles: {}", user.getEmail(), user.getRoles());
         return userRepository.save(user);
     }
 
@@ -59,7 +64,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("Registering user with email: {}", request.getEmail());
 
         if(userRepository.findByEmail(request.getEmail()).isPresent()){
-            log.info("User with email: " + request.getEmail() + " already exists");
+            log.error("User with email: {} already exists", request.getEmail());
             throw new UserAlreadyExistsException(request.getEmail());
         }
         Role role = roleRepository.findByName(request.getRole()).orElseThrow(() -> new RoleNotFoundException(request.getRole().name()));
@@ -81,5 +86,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         } catch (UserNotFoundException e){
             throw new UsernameNotFoundException("User with email: " + email + " not found");
         }
+    }
+
+    @Override
+    public String delete(String email) {
+        log.info("Deleting user with email: {}", email);
+
+        if(userRepository.findByEmail(email).isEmpty()){
+            log.error("User with email: {} doesn't exist", email);
+            throw new UserNotFoundException(email);
+        }
+        userRepository.deleteByEmail(email);
+        return email;
     }
 }

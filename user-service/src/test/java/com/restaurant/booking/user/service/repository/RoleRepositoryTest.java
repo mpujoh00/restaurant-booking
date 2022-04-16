@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
+import java.util.Optional;
+
 @DataMongoTest
 public class RoleRepositoryTest {
 
@@ -16,6 +18,10 @@ public class RoleRepositoryTest {
     @Test
     void findByName(){
         roleRepository.save(new Role(RoleName.ROLE_ADMIN));
-        Assertions.assertTrue(roleRepository.findByName(RoleName.ROLE_ADMIN).isPresent());
+
+        Optional<Role> obtainedRole = roleRepository.findByName(RoleName.ROLE_ADMIN);
+
+        Assertions.assertTrue(obtainedRole.isPresent());
+        Assertions.assertEquals(RoleName.ROLE_ADMIN, obtainedRole.get().getName());
     }
 }

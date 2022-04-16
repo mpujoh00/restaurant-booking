@@ -1,14 +1,14 @@
 package com.restaurant.booking.user.model;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
-public class AuthenticationToken {
+@Builder
+public class PasswordChangeResponse {
 
     private String token;
-
+    private String errorMessage;
 }
