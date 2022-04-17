@@ -12,6 +12,8 @@
     <modules>
         <module>user-service</module>
         <module>user-model</module>
+        <module>restaurant-service</module>
+        <module>restaurant-model</module>
         <module>naming-server</module>
     </modules>
 

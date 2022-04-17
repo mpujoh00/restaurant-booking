@@ -7,8 +7,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="user-model" />
+        <module name="restaurant-model" />
         <module name="user-service" />
+        <module name="restaurant-service" />
+        <module name="user-model" />
         <module name="naming-server" />
       </profile>
     </annotationProcessing>
@@ -22,6 +24,8 @@
       <module name="authorization-server" options="-parameters" />
       <module name="jwt-support" options="-parameters" />
       <module name="naming-server" options="-parameters" />
+      <module name="restaurant-model" options="-parameters" />
+      <module name="restaurant-service" options="-parameters" />
       <module name="user-model" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
