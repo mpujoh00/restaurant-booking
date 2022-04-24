@@ -8,7 +8,7 @@ import com.restaurant.booking.user.service.exception.UserAlreadyExistsException;
 import com.restaurant.booking.user.service.exception.UserNotFoundException;
 import com.restaurant.booking.user.service.repository.RoleRepository;
 import com.restaurant.booking.user.service.repository.UserRepository;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Set;
 
-@Log4j2
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 

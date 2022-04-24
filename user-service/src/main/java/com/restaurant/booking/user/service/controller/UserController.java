@@ -6,7 +6,6 @@ import com.restaurant.booking.user.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,7 +17,7 @@ public interface UserController {
 
     @Operation(description = "Returns a list of all users", operationId = "getAllUsers")
     @GetMapping
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
     ResponseEntity<List<User>> getAllUsers();
 
     @Operation(description = "Returns a user given its email", operationId = "getUserByEmail")

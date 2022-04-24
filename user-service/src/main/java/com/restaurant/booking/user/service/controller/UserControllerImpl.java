@@ -91,8 +91,9 @@ public class UserControllerImpl implements UserController{
             Authentication authenticationNewPass = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userEmail, updatePasswordRequest.getNewPassword()));
             SecurityContextHolder.getContext().setAuthentication(authenticationNewPass);
-            String jwtToken = jwtUtils.generateJwtToken(authenticationNewPass);
-            return ResponseEntity.ok(jwtToken);
+            //String jwtToken = jwtUtils.generateJwtToken(authenticationNewPass);
+//            return ResponseEntity.ok(jwtToken);
+            return ResponseEntity.ok("token");
         }
         catch (Exception e){
             log.error("Password is incorrect");
@@ -122,7 +123,8 @@ public class UserControllerImpl implements UserController{
     }
 
     public boolean isNotCurrentUser(String emailRequest){
-        String userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return !userEmail.equals(emailRequest);
+        //String userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //return !userEmail.equals(emailRequest);
+        return false;
     }
 }

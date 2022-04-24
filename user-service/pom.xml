@@ -10,8 +10,6 @@
 	</parent>
 
 	<artifactId>user-service</artifactId>
-	<name>user-service</name>
-	<description>com.restaurant.booking.user.model.User Login Service</description>
 
 	<properties>
 		<java.version>11</java.version>

@@ -7,21 +7,27 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="feign-client" />
+        <module name="restaurant-service" />
+        <module name="api-gateway" />
         <module name="restaurant-model" />
         <module name="user-service" />
-        <module name="restaurant-service" />
         <module name="user-model" />
         <module name="naming-server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="authentication-service" target="11" />
       <module name="authorization-server" target="11" />
       <module name="jwt-support" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="api-gateway" options="-parameters" />
+      <module name="authentication-service" options="-parameters" />
       <module name="authorization-server" options="-parameters" />
+      <module name="feign-client" options="-parameters" />
       <module name="jwt-support" options="-parameters" />
       <module name="naming-server" options="-parameters" />
       <module name="restaurant-model" options="-parameters" />

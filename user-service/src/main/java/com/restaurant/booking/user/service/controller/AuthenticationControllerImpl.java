@@ -42,11 +42,12 @@ public class AuthenticationControllerImpl implements AuthenticationController{
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String jwtToken = jwtUtils.generateJwtToken(authentication);
+        //String jwtToken = jwtUtils.generateJwtToken(authentication);
 
         User loggedUser = userService.findByEmail(loginRequest.getEmail());
 
-        return ResponseEntity.ok(new LoginResponse(jwtToken, loggedUser));
+//        return ResponseEntity.ok(new LoginResponse(jwtToken, loggedUser));
+        return ResponseEntity.ok(new LoginResponse("token", loggedUser));
     }
 
     @Override
