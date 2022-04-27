@@ -1,4 +1,4 @@
-package com.restaurant.booking.user.service.exception;
+package com.restaurant.booking.restaurant.service.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ExceptionAdvice {
 
     @ResponseBody
-    @ExceptionHandler({UserNotFoundException.class, RoleNotFoundException.class})
+    @ExceptionHandler({RestaurantNotFoundException.class, UserNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String notFoundHandler(RuntimeException e){
+    public String notFoundHandler(RuntimeException e) {
         return e.getMessage();
     }
 
     @ResponseBody
-    @ExceptionHandler({UserAlreadyExistsException.class})
+    @ExceptionHandler({RestaurantAlreadyExistsException.class, RestAdminRoleIncorrectException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String badRequestHandler(RuntimeException e){
+    public String badRequestHandler(RuntimeException e) {
         return e.getMessage();
     }
 }

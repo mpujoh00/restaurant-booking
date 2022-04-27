@@ -2,7 +2,6 @@ package com.restaurant.booking.feign.client;
 
 import com.restaurant.booking.user.model.User;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -10,7 +9,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface UserProxy {
 
     @GetMapping("api/v1/users/{email}")
-    ResponseEntity<User> getUserByEmail(@PathVariable String email);
-
-
+    User getUserByEmail(@PathVariable String email);
 }

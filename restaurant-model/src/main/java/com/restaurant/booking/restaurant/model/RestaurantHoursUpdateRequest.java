@@ -1,6 +1,8 @@
 package com.restaurant.booking.restaurant.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -10,14 +12,8 @@ import java.time.LocalTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
-@ToString
-public class RestaurantRegistrationRequest {
+public class RestaurantHoursUpdateRequest {
 
-    @NotEmpty
-    private String name;
-    @NotEmpty
-    private String location;
     @NotEmpty
     @Size(min = 10)
     private String restaurantAdminEmail;
