@@ -1,14 +1,10 @@
 package com.restaurant.booking.user.service.service;
 
-import com.restaurant.booking.user.model.RegistrationRequest;
-import com.restaurant.booking.user.model.Role;
-import com.restaurant.booking.user.model.User;
-import com.restaurant.booking.user.service.exception.RoleNotFoundException;
-import com.restaurant.booking.user.service.exception.UserAlreadyExistsException;
-import com.restaurant.booking.user.service.exception.UserNotFoundException;
+import com.restaurant.booking.user.model.*;
+import com.restaurant.booking.user.service.exception.*;
 import com.restaurant.booking.user.service.repository.RoleRepository;
 import com.restaurant.booking.user.service.repository.UserRepository;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Set;
 
-@Log4j2
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 
@@ -54,14 +50,46 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User update(User user) {
+    public User update(User user, UpdateRequest updateRequest) {
         log.info("Updating user with email: {} and roles: {}", user.getEmail(), user.getRoles());
+
+        if (updateRequest.getFullname() != null)
+            user.setFullname(updateRequest.getFullname());
+        if (updateRequest.getPassword() != null)
+            user.setPassword(updateRequest.getPassword());
+
         return userRepository.save(user);
     }
 
     @Override
-    public User register(RegistrationRequest request) throws UserAlreadyExistsException {
+    public void updatePassword(User user, String newPassword) {
+
+        log.info("Updating user's with email {} password", user.getEmail());
+        user.setPassword(newPassword);
+        save(user);
+    }
+
+    @Override
+    public User registerBaseUser(RegistrationRequest request) {
+
         log.info("Registering user with email: {}", request.getEmail());
+
+        if(request.getRole().equals(RoleName.ROLE_ADMIN)){
+            log.error("Can't register a user with role admin");
+            throw new InvalidUserRegistration("Can't register a user " + request.getEmail() + " with role admin");
+        }
+        return registerUser(request);
+    }
+
+    @Override
+    public User registerAdminUser(RegistrationRequest request) {
+
+        log.info("Registering admin user with email: {}", request.getEmail());
+        request.setRole(RoleName.ROLE_ADMIN);
+        return registerUser(request);
+    }
+
+    private User registerUser(RegistrationRequest request) {
 
         if(userRepository.findByEmail(request.getEmail()).isPresent()){
             log.error("User with email: {} already exists", request.getEmail());
@@ -70,7 +98,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Role role = roleRepository.findByName(request.getRole()).orElseThrow(() -> new RoleNotFoundException(request.getRole().name()));
 
         User user = User.builder().
-                email(request.getEmail()).password(request.getPassword()).fullname(request.getFullname()).roles(Set.of(role))
+                email(request.getEmail()).password(request.getPassword()).fullname(request.getFullname())
+                .status(UserStatus.ENABLED).roles(Set.of(role))
                 .build();
 
         return save(user);
@@ -89,14 +118,31 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public String delete(String email) {
-        log.info("Deleting user with email: {}", email);
-
-        if(userRepository.findByEmail(email).isEmpty()){
-            log.error("User with email: {} doesn't exist", email);
-            throw new UserNotFoundException(email);
+    public void deleteAdmin(User user) {
+        if(user.getRolesList().get(0).getName().equals(RoleName.ROLE_ADMIN)){
+            delete(user);
         }
-        userRepository.deleteByEmail(email);
-        return email;
+        else{
+            log.error("Can't delete user with email {}, not an admin", user.getEmail());
+            throw new IncorrectAdminDeletion(user.getEmail());
+        }
+    }
+
+    public void delete(User user) {
+        log.info("Deleting user with email: {}", user.getEmail());
+        userRepository.delete(user);
+    }
+
+    @Override
+    public User changeUserStatus(User user) {
+        log.info("Changing user's with email {} status", user.getEmail());
+        user.setStatus(user.getStatus().getNextStatus());
+        return save(user);
+    }
+
+    private boolean isNotCurrentUser(String email){
+        //String userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //return !userEmail.equals(email);
+        return false;
     }
 }

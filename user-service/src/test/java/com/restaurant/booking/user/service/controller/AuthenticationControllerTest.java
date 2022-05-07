@@ -62,11 +62,11 @@ class AuthenticationControllerTest {
         RegistrationRequest request = new RegistrationRequest
                 (user.getEmail(), user.getPassword(), user.getFullname(), RoleName.ROLE_ADMIN);
 
-        Mockito.when(userService.register(request)).thenReturn(user);
+        Mockito.when(userService.registerBaseUser(request)).thenReturn(user);
 
         ResponseEntity<User> responseEntity = authenticationController.register(request);
 
-        Mockito.verify(userService).register(request);
+        Mockito.verify(userService).registerBaseUser(request);
 
         Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         Assertions.assertNotNull(responseEntity.getBody());
