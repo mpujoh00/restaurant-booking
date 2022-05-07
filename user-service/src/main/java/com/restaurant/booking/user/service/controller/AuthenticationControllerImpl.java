@@ -48,6 +48,7 @@ public class AuthenticationControllerImpl implements AuthenticationController{
         //String jwtToken = jwtUtils.generateJwtToken(authentication);
 
 //        return ResponseEntity.ok(new LoginResponse(jwtToken, loggedUser));
+
         return ResponseEntity.ok(new LoginResponse("token", loggedUser));
     }
 

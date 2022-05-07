@@ -1,5 +1,6 @@
 package com.restaurant.booking.apigateway;
 
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -42,23 +43,16 @@ public class AuthenticationFilter implements GatewayFilter {
             final String token = this.getAuthHeader(request);
 
             // checks if the token is correct
-//          if (jwtUtils.isInvalid(token))
-//              return this.onError(exchange, "Authorization header is invalid", HttpStatus.UNAUTHORIZED);
+            if (jwtUtils.isInvalid(token))
+                return this.onError(exchange, "Authorization header is invalid", HttpStatus.UNAUTHORIZED);
 
+            // valid token
             this.populateRequestWithHeaders(exchange, token);
         }
         return chain.filter(exchange);
     }
 
     /*PRIVATE*/
-
-    private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {
-
-        log.error(err);
-        ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(httpStatus);
-        return response.setComplete();
-    }
 
     private String getAuthHeader(ServerHttpRequest request) {
         return request.getHeaders().getOrEmpty("Authorization").get(0);
@@ -70,11 +64,19 @@ public class AuthenticationFilter implements GatewayFilter {
 
     private void populateRequestWithHeaders(ServerWebExchange exchange, String token) {
 
-        // sets userId and role as request's headers
-//        Claims claims = jwtUtils.getAllClaimsFromToken(token);
-//        exchange.getRequest().mutate()
-//                .header("id", String.valueOf(claims.get("id")))
-//                .header("role", String.valueOf(claims.get("role")))
-//                .build();
+        // sets username and role as request's headers
+        Claims claims = jwtUtils.getAllClaimsFromToken(token);
+        exchange.getRequest().mutate()
+                .header("username", String.valueOf(claims.get("username")))
+                .header("role", String.valueOf(claims.get("role")))
+                .build();
+    }
+
+    private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {
+
+        log.error(err);
+        ServerHttpResponse response = exchange.getResponse();
+        response.setStatusCode(httpStatus);
+        return response.setComplete();
     }
 }
