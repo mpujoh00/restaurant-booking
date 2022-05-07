@@ -27,6 +27,7 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private String fullname;
+    private UserStatus status;
 
     @DBRef
     private Set<Role> roles = new HashSet<>();

@@ -49,7 +49,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         User restaurantAdmin = getRestaurantAdmin(restaurantRegistrationRequest.getRestaurantAdminEmail());
         // check if admin already has a restaurant (a user can only be the administrator of one restaurant)
         if(restaurantRepository.findByRestaurantAdmin(restaurantAdmin).isPresent()){
-            log.error("User with email {} doesn't exist", restaurantRegistrationRequest.getRestaurantAdminEmail());
+            log.error("User with email {} already has a restaurant", restaurantRegistrationRequest.getRestaurantAdminEmail());
             throw new RestaurantAlreadyExistsException(restaurantAdmin.getEmail());
         }
         restaurant.setRestaurantAdmin(restaurantAdmin);
@@ -66,6 +66,13 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    public Restaurant findRestaurant(String restaurantId) {
+
+        log.info("Getting restaurant with id {}", restaurantId);
+        return restaurantRepository.findById(restaurantId).orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
+    }
+
+    @Override
     public List<Restaurant> findAllRestaurants() {
 
         log.info("Getting all restaurants");
@@ -73,16 +80,25 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public void deleteByRestaurantAdmin(String restaurantAdminEmail) {
+    public List<Restaurant> findRestaurantsByStatus(RestaurantStatus restaurantStatus) {
 
-        log.info("Deleting user's {} restaurant", restaurantAdminEmail);
-        restaurantRepository.delete(findByRestaurantAdmin(restaurantAdminEmail));
+        log.info("Getting all {} restaurants", restaurantStatus);
+        return restaurantRepository.findByStatus(restaurantStatus);
+    }
+
+    @Override
+    public void deleteRestaurant(String restaurantId) {
+
+        log.info("Deleting restaurant with id {}", restaurantId);
+        restaurantRepository.deleteById(restaurantId);
     }
 
     @Override
     public Restaurant updateRestaurant(RestaurantUpdateRequest restaurantUpdateRequest) {
 
-        Restaurant restaurant = findByRestaurantAdmin(restaurantUpdateRequest.getRestaurantAdminEmail());
+        log.info("Updating restaurant with id {}", restaurantUpdateRequest.getRestaurantId());
+
+        Restaurant restaurant = findRestaurant(restaurantUpdateRequest.getRestaurantId());
 
         if(restaurantUpdateRequest.getLocation() != null)
             restaurant.setLocation(restaurantUpdateRequest.getLocation());
@@ -93,11 +109,22 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public Restaurant updateRestaurantOpeningHours(RestaurantHoursUpdateRequest restaurantHoursUpdateRequest) {
+    public Restaurant updateRestaurantReservationHours(RestaurantReservHoursUpdateRequest restaurantReservHoursUpdateRequest) {
 
-        Restaurant restaurant = findByRestaurantAdmin(restaurantHoursUpdateRequest.getRestaurantAdminEmail());
+        log.info("Updating restaurant with id {}", restaurantReservHoursUpdateRequest.getRestaurantId());
+
+        Restaurant restaurant = findRestaurant(restaurantReservHoursUpdateRequest.getRestaurantId());
         restaurant.setReservationHours(
-                getReservationHours(restaurantHoursUpdateRequest.getOpenTime(), restaurantHoursUpdateRequest.getCloseTime(), restaurantHoursUpdateRequest.getIntervalMinutes()));
+                getReservationHours(restaurantReservHoursUpdateRequest.getOpenTime(), restaurantReservHoursUpdateRequest.getCloseTime(), restaurantReservHoursUpdateRequest.getIntervalMinutes()));
+        return save(restaurant);
+    }
+
+    @Override
+    public Restaurant changeRestaurantStatus(Restaurant restaurant) {
+
+        log.info("Changing restaurant's with id {} status", restaurant.getId());
+
+        restaurant.setStatus(restaurant.getStatus().nextStatus());
         return save(restaurant);
     }
 
@@ -122,12 +149,11 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     private List<LocalTime> getReservationHours(LocalTime openTime, LocalTime closeTime, Interval interval){
 
-        // TODO ver qué hacer cuando el intervalo no da un número exacto
-
         List<LocalTime> reservationHours = new ArrayList<>();
         LocalTime currentInterval = openTime;
 
-        while(currentInterval.isBefore(closeTime)){
+        while(currentInterval.isBefore(closeTime) &&
+                (currentInterval.plusMinutes(interval.getMinutes()).isBefore(closeTime) || currentInterval.plusMinutes(interval.getMinutes()).equals(closeTime))){
             reservationHours.add(currentInterval);
             currentInterval = currentInterval.plusMinutes(interval.getMinutes());
         }

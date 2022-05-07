@@ -1,9 +1,7 @@
 package com.restaurant.booking.user.service.controller;
 
-import com.restaurant.booking.user.model.LoginRequest;
-import com.restaurant.booking.user.model.LoginResponse;
-import com.restaurant.booking.user.model.RegistrationRequest;
-import com.restaurant.booking.user.model.User;
+import com.restaurant.booking.user.model.*;
+import com.restaurant.booking.user.service.exception.UserLoginDisabledException;
 import com.restaurant.booking.user.service.security.JwtUtils;
 import com.restaurant.booking.user.service.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +35,11 @@ public class AuthenticationControllerImpl implements AuthenticationController{
     public ResponseEntity<LoginResponse> login(LoginRequest loginRequest){
         log.info("Logging in");
 
+        User loggedUser = userService.findByEmail(loginRequest.getEmail());
+        if(loggedUser.getStatus().equals(UserStatus.DISABLED)){
+            throw new UserLoginDisabledException(loggedUser.getEmail());
+        }
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
@@ -44,14 +47,13 @@ public class AuthenticationControllerImpl implements AuthenticationController{
 
         //String jwtToken = jwtUtils.generateJwtToken(authentication);
 
-        User loggedUser = userService.findByEmail(loginRequest.getEmail());
-
 //        return ResponseEntity.ok(new LoginResponse(jwtToken, loggedUser));
         return ResponseEntity.ok(new LoginResponse("token", loggedUser));
     }
 
     @Override
     public ResponseEntity<User> register(RegistrationRequest registrationRequest){
-        return new ResponseEntity<>(userService.register(registrationRequest), HttpStatus.CREATED);
+
+        return new ResponseEntity<>(userService.registerBaseUser(registrationRequest), HttpStatus.CREATED);
     }
 }

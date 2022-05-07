@@ -14,7 +14,7 @@ public class RestaurantUpdateRequest {
 
     @NotEmpty
     @Size(min = 10)
-    private String restaurantAdminEmail;
+    private String restaurantId;
     private String name;
     private String location;
 }

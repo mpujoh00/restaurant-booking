@@ -22,7 +22,12 @@ public class ApiGatewayConfig {
                 .route(p -> p.path("/api/v1/auth/**")//.filters(f -> f.filter(authenticationFilter))
                         .uri("lb://user-service"))
                 .route(p -> p.path("/api/v1/users/**").uri("lb://user-service"))
-                .route(p -> p.path("/api/v1/restaurants/**").uri("lb://restaurant-service"))
+                .route(p -> p.path("/api/v1/admin/users/**").uri("lb://user-service"))
+                .route(p -> p
+                        .path("/api/v1/restaurants/**")
+                        .filters(f -> f.filter(authenticationFilter))
+                        .uri("lb://restaurant-service"))
+                .route(p -> p.path("/api/v1/admin/restaurants/**").uri("lb://restaurant-service"))
                 .build();
     }
 

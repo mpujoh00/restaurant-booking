@@ -3,7 +3,6 @@ package com.restaurant.booking.user.service.controller;
 import com.restaurant.booking.user.model.UpdatePasswordRequest;
 import com.restaurant.booking.user.model.UpdateRequest;
 import com.restaurant.booking.user.model.User;
-import com.restaurant.booking.user.service.exception.UserNotFoundException;
 import com.restaurant.booking.user.service.security.JwtUtils;
 import com.restaurant.booking.user.service.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @Slf4j
 @CrossOrigin(origins = "http://localhost:8080", maxAge = 3600)
@@ -36,12 +33,6 @@ public class UserControllerImpl implements UserController{
     }
 
     @Override
-    public ResponseEntity<List<User>> getAllUsers(){
-        log.info("Getting all users");
-        return ResponseEntity.ok(userService.findAllUsers());
-    }
-
-    @Override
     public ResponseEntity<User> getUserByEmail(String email){
         log.info("Getting user with email {}", email);
         return ResponseEntity.ok(userService.findByEmail(email));
@@ -57,22 +48,13 @@ public class UserControllerImpl implements UserController{
             log.error("Can't update another user diferent than self");
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-
-        // gets user (unmodified)
-        User user = userService.findByEmail(updateRequest.getEmail());
-
-        // modifies user
-        if (updateRequest.getFullname() != null)
-            user.setFullname(updateRequest.getFullname());
-        if (updateRequest.getPassword() != null)
-            user.setPassword(updateRequest.getPassword());
-
         // saves user to database and returns it
-        return ResponseEntity.ok(userService.update(user));
+        return ResponseEntity.ok(userService.update(userService.findByEmail(updateRequest.getEmail()), updateRequest));
     }
 
     @Override
     public ResponseEntity<String> updateUserPassword(UpdatePasswordRequest updatePasswordRequest) {
+
         // gets current user
         String userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.info("Updating password of user with email {}", userEmail);
@@ -81,12 +63,6 @@ public class UserControllerImpl implements UserController{
         try{
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userEmail, updatePasswordRequest.getCurrentPassword()));
-            // changes password
-            User user = userService.findByEmail(userEmail);
-            user.setPassword(updatePasswordRequest.getNewPassword());
-            // saves user
-            userService.save(user);
-
             // sets the user as logged with the new password
             Authentication authenticationNewPass = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userEmail, updatePasswordRequest.getNewPassword()));
@@ -112,17 +88,11 @@ public class UserControllerImpl implements UserController{
             return ResponseEntity.badRequest().build();
         }
 
-        try{
-            userService.delete(email);
-            return ResponseEntity.ok().build();
-        }
-        catch (UserNotFoundException e){
-            log.error("User with email {} not found", email);
-            return ResponseEntity.notFound().build();
-        }
+        userService.delete(userService.findByEmail(email));
+        return ResponseEntity.ok().build();
     }
 
-    public boolean isNotCurrentUser(String emailRequest){
+    private boolean isNotCurrentUser(String emailRequest){
         //String userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         //return !userEmail.equals(emailRequest);
         return false;

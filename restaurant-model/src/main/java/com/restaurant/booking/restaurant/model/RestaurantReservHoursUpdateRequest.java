@@ -12,11 +12,11 @@ import java.time.LocalTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RestaurantHoursUpdateRequest {
+public class RestaurantReservHoursUpdateRequest {
 
     @NotEmpty
     @Size(min = 10)
-    private String restaurantAdminEmail;
+    private String restaurantId;
     @NotNull
     private LocalTime openTime;
     @NotNull

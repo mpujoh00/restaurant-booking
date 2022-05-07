@@ -1,9 +1,6 @@
 package com.restaurant.booking.restaurant.service.service;
 
-import com.restaurant.booking.restaurant.model.Restaurant;
-import com.restaurant.booking.restaurant.model.RestaurantHoursUpdateRequest;
-import com.restaurant.booking.restaurant.model.RestaurantRegistrationRequest;
-import com.restaurant.booking.restaurant.model.RestaurantUpdateRequest;
+import com.restaurant.booking.restaurant.model.*;
 
 import java.util.List;
 
@@ -32,16 +29,29 @@ public interface RestaurantService {
 
     /**
      *
+     * @param restaurantId
+     * @return
+     */
+    Restaurant findRestaurant(String restaurantId);
+
+    /**
+     *
      * @return
      */
     List<Restaurant> findAllRestaurants();
 
     /**
      *
-     * @param restaurantAdminEmail
      * @return
      */
-    void deleteByRestaurantAdmin(String restaurantAdminEmail);
+    List<Restaurant> findRestaurantsByStatus(RestaurantStatus restaurantStatus) ;
+
+    /**
+     *
+     * @param restaurantId
+     * @return
+     */
+    void deleteRestaurant(String restaurantId);
 
     /**
      *
@@ -52,8 +62,15 @@ public interface RestaurantService {
 
     /**
      *
-     * @param restaurantHoursUpdateRequest
+     * @param restaurantReservHoursUpdateRequest
      * @return
      */
-    Restaurant updateRestaurantOpeningHours(RestaurantHoursUpdateRequest restaurantHoursUpdateRequest);
+    Restaurant updateRestaurantReservationHours(RestaurantReservHoursUpdateRequest restaurantReservHoursUpdateRequest);
+
+    /**
+     *
+     * @param restaurant
+     * @return
+     */
+    Restaurant changeRestaurantStatus(Restaurant restaurant);
 }

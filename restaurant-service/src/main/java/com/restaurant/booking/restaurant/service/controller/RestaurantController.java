@@ -1,8 +1,8 @@
 package com.restaurant.booking.restaurant.service.controller;
 
 import com.restaurant.booking.restaurant.model.Restaurant;
-import com.restaurant.booking.restaurant.model.RestaurantHoursUpdateRequest;
 import com.restaurant.booking.restaurant.model.RestaurantRegistrationRequest;
+import com.restaurant.booking.restaurant.model.RestaurantReservHoursUpdateRequest;
 import com.restaurant.booking.restaurant.model.RestaurantUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,23 +20,27 @@ public interface RestaurantController {
     @PostMapping("/register")
     ResponseEntity<Restaurant> register(@RequestBody @Valid RestaurantRegistrationRequest restaurantRegistrationRequest);
 
-    @Operation(description = "Gets the restaurant given its admin's email", operationId = "getRestaurantByAdminEmail")
+    @Operation(description = "Gets the restaurant given its id", operationId = "getRestaurant")
+    @GetMapping("/{restaurantId}")
+    ResponseEntity<Restaurant> getRestaurant(@PathVariable String restaurantId);
+
+    /*@Operation(description = "Gets the restaurant given its admin's email", operationId = "getRestaurantByAdminEmail")
     @GetMapping("/{adminEmail}")
-    ResponseEntity<Restaurant> getRestaurantByAdminEmail(@PathVariable String adminEmail);
+    ResponseEntity<Restaurant> getRestaurantByAdminEmail(@PathVariable String adminEmail);*/
 
-    @Operation(description = "Gets all the restaurants", operationId = "getAllRestaurants")
+    @Operation(description = "Gets all enabled restaurants", operationId = "getEnabledRestaurants")
     @GetMapping
-    ResponseEntity<List<Restaurant>> getAllRestaurants();
+    ResponseEntity<List<Restaurant>> getEnabledRestaurants();
 
-    @Operation(description = "Deletes the restaurant given its admin's email", operationId = "deleteRestaurantByAdminEmail")
-    @DeleteMapping("/delete/{adminEmail}")
-    ResponseEntity<Void> deleteRestaurantByAdminEmail(@PathVariable String adminEmail);
+    @Operation(description = "Deletes the restaurant", operationId = "deleteRestaurant")
+    @DeleteMapping("/delete/{restaurantId}")
+    ResponseEntity<Void> deleteRestaurant(@PathVariable String restaurantId);
 
-    @Operation(description = "Updates the restaurant given its admin's email", operationId = "updateRestaurantByAdminEmail")
+    @Operation(description = "Updates the restaurant", operationId = "updateRestaurant")
     @PutMapping
-    ResponseEntity<Restaurant> updateRestaurantByAdminEmail(@RequestBody @Valid RestaurantUpdateRequest restaurantUpdateRequest);
+    ResponseEntity<Restaurant> updateRestaurant(@RequestBody @Valid RestaurantUpdateRequest restaurantUpdateRequest);
 
-    @Operation(description = "Updates the restaurant's opening hours given its admin's email", operationId = "updateRestOpenHoursByAdminEmail")
-    @PutMapping("/change-opening-hours")
-    ResponseEntity<Restaurant> updateRestOpenHoursByAdminEmail(@RequestBody @Valid RestaurantHoursUpdateRequest restaurantHoursUpdateRequest);
+    @Operation(description = "Updates the restaurant's reservation hours", operationId = "updateRestaurantReservationHours")
+    @PutMapping("/change-reservation-hours")
+    ResponseEntity<Restaurant> updateRestaurantReservationHours(@RequestBody @Valid RestaurantReservHoursUpdateRequest restaurantReservHoursUpdateRequest);
 }

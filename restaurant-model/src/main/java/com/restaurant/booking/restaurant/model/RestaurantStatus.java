@@ -1,26 +1,24 @@
 package com.restaurant.booking.restaurant.model;
 
-import java.util.Set;
-
 public enum RestaurantStatus {
     PENDING{
         @Override
-        public Set<RestaurantStatus> allowedStatus() {
-            return Set.of(ENABLED);
+        public RestaurantStatus nextStatus() {
+            return ENABLED;
         }
     },
     ENABLED {
         @Override
-        public Set<RestaurantStatus> allowedStatus() {
-            return Set.of(DISABLED);
+        public RestaurantStatus nextStatus() {
+            return DISABLED;
         }
     },
     DISABLED {
         @Override
-        public Set<RestaurantStatus> allowedStatus() {
-            return Set.of(ENABLED);
+        public RestaurantStatus nextStatus() {
+            return ENABLED;
         }
     };
 
-    public abstract Set<RestaurantStatus> allowedStatus();
+    public abstract RestaurantStatus nextStatus();
 }

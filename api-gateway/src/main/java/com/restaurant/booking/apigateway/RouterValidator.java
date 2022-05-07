@@ -14,6 +14,7 @@ public class RouterValidator {
             "api/v1/auth/login"
     );
 
+    // secured if route is not an openApiEndpoint
     public Predicate<ServerHttpRequest> isSecured =
             request -> openApiEndpoints
                     .stream()

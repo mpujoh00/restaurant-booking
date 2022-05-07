@@ -1,13 +1,15 @@
 package com.restaurant.booking.user.service.service;
 
 import com.restaurant.booking.user.model.RegistrationRequest;
+import com.restaurant.booking.user.model.UpdateRequest;
 import com.restaurant.booking.user.model.User;
-import com.restaurant.booking.user.service.exception.UserAlreadyExistsException;
 
 import java.util.List;
 
 
 public interface UserService {
+
+    // TODO mover la lógica del controlador al servicio
 
     /**
      *
@@ -34,18 +36,45 @@ public interface UserService {
      * @param request
      * @return
      */
-    User register(RegistrationRequest request) throws UserAlreadyExistsException;
+    User registerBaseUser(RegistrationRequest request);
 
     /**
      *
      * @param user
      * @return
      */
-    User update(User user);
+    User update(User user, UpdateRequest updateRequest);
 
     /**
      *
-     * @param email
+     * @param user
+     * @param newPassword
      */
-    String delete(String email);
+    void updatePassword(User user, String newPassword);
+
+    /**
+     *
+     * @param request
+     * @return
+     */
+    User registerAdminUser(RegistrationRequest request);
+
+    /**
+     *
+     * @param user
+     */
+    void delete(User user);
+
+    /**
+     *
+     * @param user
+     */
+    void deleteAdmin(User user);
+
+    /**
+     *
+     * @param user
+     * @return
+     */
+    User changeUserStatus(User user);
 }

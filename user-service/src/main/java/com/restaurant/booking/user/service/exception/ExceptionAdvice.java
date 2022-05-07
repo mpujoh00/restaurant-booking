@@ -17,9 +17,16 @@ public class ExceptionAdvice {
     }
 
     @ResponseBody
-    @ExceptionHandler({UserAlreadyExistsException.class})
+    @ExceptionHandler({UserAlreadyExistsException.class, InvalidUserRegistration.class, IncorrectAdminDeletion.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String badRequestHandler(RuntimeException e){
+        return e.getMessage();
+    }
+
+    @ResponseBody
+    @ExceptionHandler({UserLoginDisabledException.class})
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public String forbiddenHandler(RuntimeException e){
         return e.getMessage();
     }
 }

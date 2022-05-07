@@ -1,9 +1,6 @@
 package com.restaurant.booking.restaurant.service.controller;
 
-import com.restaurant.booking.restaurant.model.Restaurant;
-import com.restaurant.booking.restaurant.model.RestaurantHoursUpdateRequest;
-import com.restaurant.booking.restaurant.model.RestaurantRegistrationRequest;
-import com.restaurant.booking.restaurant.model.RestaurantUpdateRequest;
+import com.restaurant.booking.restaurant.model.*;
 import com.restaurant.booking.restaurant.service.service.RestaurantService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,28 +27,33 @@ public class RestaurantControllerImpl implements RestaurantController {
     }
 
     @Override
+    public ResponseEntity<Restaurant> getRestaurant(String restaurantId) {
+        return ResponseEntity.ok(restaurantService.findRestaurant(restaurantId));
+    }
+
+    /*@Override
     public ResponseEntity<Restaurant> getRestaurantByAdminEmail(String adminEmail) {
         return ResponseEntity.ok(restaurantService.findByRestaurantAdmin(adminEmail));
+    }*/
+
+    @Override
+    public ResponseEntity<List<Restaurant>> getEnabledRestaurants() {
+        return ResponseEntity.ok(restaurantService.findRestaurantsByStatus(RestaurantStatus.ENABLED));
     }
 
     @Override
-    public ResponseEntity<List<Restaurant>> getAllRestaurants() {
-        return ResponseEntity.ok(restaurantService.findAllRestaurants());
-    }
-
-    @Override
-    public ResponseEntity<Void> deleteRestaurantByAdminEmail(String adminEmail) {
-        restaurantService.deleteByRestaurantAdmin(adminEmail);
+    public ResponseEntity<Void> deleteRestaurant(String restaurantId) {
+        restaurantService.deleteRestaurant(restaurantId);
         return ResponseEntity.ok().build();
     }
 
     @Override
-    public ResponseEntity<Restaurant> updateRestaurantByAdminEmail(RestaurantUpdateRequest restaurantUpdateRequest) {
+    public ResponseEntity<Restaurant> updateRestaurant(RestaurantUpdateRequest restaurantUpdateRequest) {
         return ResponseEntity.ok(restaurantService.updateRestaurant(restaurantUpdateRequest));
     }
 
     @Override
-    public ResponseEntity<Restaurant> updateRestOpenHoursByAdminEmail(RestaurantHoursUpdateRequest restaurantHoursUpdateRequest) {
-        return ResponseEntity.ok(restaurantService.updateRestaurantOpeningHours(restaurantHoursUpdateRequest));
+    public ResponseEntity<Restaurant> updateRestaurantReservationHours(RestaurantReservHoursUpdateRequest restaurantReservHoursUpdateRequest) {
+        return ResponseEntity.ok(restaurantService.updateRestaurantReservationHours(restaurantReservHoursUpdateRequest));
     }
 }

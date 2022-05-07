@@ -9,16 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Tag(name = "User")
 @RequestMapping("/api/v1/users")
 public interface UserController {
-
-    @Operation(description = "Returns a list of all users", operationId = "getAllUsers")
-    @GetMapping
-    //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    ResponseEntity<List<User>> getAllUsers();
 
     @Operation(description = "Returns a user given its email", operationId = "getUserByEmail")
     @GetMapping("/{email}")

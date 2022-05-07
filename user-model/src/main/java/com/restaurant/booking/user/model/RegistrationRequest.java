@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
@@ -22,5 +23,6 @@ public class RegistrationRequest {
     @NotEmpty
     private String fullname;
     @NotNull
+    // TODO grupo para validar según el controlador
     private RoleName role;
 }
