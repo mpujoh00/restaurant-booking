@@ -26,7 +26,11 @@ public interface UserController {
     @PutMapping("/change-password")
     ResponseEntity<String> updateUserPassword(@RequestBody @Valid UpdatePasswordRequest updatePasswordRequest);
 
-    @Operation(description = "Returns the email of the deleted user", operationId = "deleteUser")
+    @Operation(description = "Deletes an user", operationId = "deleteUser")
     @DeleteMapping("/delete/{email}")
     ResponseEntity<Void> deleteUser(@PathVariable String email);
+
+    @Operation(description = "Adds the given restaurant to the user", operationId = "addRestaurant")
+    @PutMapping("/add-restaurant/{restaurantId}/user/{userEmail}")
+    ResponseEntity<Void> addRestaurant(@PathVariable String restaurantId, @PathVariable String userEmail);
 }

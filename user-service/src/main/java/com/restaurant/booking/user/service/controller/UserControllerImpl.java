@@ -92,6 +92,14 @@ public class UserControllerImpl implements UserController{
         return ResponseEntity.ok().build();
     }
 
+    @Override
+    public ResponseEntity<Void> addRestaurant(String restaurantId, String userEmail) {
+
+        log.info("Adding restaurant to user with email {}", userEmail);
+        userService.addRestaurant(userService.findByEmail(userEmail), restaurantId);
+        return ResponseEntity.ok().build();
+    }
+
     private boolean isNotCurrentUser(String emailRequest){
         //String userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         //return !userEmail.equals(emailRequest);

@@ -22,13 +22,6 @@ public interface RestaurantService {
 
     /**
      *
-     * @param restaurantAdminEmail
-     * @return
-     */
-    Restaurant findByRestaurantAdmin(String restaurantAdminEmail);
-
-    /**
-     *
      * @param restaurantId
      * @return
      */

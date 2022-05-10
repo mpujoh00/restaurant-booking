@@ -14,6 +14,8 @@
         <module>user-model</module>
         <module>restaurant-service</module>
         <module>restaurant-model</module>
+        <module>table-service</module>
+        <module>table-model</module>
         <module>naming-server</module>
         <module>api-gateway</module>
         <module>feign-client</module>

@@ -2,6 +2,11 @@
 <project version="4">
   <component name="SonarLintProjectSettings">
     <option name="bindingEnabled" value="true" />
+    <option name="fileExclusions">
+      <list>
+        <option value="DIRECTORY:front-end" />
+      </list>
+    </option>
     <option name="projectKey" value="mpujoh00_restaurant-booking" />
     <option name="serverId" value="SonarCloud" />
   </component>

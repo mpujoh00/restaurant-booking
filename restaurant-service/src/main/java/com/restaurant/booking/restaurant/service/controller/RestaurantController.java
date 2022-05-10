@@ -24,10 +24,6 @@ public interface RestaurantController {
     @GetMapping("/{restaurantId}")
     ResponseEntity<Restaurant> getRestaurant(@PathVariable String restaurantId);
 
-    /*@Operation(description = "Gets the restaurant given its admin's email", operationId = "getRestaurantByAdminEmail")
-    @GetMapping("/{adminEmail}")
-    ResponseEntity<Restaurant> getRestaurantByAdminEmail(@PathVariable String adminEmail);*/
-
     @Operation(description = "Gets all enabled restaurants", operationId = "getEnabledRestaurants")
     @GetMapping
     ResponseEntity<List<Restaurant>> getEnabledRestaurants();

@@ -1,5 +1,8 @@
 package com.restaurant.booking.user.service.service;
 
+import com.restaurant.booking.feign.client.RestaurantProxy;
+import com.restaurant.booking.feign.client.exception.NotFoundException;
+import com.restaurant.booking.restaurant.model.Restaurant;
 import com.restaurant.booking.user.model.*;
 import com.restaurant.booking.user.service.exception.*;
 import com.restaurant.booking.user.service.repository.RoleRepository;
@@ -22,12 +25,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final RestaurantProxy restaurantProxy;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, RoleRepository roleRepository, RestaurantProxy restaurantProxy) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+        this.restaurantProxy = restaurantProxy;
     }
 
     public List<User> findAllUsers(){
@@ -138,6 +143,33 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("Changing user's with email {} status", user.getEmail());
         user.setStatus(user.getStatus().getNextStatus());
         return save(user);
+    }
+
+    @Override
+    public void addRestaurant(User user, String restaurantId) {
+        log.info("Adding restaurant to user with email {}", user.getEmail());
+
+        // TODO disabled user?
+
+        if(!user.getRolesList().get(0).getName().equals(RoleName.ROLE_RESTAURANT)){
+            log.error("Can't add restaurant, user with email {} doesn't have restaurant role", user.getEmail());
+            throw new IncorrectRoleException(user.getEmail(), RoleName.ROLE_RESTAURANT.name());
+        }
+        else if(user.getRestaurant() != null){
+            log.error("Can't add restaurant, user with email {} already has a restaurant", user.getEmail());
+            throw new RestaurantAlreadyExistsException(user.getEmail());
+        }
+
+        user.setRestaurant(getRestaurant(restaurantId));
+        save(user);
+    }
+
+    private Restaurant getRestaurant(String restaurantId){
+        try{
+            return restaurantProxy.getRestaurant(restaurantId);
+        }catch (NotFoundException e){
+            throw new RestaurantNotFoundException(restaurantId);
+        }
     }
 
     private boolean isNotCurrentUser(String email){
