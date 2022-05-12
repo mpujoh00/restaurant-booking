@@ -26,7 +26,7 @@ import java.util.Set;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceImplTest {
+class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;

@@ -1,6 +1,5 @@
 package com.restaurant.booking.table.service.service;
 
-import com.restaurant.booking.feign.client.RestaurantProxy;
 import com.restaurant.booking.table.model.Table;
 import com.restaurant.booking.table.model.TableCreationRequest;
 import com.restaurant.booking.table.service.exception.TableNotFoundException;
@@ -19,9 +18,8 @@ public class TableServiceImpl implements TableService {
     private final TableRepository tableRepository;
 
     @Autowired
-    public TableServiceImpl(TableRepository tableRepository, RestaurantProxy restaurantProxy) {
+    public TableServiceImpl(TableRepository tableRepository) {
         this.tableRepository = tableRepository;
-        this.restaurantProxy = restaurantProxy;
     }
 
     @Override

@@ -17,7 +17,7 @@ public class ExceptionAdvice {
     }
 
     @ResponseBody
-    @ExceptionHandler({RestaurantAlreadyExistsException.class, RestAdminRoleIncorrectException.class})
+    @ExceptionHandler({RestaurantAlreadyExistsException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String badRequestHandler(RuntimeException e) {
         return e.getMessage();
