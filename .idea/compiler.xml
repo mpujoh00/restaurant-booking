@@ -9,8 +9,10 @@
         <outputRelativeToContentRoot value="true" />
         <module name="feign-client" />
         <module name="restaurant-service" />
+        <module name="table-model" />
         <module name="api-gateway" />
         <module name="restaurant-model" />
+        <module name="table-service" />
         <module name="user-service" />
         <module name="user-model" />
         <module name="naming-server" />
@@ -19,6 +21,8 @@
     <bytecodeTargetLevel>
       <module name="authentication-service" target="11" />
       <module name="authorization-server" target="11" />
+      <module name="booking-model" target="11" />
+      <module name="booking-service" target="11" />
       <module name="jwt-support" target="11" />
     </bytecodeTargetLevel>
   </component>
@@ -27,11 +31,15 @@
       <module name="api-gateway" options="-parameters" />
       <module name="authentication-service" options="-parameters" />
       <module name="authorization-server" options="-parameters" />
+      <module name="booking-model" options="-parameters" />
+      <module name="booking-service" options="-parameters" />
       <module name="feign-client" options="-parameters" />
       <module name="jwt-support" options="-parameters" />
       <module name="naming-server" options="-parameters" />
       <module name="restaurant-model" options="-parameters" />
       <module name="restaurant-service" options="-parameters" />
+      <module name="table-model" options="-parameters" />
+      <module name="table-service" options="-parameters" />
       <module name="user-model" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>

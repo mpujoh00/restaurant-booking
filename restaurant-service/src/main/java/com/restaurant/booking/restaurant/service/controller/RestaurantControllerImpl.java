@@ -2,7 +2,6 @@ package com.restaurant.booking.restaurant.service.controller;
 
 import com.restaurant.booking.restaurant.model.*;
 import com.restaurant.booking.restaurant.service.service.RestaurantService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 public class RestaurantControllerImpl implements RestaurantController {
 
@@ -30,11 +28,6 @@ public class RestaurantControllerImpl implements RestaurantController {
     public ResponseEntity<Restaurant> getRestaurant(String restaurantId) {
         return ResponseEntity.ok(restaurantService.findRestaurant(restaurantId));
     }
-
-    /*@Override
-    public ResponseEntity<Restaurant> getRestaurantByAdminEmail(String adminEmail) {
-        return ResponseEntity.ok(restaurantService.findByRestaurantAdmin(adminEmail));
-    }*/
 
     @Override
     public ResponseEntity<List<Restaurant>> getEnabledRestaurants() {

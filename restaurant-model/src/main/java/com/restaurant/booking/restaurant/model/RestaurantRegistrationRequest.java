@@ -12,6 +12,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
+@Builder
 public class RestaurantRegistrationRequest {
 
     @NotEmpty

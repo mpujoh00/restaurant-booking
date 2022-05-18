@@ -40,12 +40,6 @@
 			<artifactId>lombok</artifactId>
 			<version>${lombok.version}</version>
 		</dependency>
-
-		<dependency>
-			<groupId>com.restaurant.booking</groupId>
-			<artifactId>user-model</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 
 </project>

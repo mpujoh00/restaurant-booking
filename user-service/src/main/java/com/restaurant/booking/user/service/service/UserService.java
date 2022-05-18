@@ -9,8 +9,6 @@ import java.util.List;
 
 public interface UserService {
 
-    // TODO mover la lógica del controlador al servicio
-
     /**
      *
      * @return
@@ -77,4 +75,11 @@ public interface UserService {
      * @return
      */
     User changeUserStatus(User user);
+
+    /**
+     *
+     * @param user
+     * @param restaurantId
+     */
+    void addRestaurant(User user, String restaurantId);
 }

@@ -1,15 +1,13 @@
 package com.restaurant.booking.restaurant.service.service;
 
 import com.restaurant.booking.feign.client.UserProxy;
+import com.restaurant.booking.feign.client.exception.BadRequestException;
 import com.restaurant.booking.feign.client.exception.NotFoundException;
 import com.restaurant.booking.restaurant.model.*;
-import com.restaurant.booking.restaurant.service.exception.RestAdminRoleIncorrectException;
 import com.restaurant.booking.restaurant.service.exception.RestaurantAlreadyExistsException;
 import com.restaurant.booking.restaurant.service.exception.RestaurantNotFoundException;
 import com.restaurant.booking.restaurant.service.exception.UserNotFoundException;
 import com.restaurant.booking.restaurant.service.repository.RestaurantRepository;
-import com.restaurant.booking.user.model.RoleName;
-import com.restaurant.booking.user.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,27 +40,23 @@ public class RestaurantServiceImpl implements RestaurantService {
         log.info("Registering new restaurant: {}", restaurantRegistrationRequest.getName());
 
         Restaurant restaurant = new Restaurant(restaurantRegistrationRequest);
-
         restaurant.setReservationHours(
                 getReservationHours(restaurantRegistrationRequest.getOpenTime(), restaurantRegistrationRequest.getCloseTime(), restaurantRegistrationRequest.getIntervalMinutes()));
+        restaurant = save(restaurant);
 
-        User restaurantAdmin = getRestaurantAdmin(restaurantRegistrationRequest.getRestaurantAdminEmail());
-        // check if admin already has a restaurant (a user can only be the administrator of one restaurant)
-        if(restaurantRepository.findByRestaurantAdmin(restaurantAdmin).isPresent()){
-            log.error("User with email {} already has a restaurant", restaurantRegistrationRequest.getRestaurantAdminEmail());
-            throw new RestaurantAlreadyExistsException(restaurantAdmin.getEmail());
+        // add restaurant to admin user
+        try{
+            userProxy.addRestaurant(restaurantRegistrationRequest.getRestaurantAdminEmail(), restaurant.getId());
+        } catch(BadRequestException e){
+            log.error("Can't create a restaurant for user with email {}", restaurantRegistrationRequest.getRestaurantAdminEmail());
+            restaurantRepository.delete(restaurant);
+            throw new RestaurantAlreadyExistsException(restaurantRegistrationRequest.getRestaurantAdminEmail());
+        } catch (NotFoundException e){
+            log.error("User with email {} doesn't exist", restaurantRegistrationRequest.getRestaurantAdminEmail());
+            restaurantRepository.delete(restaurant);
+            throw new UserNotFoundException(restaurantRegistrationRequest.getRestaurantAdminEmail());
         }
-        restaurant.setRestaurantAdmin(restaurantAdmin);
-
-        return restaurantRepository.save(restaurant);
-    }
-
-    @Override
-    public Restaurant findByRestaurantAdmin(String restaurantAdminEmail) {
-
-        log.info("Getting restaurant whose admin is {}", restaurantAdminEmail);
-        return restaurantRepository.findByRestaurantAdmin(getRestaurantAdmin(restaurantAdminEmail))
-                .orElseThrow(() -> new RestaurantNotFoundException(restaurantAdminEmail));
+        return restaurant;
     }
 
     @Override
@@ -126,25 +120,6 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         restaurant.setStatus(restaurant.getStatus().nextStatus());
         return save(restaurant);
-    }
-
-    private User getRestaurantAdmin(String restaurantAdminEmail){
-
-        User restaurantAdmin;
-        try{
-            restaurantAdmin = userProxy.getUserByEmail(restaurantAdminEmail);
-        }
-        catch (NotFoundException e){
-            log.error("User with email {} doesn't exist", restaurantAdminEmail);
-            throw new UserNotFoundException(restaurantAdminEmail);
-        }
-        // checks if the user has role restaurant
-        if(restaurantAdmin.getRolesList().get(0).getName().equals(RoleName.ROLE_RESTAURANT)) {
-            return restaurantAdmin;
-        } else{
-            log.error("User with email {} doesn't have restaurant role", restaurantAdminEmail);
-            throw new RestAdminRoleIncorrectException(restaurantAdmin.getEmail());
-        }
     }
 
     private List<LocalTime> getReservationHours(LocalTime openTime, LocalTime closeTime, Interval interval){

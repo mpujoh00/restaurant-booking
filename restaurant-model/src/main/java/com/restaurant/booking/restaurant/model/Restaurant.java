@@ -1,9 +1,7 @@
 package com.restaurant.booking.restaurant.model;
 
-import com.restaurant.booking.user.model.User;
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalTime;
@@ -26,9 +24,6 @@ public class Restaurant {
     private String location;
     private List<LocalTime> reservationHours;
     private RestaurantStatus status;
-
-    @DBRef
-    private User restaurantAdmin;
 
     public Restaurant(RestaurantRegistrationRequest restaurantRegistrationRequest) {
 
