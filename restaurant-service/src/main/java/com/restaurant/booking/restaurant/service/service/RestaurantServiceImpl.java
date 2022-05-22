@@ -1,5 +1,6 @@
 package com.restaurant.booking.restaurant.service.service;
 
+import com.restaurant.booking.feign.client.BookingProxy;
 import com.restaurant.booking.feign.client.UserProxy;
 import com.restaurant.booking.feign.client.exception.BadRequestException;
 import com.restaurant.booking.feign.client.exception.NotFoundException;
@@ -22,11 +23,13 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
     private final UserProxy userProxy;
+    private final BookingProxy bookingProxy;
 
     @Autowired
-    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, UserProxy userProxy) {
+    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, UserProxy userProxy, BookingProxy bookingProxy) {
         this.restaurantRepository = restaurantRepository;
         this.userProxy = userProxy;
+        this.bookingProxy = bookingProxy;
     }
 
     @Override
@@ -56,6 +59,10 @@ public class RestaurantServiceImpl implements RestaurantService {
             restaurantRepository.delete(restaurant);
             throw new UserNotFoundException(restaurantRegistrationRequest.getRestaurantAdminEmail());
         }
+        // generates all reservation slots
+        // TODO mejor hacerlo al crear una mesa?
+        // bookingProxy.generateRestaurantSlots(new ReservSlotsCreationRequest(restaurant.getId(), restaurant.getReservationHours()));
+
         return restaurant;
     }
 
@@ -78,6 +85,13 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         log.info("Getting all {} restaurants", restaurantStatus);
         return restaurantRepository.findByStatus(restaurantStatus);
+    }
+
+    @Override
+    public List<LocalTime> getRestaurantsReservationHours(Restaurant restaurant) {
+
+        log.info("Getting restaurant's {} reservation hours", restaurant.getId());
+        return restaurant.getReservationHours();
     }
 
     @Override

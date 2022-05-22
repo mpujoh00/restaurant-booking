@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -32,6 +33,11 @@ public class RestaurantControllerImpl implements RestaurantController {
     @Override
     public ResponseEntity<List<Restaurant>> getEnabledRestaurants() {
         return ResponseEntity.ok(restaurantService.findRestaurantsByStatus(RestaurantStatus.ENABLED));
+    }
+
+    @Override
+    public ResponseEntity<List<LocalTime>> getRestaurantsReservationHours(String restaurantId) {
+        return ResponseEntity.ok(restaurantService.getRestaurantsReservationHours(restaurantService.findRestaurant(restaurantId)));
     }
 
     @Override

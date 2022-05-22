@@ -10,7 +10,9 @@
         <module name="feign-client" />
         <module name="restaurant-service" />
         <module name="table-model" />
+        <module name="booking-service" />
         <module name="api-gateway" />
+        <module name="booking-model" />
         <module name="restaurant-model" />
         <module name="table-service" />
         <module name="user-service" />
@@ -21,8 +23,6 @@
     <bytecodeTargetLevel>
       <module name="authentication-service" target="11" />
       <module name="authorization-server" target="11" />
-      <module name="booking-model" target="11" />
-      <module name="booking-service" target="11" />
       <module name="jwt-support" target="11" />
     </bytecodeTargetLevel>
   </component>

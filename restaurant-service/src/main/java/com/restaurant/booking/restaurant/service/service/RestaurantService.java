@@ -2,6 +2,7 @@ package com.restaurant.booking.restaurant.service.service;
 
 import com.restaurant.booking.restaurant.model.*;
 
+import java.time.LocalTime;
 import java.util.List;
 
 public interface RestaurantService {
@@ -38,6 +39,13 @@ public interface RestaurantService {
      * @return
      */
     List<Restaurant> findRestaurantsByStatus(RestaurantStatus restaurantStatus) ;
+
+    /**
+     *
+     * @param restaurant
+     * @return
+     */
+    List<LocalTime> getRestaurantsReservationHours(Restaurant restaurant);
 
     /**
      *

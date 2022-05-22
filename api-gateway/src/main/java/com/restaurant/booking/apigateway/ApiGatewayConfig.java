@@ -13,6 +13,7 @@ public class ApiGatewayConfig {
     private static final String USER_SERVICE = "lb://user-service";
     private static final String RESTAURANT_SERVICE = "lb://restaurant-service";
     private static final String TABLE_SERVICE = "lb://table-service";
+    private static final String BOOKING_SERVICE = "lb://booking-service";
 
     @Autowired
     public ApiGatewayConfig(AuthenticationFilter authenticationFilter) {
@@ -41,6 +42,15 @@ public class ApiGatewayConfig {
                 .route(p -> p.path("/api/v1/tables/**")
                         //.filters(f -> f.filter(authenticationFilter))
                         .uri(TABLE_SERVICE))
+                .route(p -> p.path("/api/v1/reservation-slots/**")
+                        //.filters(f -> f.filter(authenticationFilter))
+                        .uri(BOOKING_SERVICE))
+                .route(p -> p.path("/api/v1/reservations/**")
+                        //.filters(f -> f.filter(authenticationFilter))
+                        .uri(BOOKING_SERVICE))
+                .route(p -> p.path("/api/v1/admin/reservations/**")
+                        //.filters(f -> f.filter(authenticationFilter))
+                        .uri(BOOKING_SERVICE))
                 .build();
     }
 

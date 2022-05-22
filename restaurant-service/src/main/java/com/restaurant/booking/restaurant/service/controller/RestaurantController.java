@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalTime;
 import java.util.List;
 
 @Tag(name = "Restaurant")
@@ -27,6 +28,10 @@ public interface RestaurantController {
     @Operation(description = "Gets all enabled restaurants", operationId = "getEnabledRestaurants")
     @GetMapping
     ResponseEntity<List<Restaurant>> getEnabledRestaurants();
+
+    @Operation(description = "Gets the restaurant's reservation hours", operationId = "getRestaurantsReservationHours")
+    @GetMapping("/reservation-hours/{restaurantId}")
+    ResponseEntity<List<LocalTime>> getRestaurantsReservationHours(@PathVariable String restaurantId);
 
     @Operation(description = "Deletes the restaurant", operationId = "deleteRestaurant")
     @DeleteMapping("/delete/{restaurantId}")
