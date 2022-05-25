@@ -1,6 +1,7 @@
 package com.restaurant.booking.bookingservice.controller;
 
 import com.restaurant.booking.booking.model.ReservSlotsCreationRequest;
+import com.restaurant.booking.table.model.Table;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,6 +29,10 @@ public interface ReservationSlotController {
     ResponseEntity<List<LocalTime>> getRestaurantSlotsByPeople(@PathVariable String restaurantId,
                                                                @PathVariable Integer numPeople,
                                                                @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date);
+
+    @Operation(description = "Deletes all reservation slots of a restaurant's table", operationId = "deleteRestaurantTableSlots")
+    @DeleteMapping("/restaurant-table")
+    ResponseEntity<Void> deleteRestaurantTableSlots(@RequestBody Table table);
 
     // TODO delete past restaurant slots
 }

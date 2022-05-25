@@ -1,5 +1,8 @@
 package com.restaurant.booking.table.service.service;
 
+import com.restaurant.booking.booking.model.ReservSlotsCreationRequest;
+import com.restaurant.booking.feign.client.BookingProxy;
+import com.restaurant.booking.feign.client.RestaurantProxy;
 import com.restaurant.booking.table.model.Table;
 import com.restaurant.booking.table.model.TableCreationRequest;
 import com.restaurant.booking.table.service.exception.TableNotFoundException;
@@ -13,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +26,12 @@ class TableServiceTest {
     @Mock
     private TableRepository tableRepository;
 
+    @Mock
+    private BookingProxy bookingProxy;
+
+    @Mock
+    private RestaurantProxy restaurantProxy;
+
     @InjectMocks
     private TableServiceImpl tableService;
 
@@ -29,14 +39,19 @@ class TableServiceTest {
     void create(){
         TableCreationRequest request = new TableCreationRequest(12, 2, 4);
         Table table = new Table(request, "id");
+        List<LocalTime> reservationHours = List.of(LocalTime.now());
+        ReservSlotsCreationRequest slotsCreationRequest = new ReservSlotsCreationRequest("id", reservationHours, table);
 
         Mockito.when(tableRepository.findByRestaurantIdAndNumber("id", request.getNumber())).thenReturn(Optional.empty());
         Mockito.when(tableRepository.save(table)).thenReturn(table);
+        Mockito.when(restaurantProxy.getRestaurantsReservationHours("id")).thenReturn(reservationHours);
 
         Table obtainedTable = tableService.create("id", request);
 
         Mockito.verify(tableRepository).findByRestaurantIdAndNumber("id", request.getNumber());
         Mockito.verify(tableRepository).save(table);
+        Mockito.verify(restaurantProxy).getRestaurantsReservationHours("id");
+        Mockito.verify(bookingProxy).generateRestaurantTableSlots(slotsCreationRequest);
         Assertions.assertEquals(table, obtainedTable);
     }
 
@@ -97,8 +112,11 @@ class TableServiceTest {
 
     @Test
     void delete(){
-        tableService.deleteTable("id");
+        Table table = Table.builder().id("id").build();
 
+        tableService.deleteTable(table);
+
+        Mockito.verify(bookingProxy).deleteRestaurantTableSlots(table);
         Mockito.verify(tableRepository).deleteById("id");
     }
 }

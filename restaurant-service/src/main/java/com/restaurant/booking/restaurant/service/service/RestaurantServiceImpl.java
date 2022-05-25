@@ -1,6 +1,5 @@
 package com.restaurant.booking.restaurant.service.service;
 
-import com.restaurant.booking.feign.client.BookingProxy;
 import com.restaurant.booking.feign.client.UserProxy;
 import com.restaurant.booking.feign.client.exception.BadRequestException;
 import com.restaurant.booking.feign.client.exception.NotFoundException;
@@ -23,13 +22,11 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
     private final UserProxy userProxy;
-    private final BookingProxy bookingProxy;
 
     @Autowired
-    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, UserProxy userProxy, BookingProxy bookingProxy) {
+    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, UserProxy userProxy) {
         this.restaurantRepository = restaurantRepository;
         this.userProxy = userProxy;
-        this.bookingProxy = bookingProxy;
     }
 
     @Override
@@ -59,9 +56,6 @@ public class RestaurantServiceImpl implements RestaurantService {
             restaurantRepository.delete(restaurant);
             throw new UserNotFoundException(restaurantRegistrationRequest.getRestaurantAdminEmail());
         }
-        // generates all reservation slots
-        // TODO mejor hacerlo al crear una mesa?
-        // bookingProxy.generateRestaurantSlots(new ReservSlotsCreationRequest(restaurant.getId(), restaurant.getReservationHours()));
 
         return restaurant;
     }

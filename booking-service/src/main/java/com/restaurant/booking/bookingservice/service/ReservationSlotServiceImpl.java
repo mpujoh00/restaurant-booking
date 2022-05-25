@@ -122,6 +122,12 @@ public class ReservationSlotServiceImpl implements ReservationSlotService {
         return save(slot);
     }
 
+    @Override
+    public void deleteTableSlots(Table table) {
+        log.info("Deleting all reservation slots of the table with id {}", table);
+        slotRepository.deleteAllByTableAndDateAfter(table, LocalDate.now());
+    }
+
     private void persistAdjacentSlot(ReservationSlotStatus parentSlotStatus, Optional<ReservationSlot> currentSlotOpt) {
         if(currentSlotOpt.isPresent()){
             ReservationSlot currentSlot = currentSlotOpt.get();

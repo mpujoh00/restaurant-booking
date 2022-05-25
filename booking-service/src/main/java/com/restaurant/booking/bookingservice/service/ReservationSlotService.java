@@ -2,6 +2,7 @@ package com.restaurant.booking.bookingservice.service;
 
 import com.restaurant.booking.booking.model.ReservSlotsCreationRequest;
 import com.restaurant.booking.booking.model.ReservationSlot;
+import com.restaurant.booking.table.model.Table;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -21,4 +22,6 @@ public interface ReservationSlotService {
     Optional<ReservationSlot> findFirstAvailableSlotsByPeople(String restaurantId, Integer numPeople, LocalDate date);
 
     ReservationSlot changeStatus(ReservationSlot slot);
+
+    void deleteTableSlots(Table table);
 }

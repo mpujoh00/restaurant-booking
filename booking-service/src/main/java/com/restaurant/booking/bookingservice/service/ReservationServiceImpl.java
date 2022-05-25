@@ -42,7 +42,8 @@ public class ReservationServiceImpl implements ReservationService{
             log.warn("Did not find an available slot for configuration {}", creationRequest);
             throw new NoSlotAvailableException(creationRequest.getNumPeople(), creationRequest.getDate().toString());
         }
-        Reservation reservation = new Reservation(creationRequest.getUserId(), creationRequest.getRestaurantId(), creationRequest.getNumPeople(), slotService.changeStatus(possibleSlot.get()));
+        Reservation reservation = new Reservation(creationRequest.getUserId(), creationRequest.getRestaurantId(),
+                creationRequest.getNumPeople(), slotService.changeStatus(possibleSlot.get()));
         return save(reservation);
     }
 

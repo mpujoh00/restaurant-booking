@@ -12,4 +12,5 @@ public interface ReservationSlotRepository extends MongoRepository<ReservationSl
 
     List<ReservationSlot> findAllByRestaurantIdAndDateAndStatus(String restaurantId, LocalDate date, ReservationSlotStatus status);
     List<ReservationSlot> findAllByTableAndDate(Table table, LocalDate date);
+    void deleteAllByTableAndDateAfter(Table table, LocalDate date);
 }

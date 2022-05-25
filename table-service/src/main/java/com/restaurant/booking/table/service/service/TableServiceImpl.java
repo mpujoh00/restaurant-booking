@@ -68,10 +68,11 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
-    public void deleteTable(String tableId) {
+    public void deleteTable(Table table) {
 
-        log.info("Deleting table with id {}", tableId);
-        tableRepository.deleteById(tableId);
-        // TODO borrar slots
+        log.info("Deleting table with id {}", table.getId());
+        // deletes its future reservation slots
+        bookingProxy.deleteRestaurantTableSlots(table);
+        tableRepository.deleteById(table.getId());
     }
 }

@@ -36,7 +36,7 @@ public class TableControllerImpl implements TableController {
 
     @Override
     public ResponseEntity<Void> deleteTable(String tableId) {
-        tableService.deleteTable(tableId);
+        tableService.deleteTable(tableService.findTable(tableId));
         return ResponseEntity.ok().build();
     }
 }

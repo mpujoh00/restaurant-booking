@@ -2,6 +2,7 @@ package com.restaurant.booking.bookingservice.controller;
 
 import com.restaurant.booking.booking.model.ReservSlotsCreationRequest;
 import com.restaurant.booking.bookingservice.service.ReservationSlotService;
+import com.restaurant.booking.table.model.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,5 +36,11 @@ public class ReservationSlotControllerImpl implements ReservationSlotController 
     @Override
     public ResponseEntity<List<LocalTime>> getRestaurantSlotsByPeople(String restaurantId, Integer numPeople, LocalDate date) {
         return ResponseEntity.ok(slotService.findAllAvailableSlotsByPeople(restaurantId, numPeople, date));
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteRestaurantTableSlots(Table table) {
+        slotService.deleteTableSlots(table);
+        return ResponseEntity.ok().build();
     }
 }
