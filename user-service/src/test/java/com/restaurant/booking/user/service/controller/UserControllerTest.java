@@ -41,20 +41,6 @@ class UserControllerTest {
     @Mock
     private JwtUtils jwtUtils;
 
-    /*@Test
-    void getAllUsers(){
-        List<User> users = List.of(
-                User.builder().email("micaela@gmail.com").build(),
-                User.builder().email("diego@gmail.com").build());
-
-        Mockito.when(userService.findAllUsers()).thenReturn(users);
-
-        List<User> obtainedUsers = userController.getAllUsers().getBody();
-
-        Mockito.verify(userService).findAllUsers();
-        Assertions.assertEquals(users, obtainedUsers);
-    }*/
-
     @Test
     void getUserByEmail(){
         User user = User.builder().email("micaela@gmail.com").build();
@@ -70,21 +56,20 @@ class UserControllerTest {
     @Test
     void updateUser(){
         UpdateRequest updateRequest = new UpdateRequest("micaela@gmail.com", "contraseña", "Micaela");
-        User userUnmodified = User.builder().email("micaela@gmail.com").build();
-        User userModified = User.builder().email("micaela@gmail.com").password("contraseña").fullname("Micaela").build();
+        User user = User.builder().email("micaela@gmail.com").build();
 
         Mockito.when(authentication.getPrincipal()).thenReturn("micaela@gmail.com");
         Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
-        Mockito.when(userService.findByEmail("micaela@gmail.com")).thenReturn(userUnmodified);
-        //Mockito.when(userService.update(userModified)).thenReturn(userModified);
+        Mockito.when(userService.findByEmail("micaela@gmail.com")).thenReturn(user);
+        Mockito.when(userService.update(user, updateRequest)).thenReturn(user);
 
         User obtainedUser = userController.updateUser(updateRequest).getBody();
 
         Mockito.verify(securityContext).getAuthentication();
         Mockito.verify(authentication).getPrincipal();
         Mockito.verify(userService).findByEmail("micaela@gmail.com");
-        Assertions.assertEquals(userModified, obtainedUser);
+        Assertions.assertEquals(user, obtainedUser);
     }
 
     @Test
@@ -142,12 +127,12 @@ class UserControllerTest {
         Mockito.when(authentication.getPrincipal()).thenReturn("micaela@gmail.com");
         Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
+        Mockito.when(authenticationManager.authenticate(authenticationTokenOld)).thenThrow(new RuntimeException());
 
         ResponseEntity<String> responseEntity = userController.updateUserPassword(updatePasswordRequest);
 
         Mockito.verify(securityContext).getAuthentication();
         Mockito.verify(authentication).getPrincipal();
-        Mockito.verify(authenticationManager).authenticate(authenticationTokenOld);
         Assertions.assertEquals("Incorrect password", responseEntity.getBody());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
@@ -159,12 +144,13 @@ class UserControllerTest {
         Mockito.when(authentication.getPrincipal()).thenReturn("micaela@gmail.com");
         Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
-        //Mockito.when(userService.delete(user)).thenReturn(null);
+        Mockito.when(userService.findByEmail("micaela@gmail.com")).thenReturn(user);
 
         ResponseEntity<Void> responseEntity = userController.deleteUser("micaela@gmail.com");
 
         Mockito.verify(securityContext).getAuthentication();
         Mockito.verify(authentication).getPrincipal();
+        Mockito.verify(userService).findByEmail("micaela@gmail.com");
         Mockito.verify(userService).delete(user);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
@@ -182,20 +168,18 @@ class UserControllerTest {
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
-    /*@Test
-    void deleteUser_notFound(){
-        Mockito.when(authentication.getPrincipal()).thenReturn("micaela@gmail.com");
-        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
-        SecurityContextHolder.setContext(securityContext);
-        Mockito.when(userService.delete("micaela@gmail.com")).thenThrow(new UserNotFoundException(""));
+    @Test
+    void addRestaurant() {
+        User user = User.builder().build();
 
-        ResponseEntity<Void> responseEntity = userController.deleteUser("micaela@gmail.com");
+        Mockito.when(userService.findByEmail("micaela@gmail.com")).thenReturn(user);
 
-        Mockito.verify(securityContext).getAuthentication();
-        Mockito.verify(authentication).getPrincipal();
-        Mockito.verify(userService).delete("micaela@gmail.com");
-        Assertions.assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-    }*/
+        ResponseEntity<Void> responseEntity = userController.addRestaurant("restaurantId", "micaela@gmail.com");
+
+        Mockito.verify(userService).findByEmail("micaela@gmail.com");
+        Mockito.verify(userService).addRestaurant(user, "restaurantId");
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
 
     /*@Test
     void isNotCurrentUser(){
@@ -208,6 +192,5 @@ class UserControllerTest {
         Mockito.verify(securityContext).getAuthentication();
         Mockito.verify(authentication).getPrincipal();
         Assertions.assertTrue(isNotCurrentUser);
-
     }*/
 }

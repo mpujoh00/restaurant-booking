@@ -28,7 +28,6 @@ public class JwtUtils {
 
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
-                //.claim("userId", userPrincipal.getId())
                 .claim("username", userPrincipal.getEmail())
                 .claim("authorities", userPrincipal.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
                 .setIssuedAt(new Date())
@@ -45,10 +44,6 @@ public class JwtUtils {
     public List<String> getRolesFromJwtToken(String token){
         return (List<String>) Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("authorities");
     }
-
-    /*public String getUserIdFromJwtToken(String token){
-        return (String) Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("userId");
-    }*/
 
     public boolean validateJwtToken(String authToken) {
         try {

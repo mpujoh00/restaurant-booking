@@ -1,6 +1,7 @@
 package com.restaurant.booking.user.service.controller;
 
 import com.restaurant.booking.user.model.*;
+import com.restaurant.booking.user.service.exception.UserLoginDisabledException;
 import com.restaurant.booking.user.service.security.JwtUtils;
 import com.restaurant.booking.user.service.service.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -41,7 +42,9 @@ class AuthenticationControllerTest {
         LoginRequest request = new LoginRequest("micaela@gmail.com", "1234");
         UsernamePasswordAuthenticationToken userPassAuthToken =
                 new UsernamePasswordAuthenticationToken("micaela@gmail.com", "1234");
+        User user = User.builder().email("micaela@gmail.com").status(UserStatus.ENABLED).build();
 
+        Mockito.when(userService.findByEmail("micaela@gmail.com")).thenReturn(user);
         Mockito.when(authenticationManager.authenticate(userPassAuthToken)).thenReturn(authentication);
         Mockito.when(jwtUtils.generateJwtToken(authentication)).thenReturn("JWT-TOKEN");
 
@@ -53,6 +56,18 @@ class AuthenticationControllerTest {
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         Assertions.assertNotNull(responseEntity.getBody());
         Assertions.assertEquals("JWT-TOKEN", responseEntity.getBody().getToken());
+    }
+
+    @Test
+    void login_disabledUser(){
+        LoginRequest request = new LoginRequest("micaela@gmail.com", "1234");
+        User user = User.builder().email("micaela@gmail.com").status(UserStatus.DISABLED).build();
+
+        Mockito.when(userService.findByEmail("micaela@gmail.com")).thenReturn(user);
+
+        UserLoginDisabledException exception = Assertions.assertThrows(
+                UserLoginDisabledException.class, () -> authenticationController.login(request));
+        Assertions.assertEquals("Can't login, user micaela@gmail.com is disabled", exception.getMessage());
     }
 
     @Test

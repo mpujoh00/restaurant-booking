@@ -21,6 +21,7 @@
         <module>naming-server</module>
         <module>api-gateway</module>
         <module>feign-client</module>
+        <module>jwt-utils</module>
     </modules>
 
     <properties>

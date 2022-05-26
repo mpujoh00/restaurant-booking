@@ -37,7 +37,7 @@ public class RestaurantControllerImpl implements RestaurantController {
 
     @Override
     public ResponseEntity<List<LocalTime>> getRestaurantsReservationHours(String restaurantId) {
-        return ResponseEntity.ok(restaurantService.getRestaurantsReservationHours(restaurantService.findRestaurant(restaurantId)));
+        return ResponseEntity.ok(restaurantService.findRestaurant(restaurantId).getReservationHours());
     }
 
     @Override

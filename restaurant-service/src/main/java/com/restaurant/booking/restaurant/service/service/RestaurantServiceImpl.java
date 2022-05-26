@@ -82,13 +82,6 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public List<LocalTime> getRestaurantsReservationHours(Restaurant restaurant) {
-
-        log.info("Getting restaurant's {} reservation hours", restaurant.getId());
-        return restaurant.getReservationHours();
-    }
-
-    @Override
     public void deleteRestaurant(String restaurantId) {
 
         log.info("Deleting restaurant with id {}", restaurantId);
