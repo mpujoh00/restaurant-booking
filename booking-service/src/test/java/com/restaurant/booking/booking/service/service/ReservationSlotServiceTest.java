@@ -215,4 +215,15 @@ class ReservationSlotServiceTest {
         Mockito.verify(slotRepository, Mockito.times(2)).save(Mockito.any(ReservationSlot.class));
         Assertions.assertEquals(slotBooked, obtainedSlot);
     }
+
+    @Test
+    void deleteTableSlots() {
+
+        Table tableToBeDeleted = Table.builder().build();
+
+        slotService.deleteTableSlots(tableToBeDeleted);
+
+        Mockito.verify(slotRepository).deleteAllByTableAndDateAfter(tableToBeDeleted, LocalDate.now());
+    }
+
 }
