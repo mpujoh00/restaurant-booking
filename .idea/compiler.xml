@@ -20,24 +20,11 @@
         <module name="jwt-utils" />
         <module name="naming-server" />
       </profile>
-      <profile name="Annotation profile for Unknown" enabled="true">
-        <sourceOutputDir name="../../target/generated-sources/annotations" />
-        <sourceTestOutputDir name="../../target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="api-gateway" target="11" />
       <module name="authentication-service" target="11" />
       <module name="authorization-server" target="11" />
-      <module name="feign-client" target="11" />
       <module name="jwt-support" target="11" />
-      <module name="naming-server" target="11" />
-      <module name="restaurant-model" target="11" />
-      <module name="restaurant-service" target="11" />
-      <module name="table-model" target="11" />
-      <module name="table-service" target="11" />
-      <module name="user-service" target="11" />
       <module name="wrapper (1)" target="1.5" />
       <module name="wrapper (2)" target="1.5" />
     </bytecodeTargetLevel>
@@ -53,6 +40,7 @@
       <module name="jwt-support" options="-parameters" />
       <module name="jwt-utils" options="-parameters" />
       <module name="naming-server" options="-parameters" />
+      <module name="restaurant-booking" options="" />
       <module name="restaurant-model" options="-parameters" />
       <module name="restaurant-service" options="-parameters" />
       <module name="table-model" options="-parameters" />

@@ -11,5 +11,5 @@ import java.util.List;
 public interface TableProxy {
 
     @GetMapping("/api/v1/tables/restaurant/{restaurantId}")
-    List<Table> getRestaurantTables(@PathVariable String restaurantId);
+    List<Table> getRestaurantTables(@PathVariable(value = "restaurantId") String restaurantId);
 }

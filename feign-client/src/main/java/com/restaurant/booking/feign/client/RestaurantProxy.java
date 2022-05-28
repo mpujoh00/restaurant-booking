@@ -12,8 +12,8 @@ import java.util.List;
 public interface RestaurantProxy {
 
     @GetMapping("/api/v1/restaurants/{restaurantId}")
-    Restaurant getRestaurant(@PathVariable String restaurantId);
+    Restaurant getRestaurant(@PathVariable(value = "restaurantId") String restaurantId);
 
     @GetMapping("/api/v1/restaurants/reservation-hours/{restaurantId}")
-    List<LocalTime> getRestaurantsReservationHours(@PathVariable String restaurantId);
+    List<LocalTime> getRestaurantsReservationHours(@PathVariable(value = "restaurantId") String restaurantId);
 }

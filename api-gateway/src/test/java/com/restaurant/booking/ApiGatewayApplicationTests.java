@@ -1,21 +1,21 @@
 package com.restaurant.booking;
 
-import com.restaurant.booking.restaurant.service.controller.RestaurantController;
+import com.restaurant.booking.api.gateway.config.JwtUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class RestaurantServiceApplicationTests {
+class ApiGatewayApplicationTests {
 
 	@Autowired
-	private RestaurantController restaurantController;
+	private JwtUtils jwtUtils;
 
 	@Test
 	void contextLoads() {
-		RestaurantServiceApplication.main(new String[]{});
-		Assertions.assertNotNull(restaurantController);
+		ApiGatewayApplication.main(new String[]{});
+		Assertions.assertNotNull(jwtUtils);
 	}
 
 }
