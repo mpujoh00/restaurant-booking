@@ -34,6 +34,7 @@
         <sonar.organization>mpujoh00</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.coverage.exclusions>**/security/**/*, **/jwt/utils/**/*, **/config/**</sonar.coverage.exclusions>
+        <sonar.cpd.exclusions>**/security/**/*, **/jwt/utils/**/*, **/config/**</sonar.cpd.exclusions>
         <jacoco.version>0.8.8</jacoco.version>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
