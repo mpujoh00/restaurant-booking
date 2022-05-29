@@ -1,5 +1,8 @@
 package com.restaurant.booking.table.service.service;
 
+import com.restaurant.booking.booking.model.ReservSlotsCreationRequest;
+import com.restaurant.booking.feign.client.BookingProxy;
+import com.restaurant.booking.feign.client.RestaurantProxy;
 import com.restaurant.booking.table.model.Table;
 import com.restaurant.booking.table.model.TableCreationRequest;
 import com.restaurant.booking.table.service.exception.TableNotFoundException;
@@ -16,10 +19,14 @@ import java.util.List;
 public class TableServiceImpl implements TableService {
 
     private final TableRepository tableRepository;
+    private final BookingProxy bookingProxy;
+    private final RestaurantProxy restaurantProxy;
 
     @Autowired
-    public TableServiceImpl(TableRepository tableRepository) {
+    public TableServiceImpl(TableRepository tableRepository, BookingProxy bookingProxy, RestaurantProxy restaurantProxy) {
         this.tableRepository = tableRepository;
+        this.bookingProxy = bookingProxy;
+        this.restaurantProxy = restaurantProxy;
     }
 
     @Override
@@ -38,7 +45,12 @@ public class TableServiceImpl implements TableService {
                 throw new TableNumberAlreadyExistsException(restaurantId, tableCreationRequest.getNumber());
 
         Table table = new Table(tableCreationRequest, restaurantId);
-        return save(table);
+        table = save(table);
+
+        // generates its reservation slots
+        bookingProxy.generateRestaurantTableSlots(new ReservSlotsCreationRequest(restaurantId, restaurantProxy.getRestaurantsReservationHours(restaurantId), table));
+
+        return table;
     }
 
     @Override
@@ -56,9 +68,11 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
-    public void deleteTable(String tableId) {
+    public void deleteTable(Table table) {
 
-        log.info("Deleting table with id {}", tableId);
-        tableRepository.deleteById(tableId);
+        log.info("Deleting table with id {}", table.getId());
+        // deletes its future reservation slots
+        bookingProxy.deleteRestaurantTableSlots(table);
+        tableRepository.deleteById(table.getId());
     }
 }

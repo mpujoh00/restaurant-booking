@@ -16,9 +16,12 @@
         <module>restaurant-model</module>
         <module>table-service</module>
         <module>table-model</module>
+        <module>booking-service</module>
+        <module>booking-model</module>
         <module>naming-server</module>
         <module>api-gateway</module>
         <module>feign-client</module>
+        <module>jwt-utils</module>
     </modules>
 
     <properties>
@@ -30,12 +33,15 @@
         <open-api.version>1.6.4</open-api.version>
         <sonar.organization>mpujoh00</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.coverage.exclusions>**/src/main/java/security/**/*</sonar.coverage.exclusions>
+        <sonar.coverage.exclusions>**/security/**/*, **/jwt/utils/**/*, **/config/**</sonar.coverage.exclusions>
+        <sonar.cpd.exclusions>**/security/**/*, **/jwt/utils/**/*, **/config/**</sonar.cpd.exclusions>
         <jacoco.version>0.8.8</jacoco.version>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.jacoco.reportPath>${project.artifactId}/target/jacoco.exec</sonar.jacoco.reportPath>
         <sonar.language>java</sonar.language>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
     <parent>
@@ -87,6 +93,15 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>

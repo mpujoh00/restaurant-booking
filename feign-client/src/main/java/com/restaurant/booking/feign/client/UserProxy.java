@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 public interface UserProxy {
 
     @GetMapping("api/v1/users/{email}")
-    User getUserByEmail(@PathVariable String email);
+    User getUserByEmail(@PathVariable(value = "email") String email);
 
     @PutMapping("api/v1/users/add-restaurant/{restaurantId}/user/{userEmail}")
-    void addRestaurant(@PathVariable String userEmail, @PathVariable String restaurantId);
+    void addRestaurant(@PathVariable(value = "userEmail") String userEmail, @PathVariable(value = "restaurantId")  String restaurantId);
 }

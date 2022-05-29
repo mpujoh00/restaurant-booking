@@ -1,0 +1,51 @@
+{
+	"id": "f5253d4e-1cc3-4041-b29c-55df36d8182f",
+	"name": "Restaurant Booking environment",
+	"values": [
+		{
+			"key": "baseUserServiceURL",
+			"value": "http://localhost:8000",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "bearerToken",
+			"value": "--auto-generated--",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "baseRestaurantServiceURL",
+			"value": "http://localhost:8100/api/v1/restaurants",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "baseAdminURL",
+			"value": "http://localhost:8765/api/v1/admin",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "baseTableServiceURL",
+			"value": "http://localhost:8765/api/v1/tables",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "baseReservationSlotServiceURL",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "baseReservationServiceURL",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2022-05-26T15:24:36.487Z",
+	"_postman_exported_using": "Postman/9.19.3"
+}

@@ -63,9 +63,13 @@ class TableControllerTest {
 
     @Test
     void deleteTable(){
+        Table table = new Table();
+
+        Mockito.when(tableService.findTable("id")).thenReturn(table);
+
         HttpStatus obtainedStatus = tableController.deleteTable("id").getStatusCode();
 
-        Mockito.verify(tableService).deleteTable("id");
+        Mockito.verify(tableService).deleteTable(table);
         Assertions.assertEquals(HttpStatus.OK, obtainedStatus);
     }
 

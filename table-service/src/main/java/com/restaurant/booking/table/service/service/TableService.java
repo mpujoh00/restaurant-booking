@@ -15,5 +15,5 @@ public interface TableService {
 
     List<Table> findAllRestaurantTables(String restaurantId);
 
-    void deleteTable(String tableId);
+    void deleteTable(Table table);
 }

@@ -65,6 +65,20 @@ class RestaurantControllerTest {
     }
 
     @Test
+    void getRestaurantReservationHours() {
+        List<LocalTime> reservationHours = List.of(LocalTime.now());
+        Restaurant restaurant = Restaurant.builder().reservationHours(reservationHours).build();
+
+        Mockito.when(restaurantService.findRestaurant("id")).thenReturn(restaurant);
+
+        ResponseEntity<List<LocalTime>> responseEntity = restaurantController.getRestaurantsReservationHours("id");
+
+        Mockito.verify(restaurantService).findRestaurant("id");
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assertions.assertEquals(reservationHours, responseEntity.getBody());
+    }
+
+    @Test
     void deleteRestaurant(){
         ResponseEntity<Void> responseEntity = restaurantController.deleteRestaurant("id");
 

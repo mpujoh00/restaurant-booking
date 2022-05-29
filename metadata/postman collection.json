@@ -1,0 +1,949 @@
+{
+	"info": {
+		"_postman_id": "bbd8e666-8cd7-4616-8d7d-5a47a53e8194",
+		"name": "Restaurant Booking",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10838249"
+	},
+	"item": [
+		{
+			"name": "User service",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Register user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"chef2@gmail.com\",\r\n    \"password\": \"soy chef2\",\r\n    \"fullname\": \"Chef\",\r\n    \"role\": \"ROLE_RESTAURANT\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUserServiceURL}}/auth/register",
+									"host": [
+										"{{baseUserServiceURL}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login Admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonResponse = pm.response.json()\r",
+											"pm.environment.set(\"bearerToken\", jsonResponse[\"token\"])"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"micaela@gmail.com\",\r\n    \"password\": \"soy micaela\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8765/api/v1/auth/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8765",
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login Client",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonResponse = pm.response.json()\r",
+											"pm.environment.set(\"bearerToken\", jsonResponse[\"token\"])"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"dylan@gmail.com\",\r\n    \"password\": \"soy dylan\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUserServiceURL}}/auth/login",
+									"host": [
+										"{{baseUserServiceURL}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Requests",
+					"item": [
+						{
+							"name": "Get user by email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUserServiceURL}}/users/new_user2@gmail.com",
+									"host": [
+										"{{baseUserServiceURL}}"
+									],
+									"path": [
+										"users",
+										"new_user2@gmail.com"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update user",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"micaela@gmail.com\",\r\n    \"fullname\": \"Micaela\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUserServiceURL}}/users/",
+									"host": [
+										"{{baseUserServiceURL}}"
+									],
+									"path": [
+										"users",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change password",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"currentPassword\": \"soy micaelaaa\",\r\n    \"newPassword\": \"soy micaela\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUserServiceURL}}/users/change-password",
+									"host": [
+										"{{baseUserServiceURL}}"
+									],
+									"path": [
+										"users",
+										"change-password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete user",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUserServiceURL}}/users/delete/test@gmail.com",
+									"host": [
+										"{{baseUserServiceURL}}"
+									],
+									"path": [
+										"users",
+										"delete",
+										"test@gmail.com"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{bearerToken}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "Register admin",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"new_admin@gmail.com\",\r\n    \"password\": \"soy new admin\",\r\n    \"fullname\": \"Admin\",\r\n    \"role\": \"ROLE_ADMIN\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAdminURL}}/users",
+									"host": [
+										"{{baseAdminURL}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get all users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseAdminURL}}/users",
+									"host": [
+										"{{baseAdminURL}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete admin",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseAdminURL}}/users/delete/new_admin@gmail.com",
+									"host": [
+										"{{baseAdminURL}}"
+									],
+									"path": [
+										"users",
+										"delete",
+										"new_admin@gmail.com"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update user status",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{baseAdminURL}}/users/change-status/new_user@gmail.com",
+									"host": [
+										"{{baseAdminURL}}"
+									],
+									"path": [
+										"users",
+										"change-status",
+										"new_user@gmail.com"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Restaurant service",
+			"item": [
+				{
+					"name": "Requests",
+					"item": [
+						{
+							"name": "Register restaurant",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"nuevo restaurante\",\r\n    \"location\": \"León\",\r\n    \"restaurantAdminEmail\": \"chef2@gmail.com\",\r\n    \"openTime\": \"09:00\",\r\n    \"closeTime\": \"10:00\",\r\n    \"intervalMinutes\": \"60\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseRestaurantServiceURL}}/register",
+									"host": [
+										"{{baseRestaurantServiceURL}}"
+									],
+									"path": [
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get restaurant",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestaurantServiceURL}}/62697029ab722e6a8d6b20b2",
+									"host": [
+										"{{baseRestaurantServiceURL}}"
+									],
+									"path": [
+										"62697029ab722e6a8d6b20b2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get enabled restaurants",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestaurantServiceURL}}",
+									"host": [
+										"{{baseRestaurantServiceURL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete restaurant",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseRestaurantServiceURL}}/delete/62697029ab722e6a8d6b20b2",
+									"host": [
+										"{{baseRestaurantServiceURL}}"
+									],
+									"path": [
+										"delete",
+										"62697029ab722e6a8d6b20b2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update restaurant",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"restaurantId\": \"62697029ab722e6a8d6b20b2\",\r\n    \"name\": \"Chef's new restaurant\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseRestaurantServiceURL}}",
+									"host": [
+										"{{baseRestaurantServiceURL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update restaurant reservation hours",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"restaurantId\": \"62697029ab722e6a8d6b20b2\",\r\n    \"openTime\": \"09:30\",\r\n    \"closeTime\": \"12:00\",\r\n    \"intervalMinutes\": \"60\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseRestaurantServiceURL}}/change-reservation-hours",
+									"host": [
+										"{{baseRestaurantServiceURL}}"
+									],
+									"path": [
+										"change-reservation-hours"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "Get all restaurants",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseAdminURL}}/restaurants",
+									"host": [
+										"{{baseAdminURL}}"
+									],
+									"path": [
+										"restaurants"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get disabled restaurants",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseAdminURL}}/restaurants/disabled",
+									"host": [
+										"{{baseAdminURL}}"
+									],
+									"path": [
+										"restaurants",
+										"disabled"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get pending restaurants",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseAdminURL}}/restaurants/pending",
+									"host": [
+										"{{baseAdminURL}}"
+									],
+									"path": [
+										"restaurants",
+										"pending"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change restaurant status",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{baseAdminURL}}/restaurants/change-status/62697029ab722e6a8d6b20b2",
+									"host": [
+										"{{baseAdminURL}}"
+									],
+									"path": [
+										"restaurants",
+										"change-status",
+										"62697029ab722e6a8d6b20b2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Table service",
+			"item": [
+				{
+					"name": "Create table",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"number\": 4,\r\n    \"minPeople\": 1,\r\n    \"maxPeople\":3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseTableServiceURL}}/6288fb6b3d2ff80747568812",
+							"host": [
+								"{{baseTableServiceURL}}"
+							],
+							"path": [
+								"6288fb6b3d2ff80747568812"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get table",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseTableServiceURL}}/6288b967aa3c277ad04ecf2a",
+							"host": [
+								"{{baseTableServiceURL}}"
+							],
+							"path": [
+								"6288b967aa3c277ad04ecf2a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get restaurant tables",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseTableServiceURL}}/restaurant/6288b8d62fd8785824c98b40",
+							"host": [
+								"{{baseTableServiceURL}}"
+							],
+							"path": [
+								"restaurant",
+								"6288b8d62fd8785824c98b40"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete table",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseTableServiceURL}}/delete/6288b967aa3c277ad04ecf2a",
+							"host": [
+								"{{baseTableServiceURL}}"
+							],
+							"path": [
+								"delete",
+								"6288b967aa3c277ad04ecf2a"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Booking service",
+			"item": [
+				{
+					"name": "Reservation slot",
+					"item": [
+						{
+							"name": "Get restaurant slots by people",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseReservationSlotServiceURL}}/restaurant/6288b8d62fd8785824c98b40/people/2/date/2022-05-23",
+									"host": [
+										"{{baseReservationSlotServiceURL}}"
+									],
+									"path": [
+										"restaurant",
+										"6288b8d62fd8785824c98b40",
+										"people",
+										"2",
+										"date",
+										"2022-05-23"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Generate restaurant slots",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"restaurantId\": \"6288b8d62fd8785824c98b40\",\r\n    \"reservationHours\": [\r\n            \"09:00\",\r\n            \"09:30\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseReservationSlotServiceURL}}/restaurant",
+									"host": [
+										"{{baseReservationSlotServiceURL}}"
+									],
+									"path": [
+										"restaurant"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Generate table slots",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"restaurantId\": \"6288b8d62fd8785824c98b40\",\r\n    \"reservationHours\": [\r\n            \"09:00\",\r\n            \"09:30\"\r\n    ],\r\n    \"table\": {\r\n        \"id\": \"6288b967aa3c277ad04ecf2a\",\r\n        \"number\": 1,\r\n        \"minPeople\": 2,\r\n        \"maxPeople\": 4,\r\n        \"restaurantId\": \"6288b8d62fd8785824c98b40\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseReservationSlotServiceURL}}/restaurant-table",
+									"host": [
+										"{{baseReservationSlotServiceURL}}"
+									],
+									"path": [
+										"restaurant-table"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete table slots",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"6288b967aa3c277ad04ecf2a\",\r\n    \"number\": 1,\r\n    \"minPeople\": 2,\r\n    \"maxPeople\": 4,\r\n    \"restaurantId\": \"6288b8d62fd8785824c98b40\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseReservationSlotServiceURL}}/restaurant-table",
+									"host": [
+										"{{baseReservationSlotServiceURL}}"
+									],
+									"path": [
+										"restaurant-table"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Reservation",
+					"item": [
+						{
+							"name": "Restaurant admin",
+							"item": [
+								{
+									"name": "Get all restaurant reservations",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseAdminURL}}/reservations/restaurant/6288b8d62fd8785824c98b40",
+											"host": [
+												"{{baseAdminURL}}"
+											],
+											"path": [
+												"reservations",
+												"restaurant",
+												"6288b8d62fd8785824c98b40"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Change reservation status",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"url": {
+											"raw": "{{baseAdminURL}}/reservations/628a0c935504af495df9f594/status/CONFIRMED",
+											"host": [
+												"{{baseAdminURL}}"
+											],
+											"path": [
+												"reservations",
+												"628a0c935504af495df9f594",
+												"status",
+												"CONFIRMED"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Create reservation",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": \"620c099dbe1b4018af44af40\",\r\n    \"restaurantId\": \"6288b8d62fd8785824c98b40\",\r\n    \"numPeople\": 2,\r\n    \"date\": \"2022-05-23\",\r\n    \"time\": \"09:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseReservationServiceURL}}",
+									"host": [
+										"{{baseReservationServiceURL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get reservation",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseReservationServiceURL}}/628a0c935504af495df9f594",
+									"host": [
+										"{{baseReservationServiceURL}}"
+									],
+									"path": [
+										"628a0c935504af495df9f594"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get active user reservations",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseReservationServiceURL}}/user/active/620c099dbe1b4018af44af40",
+									"host": [
+										"{{baseReservationServiceURL}}"
+									],
+									"path": [
+										"user",
+										"active",
+										"620c099dbe1b4018af44af40"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get inactive user reservations",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseReservationServiceURL}}/user/inactive/620c099dbe1b4018af44af40",
+									"host": [
+										"{{baseReservationServiceURL}}"
+									],
+									"path": [
+										"user",
+										"inactive",
+										"620c099dbe1b4018af44af40"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cancel reservation",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{baseReservationServiceURL}}/628a0c935504af495df9f594",
+									"host": [
+										"{{baseReservationServiceURL}}"
+									],
+									"path": [
+										"628a0c935504af495df9f594"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{bearerToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

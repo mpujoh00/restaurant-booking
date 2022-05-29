@@ -56,6 +56,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             restaurantRepository.delete(restaurant);
             throw new UserNotFoundException(restaurantRegistrationRequest.getRestaurantAdminEmail());
         }
+
         return restaurant;
     }
 

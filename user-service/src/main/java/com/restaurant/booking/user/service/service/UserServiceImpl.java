@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         if(request.getRole().equals(RoleName.ROLE_ADMIN)){
             log.error("Can't register a user with role admin");
-            throw new InvalidUserRegistration("Can't register a user " + request.getEmail() + " with role admin");
+            throw new InvalidUserRegistration(request.getEmail());
         }
         return registerUser(request);
     }
@@ -142,14 +142,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public User changeUserStatus(User user) {
         log.info("Changing user's with email {} status", user.getEmail());
         user.setStatus(user.getStatus().getNextStatus());
-        return save(user);
+        return userRepository.save(user);
     }
 
     @Override
     public void addRestaurant(User user, String restaurantId) {
         log.info("Adding restaurant to user with email {}", user.getEmail());
-
-        // TODO disabled user?
 
         if(!user.getRolesList().get(0).getName().equals(RoleName.ROLE_RESTAURANT)){
             log.error("Can't add restaurant, user with email {} doesn't have restaurant role", user.getEmail());
@@ -159,9 +157,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             log.error("Can't add restaurant, user with email {} already has a restaurant", user.getEmail());
             throw new RestaurantAlreadyExistsException(user.getEmail());
         }
-
         user.setRestaurant(getRestaurant(restaurantId));
-        save(user);
+        userRepository.save(user);
     }
 
     private Restaurant getRestaurant(String restaurantId){
@@ -170,11 +167,5 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }catch (NotFoundException e){
             throw new RestaurantNotFoundException(restaurantId);
         }
-    }
-
-    private boolean isNotCurrentUser(String email){
-        //String userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        //return !userEmail.equals(email);
-        return false;
     }
 }

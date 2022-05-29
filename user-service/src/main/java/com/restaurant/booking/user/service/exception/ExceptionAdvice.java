@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ExceptionAdvice {
 
     @ResponseBody
-    @ExceptionHandler({UserNotFoundException.class, RoleNotFoundException.class, RestaurantNotFoundException.class})
+    @ExceptionHandler({UserNotFoundException.class, RestaurantNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String notFoundHandler(RuntimeException e){
         return e.getMessage();
@@ -18,7 +18,7 @@ public class ExceptionAdvice {
 
     @ResponseBody
     @ExceptionHandler({UserAlreadyExistsException.class, InvalidUserRegistration.class,
-            IncorrectAdminDeletion.class, IncorrectRoleException.class, RestaurantAlreadyExistsException.class})
+            IncorrectAdminDeletion.class, IncorrectRoleException.class, RestaurantAlreadyExistsException.class, RoleNotFoundException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String badRequestHandler(RuntimeException e){
         return e.getMessage();

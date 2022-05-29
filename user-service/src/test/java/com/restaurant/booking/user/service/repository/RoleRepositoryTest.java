@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import java.util.Optional;
 
 @DataMongoTest
-public class RoleRepositoryTest {
+class RoleRepositoryTest {
 
     @Autowired
     RoleRepository roleRepository;

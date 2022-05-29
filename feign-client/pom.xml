@@ -43,6 +43,16 @@
 			<artifactId>restaurant-model</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.restaurant.booking</groupId>
+			<artifactId>table-model</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.restaurant.booking</groupId>
+			<artifactId>booking-model</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 </project>
