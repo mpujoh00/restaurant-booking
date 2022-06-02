@@ -7,7 +7,7 @@
                     <v-avatar size="50" color="#ffe6e9">
                         <v-icon size="40" color="#ff99a8">mdi-account-circle</v-icon>
                     </v-avatar>
-                    <h2 class="cardTitle">Registration for {{roleName}} </h2>
+                    <h2 class="cardTitle">User information</h2>
                 </div>
                 <v-form class="form" @submit.prevent="registrationSubmit"> 
                     <v-text-field 
@@ -15,7 +15,6 @@
                         label="Fullname" 
                         :rules="fullnameRules"
                         required
-                        :readonly="nonEditable"
                         color="grey" prepend-inner-icon="mdi-at"/>
                     <v-text-field 
                         v-model="email" 
@@ -23,7 +22,7 @@
                         type="email" 
                         required
                         :rules="emailRules"
-                        color="grey" class="mb-5" prepend-inner-icon="mdi-at"/>
+                        color="grey" prepend-inner-icon="mdi-at"/>
                     <v-text-field 
                         v-model="password" 
                         label="Password" 
@@ -44,7 +43,7 @@
                         color="grey" class="mb-5" prepend-inner-icon="mdi-at"/>
 
                     <v-btn type="submit" color="#ff99a8" class="button">
-                        <span class="buttonText">Register</span>    
+                        <span class="buttonText">{{ submitButtonLabel }}</span>    
                     </v-btn>
                     <v-btn @click="cancel" color="#ff99a8" class="button">
                         <span class="buttonText">Cancel</span>    
@@ -104,6 +103,7 @@ export default ({
             confirmationPassword: '',
             fullnameRules: [
                 v => !!v || 'Fullname is required',
+                v => v.length >= 3 || 'Fullname must be at least 3 characters'
             ],
             emailRules: [
                 v => !!v || 'Email is required',
@@ -118,20 +118,31 @@ export default ({
             passwordConfirmationRules: [
                 v => v == this.password || 'Passwords do not match'
             ],
+            submitButtonLabel: ''
         }
     },
     methods: {
         ...mapActions([
-            'registerUser'
+            'registerUser',
+            'saveTempUser'
         ]),
-        registrationSubmit(){            
-            this.registerUser({
+        registrationSubmit(){       
+            const user = {
                 fullname: this.fullname,
                 email: this.email,
                 password: this.password,
                 role: this.role
-            })
+            }  
+            if(this.roleName !== 'restaurant')   {
+                this.registerUser(user)
+                router.push('/account')
+            }
             // if role is restaurant, a next page will appear to register the restaurant
+            if(this.roleName === 'restaurant'){
+                this.saveTempUser(user)
+                router.push('/restaurant-registration')
+            }
+            // todo review prevent ¿?
         },
         cancel(){
             router.push('/login')
@@ -148,12 +159,17 @@ export default ({
     },
     mounted() {
         this.reset()
-        if(this.role === 'ROLE_CLIENT')
+        if(this.role === 'ROLE_CLIENT'){
             this.roleName = 'client'
-        else if(this.role === 'ROLE_RESTAURANT')
+            this.submitButtonLabel = 'Register'
+        }            
+        else if(this.role === 'ROLE_RESTAURANT'){
             this.roleName = 'restaurant'
+            this.submitButtonLabel = 'Next'
+        }            
         else
             this.roleName = 'admin'
     },
+    // TODO cambiar título
 })
 </script>

@@ -14,10 +14,13 @@ const routes = [
     component: () => import(/* webpackChunkName: "login" */ '@/views/Login.vue')
   },
   {
-    name: 'registration',
+    name: 'userRegistration',
     path: '/registration-:role',
-    component: () => import(/* webpackChunkName: "login" */ '@/views/Registration.vue'),
+    component: () => import(/* webpackChunkName: "login" */ '@/views/UserRegistration.vue'),
     props: true
+  },{
+    path: '/restaurant-registration',
+    component: () => import(/* webpackChunkName: "login" */ '@/views/RestaurantRegistration.vue'),
   },
   {
     path: '/account',

@@ -135,7 +135,7 @@ export default {
         },
         registration(roleName){
             console.log('Going to register a user with ' + roleName)
-            router.push({name: 'registration', params: {role: roleName}})
+            router.push({name: 'userRegistration', params: {role: roleName}})
         }
     }
 }

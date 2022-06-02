@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import UserService from '@/services/UserService'
+import RestaurantService from '@/services/RestaurantService'
 import router from '@/router'
 
 Vue.use(Vuex)
@@ -13,7 +14,9 @@ export default new Vuex.Store({
     token: null,
     currentUser: null,
     editPasswordError: null,
-    deleteUserError: null
+    deleteUserError: null,
+    tempUser: null,
+    currentRestaurant: null,
   },
   mutations: {
     // Login
@@ -38,6 +41,13 @@ export default new Vuex.Store({
     },
     deleteUserError: (state, errorMessage) => {
       state.deleteUserError = errorMessage
+    },
+    saveTempUser: (state, user) => {
+      state.tempUser = user
+    },
+    saveCurrentRestaurant: (state, restaurant) => {
+      state.currentRestaurant = restaurant
+      localStorage.setItem('currentRestaurant', JSON.stringify(restaurant))
     }
   },
   actions: {
@@ -65,8 +75,7 @@ export default new Vuex.Store({
       .catch(() => {
         commit('loginStop', "Incorrect credentials")
         // incorrect login
-        commit('updateToken', null)
-        commit('updateCurrentUser', null)
+        commit('logout')
       })
     },
     // executed everytime the application is loaded (in App.vue created())
@@ -82,7 +91,7 @@ export default new Vuex.Store({
       router.push('/login')
     },
     // Registration
-    registerUser({ dispatch }, user){
+    registerUser({ dispatch, commit }, user){
       console.log("Registering user with email " + user.email + " and role " + user.role)
       // registers user
       UserService.register({
@@ -92,6 +101,7 @@ export default new Vuex.Store({
         role: user.role
       })
       .then(() => {
+        commit('saveTempUser', null)
         // login
         dispatch('login', {
           email: user.email,
@@ -165,6 +175,29 @@ export default new Vuex.Store({
           }
           reject()
         })
+      })
+    },
+    saveTempUser({ commit }, user){
+      console.log('Saving temporary user')
+      commit('saveTempUser', user)
+    },
+    removeTempUser({ commit }){
+      console.log('Removing temporary user')
+      commit('saveTempUser', null)
+    },
+    async registerRestaurant({ dispatch }, user, restaurant){
+      console.log('Registering restaurant')
+      await dispatch('registerUser', user)
+      RestaurantService.registerRestaurant(restaurant)
+      .then(() => {
+        console.log('Restaurant registered')
+        dispatch('login', {
+          email: restaurant.restaurantAdminEmail,
+          password: user.password
+        })
+      })
+      .catch(error => {
+        console.log('Couldn\'t register restaurant: ', error)
       })
     }
   }

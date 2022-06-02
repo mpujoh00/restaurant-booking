@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // common configuration
 axios.defaults.headers.post["Content-Type"] = "application/json"
-axios.defaults.baseURL = "http://localhost:8000/api/v1"
+axios.defaults.baseURL = "http://localhost:8765/api/v1"
 
 // for requests where authentication is needed
 const authAxios = axios.create({
