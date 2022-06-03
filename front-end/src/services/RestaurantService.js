@@ -9,6 +9,11 @@ class RestaurantService {
     getRestaurants(){
         return authAxios.get('/restaurants')
     }
+
+    getRestaurant(id){
+        console.log(id)
+        return authAxios.get('/restaurants', id)
+    }
 }
 
 export default new RestaurantService()

@@ -7,6 +7,7 @@ import com.restaurant.booking.user.model.*;
 import com.restaurant.booking.user.service.exception.*;
 import com.restaurant.booking.user.service.repository.RoleRepository;
 import com.restaurant.booking.user.service.repository.UserRepository;
+import com.restaurant.booking.user.service.security.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;

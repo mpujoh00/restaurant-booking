@@ -30,6 +30,7 @@ public class AuthenticationFilter implements GatewayFilter {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
         ServerHttpRequest request = exchange.getRequest();
+        log.info(request.getHeaders().toString());
 
         // checks if the route is secured
         if (RouterValidator.isSecured.test(request)) {

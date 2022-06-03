@@ -7,6 +7,7 @@ import com.restaurant.booking.user.model.*;
 import com.restaurant.booking.user.service.exception.*;
 import com.restaurant.booking.user.service.repository.RoleRepository;
 import com.restaurant.booking.user.service.repository.UserRepository;
+import com.restaurant.booking.user.service.security.JwtUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

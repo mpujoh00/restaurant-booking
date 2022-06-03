@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <br/>
-    <h1>Welcome to Restaurant Booking!!</h1>
+    <h1>{{ restaurant.name }}</h1>
     <br/>
 
     <v-container>
@@ -22,26 +22,20 @@
 
 <script>
 import RestaurantService from '@/services/RestaurantService'
-import router from '@/router'
 
 export default {
-  name: 'Home',
-  data() {
-    return {
-      restaurants: [],
-    }
-  },
-  methods: {
-    openRestaurant(restaurant){
-      console.log('opening restaurant: ' + restaurant.name)
-      router.push({name: 'restaurant', params: {id: restaurant.id}})
-    }
-  },
-  mounted() {
-    console.log('getting restaurants')
-    RestaurantService.getRestaurants().then(response => {
-      this.restaurants = response.data
-    })
-  },
+    props: [
+        'id'
+    ],
+    data() {
+        return {
+            restaurant: null
+        }
+    },
+    mounted() {
+        RestaurantService.getRestaurant(this.id).then(response => {
+            this.restaurant = response.data[0]
+        })
+    },
 }
 </script>

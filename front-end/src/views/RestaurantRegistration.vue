@@ -133,6 +133,7 @@ import { mapState, mapActions } from 'vuex'
 import router from '@/router'
 
 export default ({
+    name: 'RestaurantRegistration',
     data() {
         return {
             name: '',
@@ -143,10 +144,10 @@ export default ({
             closeTimeMenu: false,
             intervalMinutes: null,
             intervalMinutesOptions: [
-                {label: '15 minutes', value: 15},
-                {label: '30 minutes', value: 30},
-                {label: '45 minutes', value: 45},
-                {label: '60 minutes', value: 60},
+                {label: '15 minutes', value: '15'},
+                {label: '30 minutes', value: '30'},
+                {label: '45 minutes', value: '45'},
+                {label: '60 minutes', value: '60'},
             ],
             nameRules: [
                 v => !!v || 'Name is required',

@@ -3,6 +3,7 @@ package com.restaurant.booking.table.service.service;
 import com.restaurant.booking.booking.model.ReservSlotsCreationRequest;
 import com.restaurant.booking.feign.client.BookingProxy;
 import com.restaurant.booking.feign.client.RestaurantProxy;
+import com.restaurant.booking.jwt.utils.JwtUtils;
 import com.restaurant.booking.table.model.Table;
 import com.restaurant.booking.table.model.TableCreationRequest;
 import com.restaurant.booking.table.service.exception.TableNotFoundException;

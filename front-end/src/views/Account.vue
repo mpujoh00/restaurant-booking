@@ -1,8 +1,6 @@
 <template>
     <v-layout class="layout">
         <v-col cols="6">
-            <h1>Account page</h1>
-            <br/>
             <v-card class="card">
                 <div class="cardHeader">
                     <v-avatar size="50" color="#ffe6e9">
@@ -102,6 +100,7 @@
 .layout {
     align-content: center;
     justify-content: center;
+    padding-top: 5%;
 }
 .card {
     padding: 4%;

@@ -66,6 +66,7 @@ export default new Vuex.Store({
         commit('updateToken', response.data.token)
         commit('loginStop', null)
         commit('updateCurrentUser', {
+          id: response.data.user.id,
           email: response.data.user.email,
           fullname: response.data.user.fullname,
           role: response.data.user.roles[0].name
@@ -123,6 +124,7 @@ export default new Vuex.Store({
           console.log(response.data)
           // updates user
           commit('updateCurrentUser', {
+            id: response.data.user.id,
             email: response.data.email,
             fullname: response.data.fullname,
             role: response.data.roles[0].name
@@ -201,6 +203,7 @@ export default new Vuex.Store({
           localStorage.setItem('token', response.data.token)
           commit('updateToken', response.data.token)
           commit('updateCurrentUser', {
+            id: response.data.user.id,
             email: response.data.user.email,
             fullname: response.data.user.fullname,
             role: response.data.user.roles[0].name
