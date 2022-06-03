@@ -1,5 +1,6 @@
 package com.restaurant.booking.jwt.utils;
 
+import com.restaurant.booking.user.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,8 +40,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 String email = jwtUtils.getUsernameFromJwtToken(jwtToken);
 
                 List<GrantedAuthority> roles = jwtUtils.getRolesFromJwtToken(jwtToken).stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, null, roles);
+                User user = new User();
+                user.setEmail(email);
+                user.setJwtToken(jwtToken);
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, roles);
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);

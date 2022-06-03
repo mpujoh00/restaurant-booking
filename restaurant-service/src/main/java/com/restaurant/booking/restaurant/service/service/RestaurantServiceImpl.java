@@ -3,6 +3,7 @@ package com.restaurant.booking.restaurant.service.service;
 import com.restaurant.booking.feign.client.UserProxy;
 import com.restaurant.booking.feign.client.exception.BadRequestException;
 import com.restaurant.booking.feign.client.exception.NotFoundException;
+import com.restaurant.booking.jwt.utils.JwtUtils;
 import com.restaurant.booking.restaurant.model.*;
 import com.restaurant.booking.restaurant.service.exception.RestaurantAlreadyExistsException;
 import com.restaurant.booking.restaurant.service.exception.RestaurantNotFoundException;
@@ -22,11 +23,13 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
     private final UserProxy userProxy;
+    private final JwtUtils jwtUtils;
 
     @Autowired
-    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, UserProxy userProxy) {
+    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, UserProxy userProxy, JwtUtils jwtUtils) {
         this.restaurantRepository = restaurantRepository;
         this.userProxy = userProxy;
+        this.jwtUtils = jwtUtils;
     }
 
     @Override
@@ -36,7 +39,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public Restaurant register(RestaurantRegistrationRequest restaurantRegistrationRequest, String token) {
+    public Restaurant register(RestaurantRegistrationRequest restaurantRegistrationRequest) {
         log.info("Registering new restaurant: {}", restaurantRegistrationRequest.getName());
 
         Restaurant restaurant = new Restaurant(restaurantRegistrationRequest);
@@ -46,7 +49,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         // add restaurant to admin user
         try{
-            userProxy.addRestaurant(token, restaurantRegistrationRequest.getRestaurantAdminEmail(), restaurant.getId());
+            userProxy.addRestaurant(jwtUtils.getAuthorizationHeader(), restaurantRegistrationRequest.getRestaurantAdminEmail(), restaurant.getId());
         } catch(BadRequestException e){
             log.error("Can't create a restaurant for user with email {}", restaurantRegistrationRequest.getRestaurantAdminEmail());
             restaurantRepository.delete(restaurant);

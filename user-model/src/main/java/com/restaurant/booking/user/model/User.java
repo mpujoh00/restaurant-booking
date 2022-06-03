@@ -3,6 +3,7 @@ package com.restaurant.booking.user.model;
 import com.restaurant.booking.restaurant.model.Restaurant;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -31,6 +32,9 @@ public class User implements UserDetails {
     private String password;
     private String fullname;
     private UserStatus status;
+
+    @Transient
+    private String jwtToken;
 
     @DBRef
     private Set<Role> roles = new HashSet<>();

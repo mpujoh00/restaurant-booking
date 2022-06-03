@@ -6,6 +6,7 @@ import com.restaurant.booking.booking.model.ReservationSlotStatus;
 import com.restaurant.booking.booking.service.exception.ReservationSlotNotFoundException;
 import com.restaurant.booking.booking.service.repository.ReservationSlotRepository;
 import com.restaurant.booking.feign.client.TableProxy;
+import com.restaurant.booking.jwt.utils.JwtUtils;
 import com.restaurant.booking.table.model.Table;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,13 @@ public class ReservationSlotServiceImpl implements ReservationSlotService {
 
     private final ReservationSlotRepository slotRepository;
     private final TableProxy tableProxy;
+    private final JwtUtils jwtUtils;
 
     @Autowired
-    public ReservationSlotServiceImpl(ReservationSlotRepository slotRepository, TableProxy tableProxy) {
+    public ReservationSlotServiceImpl(ReservationSlotRepository slotRepository, TableProxy tableProxy, JwtUtils jwtUtils) {
         this.slotRepository = slotRepository;
         this.tableProxy = tableProxy;
+        this.jwtUtils = jwtUtils;
     }
 
     @Override
@@ -46,7 +49,7 @@ public class ReservationSlotServiceImpl implements ReservationSlotService {
         if(slotsCreationRequest.getTable() != null)
             tables = List.of(slotsCreationRequest.getTable());
         else
-            tables = tableProxy.getRestaurantTables(slotsCreationRequest.getRestaurantId());
+            tables = tableProxy.getRestaurantTables(jwtUtils.getAuthorizationHeader(), slotsCreationRequest.getRestaurantId());
 
         // para un mes, a partir del día actual y cada mesa creo un reservation slot, según las reservation hours del restaurante
         LocalDate date = LocalDate.now();

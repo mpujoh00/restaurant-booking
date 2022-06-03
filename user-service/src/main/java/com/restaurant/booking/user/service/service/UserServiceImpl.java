@@ -27,13 +27,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final RestaurantProxy restaurantProxy;
+    private final JwtUtils jwtUtils;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, RoleRepository roleRepository, RestaurantProxy restaurantProxy) {
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, RoleRepository roleRepository, RestaurantProxy restaurantProxy, JwtUtils jwtUtils) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.restaurantProxy = restaurantProxy;
+        this.jwtUtils = jwtUtils;
     }
 
     public List<User> findAllUsers(){
@@ -164,7 +166,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private Restaurant getRestaurant(String restaurantId){
         try{
-            return restaurantProxy.getRestaurant(restaurantId);
+            return restaurantProxy.getRestaurant(jwtUtils.getAuthorizationHeader(), restaurantId);
         }catch (NotFoundException e){
             throw new RestaurantNotFoundException(restaurantId);
         }

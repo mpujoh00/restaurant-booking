@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public interface BookingProxy {
 
     @PostMapping("/api/v1/reservation-slots/restaurant")
-    void generateRestaurantSlots(@RequestBody ReservSlotsCreationRequest slotsCreationRequest);
+    void generateRestaurantSlots(@RequestHeader(value = "Authorization") String authorizationHeader,
+                                 @RequestBody ReservSlotsCreationRequest slotsCreationRequest);
 
     @PostMapping("/api/v1/reservation-slots/restaurant-table")
-    void generateRestaurantTableSlots(@RequestBody ReservSlotsCreationRequest slotsCreationRequest);
+    void generateRestaurantTableSlots(@RequestHeader(value = "Authorization") String authorizationHeader,
+                                      @RequestBody ReservSlotsCreationRequest slotsCreationRequest);
 
     @DeleteMapping("/api/v1/reservation-slots/restaurant-table")
-    void deleteRestaurantTableSlots(@RequestBody Table table);
+    void deleteRestaurantTableSlots(@RequestHeader(value = "Authorization") String authorizationHeader,
+                                    @RequestBody Table table);
 }

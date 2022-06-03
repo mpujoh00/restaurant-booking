@@ -18,7 +18,7 @@ public interface RestaurantService {
      * @param restaurantRegistrationRequest
      * @return
      */
-    Restaurant register(RestaurantRegistrationRequest restaurantRegistrationRequest, String token);
+    Restaurant register(RestaurantRegistrationRequest restaurantRegistrationRequest);
 
     /**
      *

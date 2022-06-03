@@ -3,6 +3,7 @@ package com.restaurant.booking.restaurant.service.service;
 import com.restaurant.booking.feign.client.UserProxy;
 import com.restaurant.booking.feign.client.exception.BadRequestException;
 import com.restaurant.booking.feign.client.exception.NotFoundException;
+import com.restaurant.booking.jwt.utils.JwtUtils;
 import com.restaurant.booking.restaurant.model.*;
 import com.restaurant.booking.restaurant.service.exception.RestaurantAlreadyExistsException;
 import com.restaurant.booking.restaurant.service.exception.RestaurantNotFoundException;
@@ -29,6 +30,9 @@ class RestaurantServiceTest {
     private RestaurantRepository restaurantRepository;
 
     @Mock
+    private JwtUtils jwtUtils;
+
+    @Mock
     private UserProxy userProxy;
 
     @InjectMocks
@@ -44,7 +48,7 @@ class RestaurantServiceTest {
 
         Mockito.when(restaurantRepository.save(restaurant)).thenReturn(restaurant);
 
-        Restaurant obtainedRestaurant = restaurantService.register(request, null);
+        Restaurant obtainedRestaurant = restaurantService.register(request);
 
         Mockito.verify(restaurantRepository).save(restaurant);
         Assertions.assertEquals(restaurant, obtainedRestaurant);
@@ -59,10 +63,11 @@ class RestaurantServiceTest {
         restaurant.setReservationHours(reservationHours);
 
         Mockito.when(restaurantRepository.save(restaurant)).thenReturn(restaurant);
-        doThrow(new BadRequestException()).when(userProxy).addRestaurant(null, "chef@gmail.com", null);
+        Mockito.when(jwtUtils.getAuthorizationHeader()).thenReturn("HEADER");
+        doThrow(new BadRequestException()).when(userProxy).addRestaurant("HEADER", "chef@gmail.com", null);
 
         RestaurantAlreadyExistsException exception = Assertions.assertThrows(
-                RestaurantAlreadyExistsException.class, () -> restaurantService.register(request, null));
+                RestaurantAlreadyExistsException.class, () -> restaurantService.register(request));
         Assertions.assertEquals("User with email chef@gmail.com already has a restaurant", exception.getMessage());
 
         Mockito.verify(restaurantRepository).save(restaurant);
@@ -77,10 +82,11 @@ class RestaurantServiceTest {
         restaurant.setReservationHours(reservationHours);
 
         Mockito.when(restaurantRepository.save(restaurant)).thenReturn(restaurant);
-        doThrow(new NotFoundException()).when(userProxy).addRestaurant(null, "chef@gmail.com", null);
+        Mockito.when(jwtUtils.getAuthorizationHeader()).thenReturn("HEADER");
+        doThrow(new NotFoundException()).when(userProxy).addRestaurant("HEADER", "chef@gmail.com", null);
 
         UserNotFoundException exception = Assertions.assertThrows(
-                UserNotFoundException.class, () -> restaurantService.register(request, null));
+                UserNotFoundException.class, () -> restaurantService.register(request));
         Assertions.assertEquals("User with email: chef@gmail.com not found", exception.getMessage());
 
         Mockito.verify(restaurantRepository).save(restaurant);

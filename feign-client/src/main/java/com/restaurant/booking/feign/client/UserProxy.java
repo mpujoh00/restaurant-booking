@@ -14,5 +14,5 @@ public interface UserProxy {
     User getUserByEmail(@PathVariable(value = "email") String email);
 
     @PutMapping("api/v1/users/add-restaurant/{restaurantId}/user/{userEmail}")
-    void addRestaurant(@RequestHeader(value = "Authorization", required = true) String authorizationHeader, @PathVariable(value = "userEmail") String userEmail, @PathVariable(value = "restaurantId")  String restaurantId);
+    void addRestaurant(@RequestHeader(value = "Authorization") String authorizationHeader, @PathVariable(value = "userEmail") String userEmail, @PathVariable(value = "restaurantId")  String restaurantId);
 }

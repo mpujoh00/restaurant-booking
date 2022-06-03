@@ -20,7 +20,7 @@ public interface RestaurantController {
 
     @Operation(description = "Registers restaurant and returns created restaurant", operationId = "register")
     @PostMapping("/register")
-    ResponseEntity<Restaurant> register(@RequestBody @Valid RestaurantRegistrationRequest restaurantRegistrationRequest, @RequestHeader (name="Authorization") String token);
+    ResponseEntity<Restaurant> register(@RequestBody @Valid RestaurantRegistrationRequest restaurantRegistrationRequest);
 
     @PreAuthorize("hasAuthority('ROLE_RESTAURANT') or hasAuthority('ROLE_CLIENT') or hasAuthority('ROLE_ADMIN')")
     @Operation(description = "Gets the restaurant given its id", operationId = "getRestaurant")

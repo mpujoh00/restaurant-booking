@@ -39,6 +39,9 @@ class UserServiceTest {
     @Mock
     private RestaurantProxy restaurantProxy;
 
+    @Mock
+    private JwtUtils jwtUtils;
+
     @InjectMocks
     private UserServiceImpl userService;
 
@@ -264,12 +267,13 @@ class UserServiceTest {
                 .email("micaela@gmail.com").roles(Set.of(new Role(RoleName.ROLE_RESTAURANT)))
                 .restaurant(restaurant).build();
 
-        Mockito.when(restaurantProxy.getRestaurant("restaurantId")).thenReturn(restaurant);
+        Mockito.when(jwtUtils.getAuthorizationHeader()).thenReturn("HEADER");
+        Mockito.when(restaurantProxy.getRestaurant("HEADER", "restaurantId")).thenReturn(restaurant);
         Mockito.when(userRepository.save(userAfter)).thenReturn(userAfter);
 
         userService.addRestaurant(user, "restaurantId");
 
-        Mockito.verify(restaurantProxy).getRestaurant("restaurantId");
+        Mockito.verify(restaurantProxy).getRestaurant("HEADER", "restaurantId");
         Mockito.verify(userRepository).save(userAfter);
     }
 
@@ -296,12 +300,13 @@ class UserServiceTest {
     void addRestaurant_restaurantNotFound(){
         User user = User.builder().email("micaela@gmail.com").roles(Set.of(new Role(RoleName.ROLE_RESTAURANT))).build();
 
-        Mockito.when(restaurantProxy.getRestaurant("restaurantId")).thenThrow(new NotFoundException());
+        Mockito.when(jwtUtils.getAuthorizationHeader()).thenReturn("HEADER");
+        Mockito.when(restaurantProxy.getRestaurant("HEADER", "restaurantId")).thenThrow(new NotFoundException());
 
         RestaurantNotFoundException exception = Assertions.assertThrows(
                 RestaurantNotFoundException.class, () -> userService.addRestaurant(user, "restaurantId"));
         Assertions.assertEquals("Restaurant with id restaurantId not found", exception.getMessage());
 
-        Mockito.verify(restaurantProxy).getRestaurant("restaurantId");
+        Mockito.verify(restaurantProxy).getRestaurant("HEADER", "restaurantId");
     }
 }

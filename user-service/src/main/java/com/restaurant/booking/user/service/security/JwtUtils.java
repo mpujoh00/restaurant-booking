@@ -63,4 +63,11 @@ public class JwtUtils {
         }
         return false;
     }
+
+    public String getAuthorizationHeader() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String accessToken = user.getJwtToken();
+        return "Bearer " + accessToken;
+    }
+
 }
