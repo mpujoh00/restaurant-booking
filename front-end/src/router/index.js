@@ -27,6 +27,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "account" */ '@/views/Account.vue')
   },
   {
+    name: 'restaurant',
+    path: 'restaurant-:id',
+    component: () => import(/* webpackChunkName: "login" */ '@/views/Restaurant.vue'),
+    props: true
+  },
+  {
     // "wildcard path" that matches everything, used as a Catch-all or Fallback (important to place it the last, if not it might redirect even if route is available)
     path: '*',
     redirect: '/login'

@@ -18,7 +18,7 @@
                             label="Fullname" 
                             required
                             :readonly="nonEditable"
-                            color="grey" prepend-inner-icon="mdi-at"/>
+                            color="grey" prepend-inner-icon="mdi-account"/>
                         <v-text-field 
                             v-model="user.email" 
                             label="Email" 

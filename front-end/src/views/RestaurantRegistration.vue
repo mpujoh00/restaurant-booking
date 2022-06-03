@@ -178,14 +178,18 @@ export default ({
         ]),
         registrationSubmit(){
             console.log('registering restaurant...')
-            this.registerRestaurant({
-                name: this.name,
-                location: this.city,
-                restaurantAdminEmail: this.tempUser.email,
-                openTime: this.openTime,
-                closeTime: this.closeTime,
-                intervalMinutes: this.intervalMinutes
-            }, this.tempUser)
+            const data = {
+                user: this.tempUser,
+                restaurant: {
+                    name: this.name,
+                    location: this.city,
+                    restaurantAdminEmail: this.tempUser.email,
+                    openTime: this.openTime,
+                    closeTime: this.closeTime,
+                    intervalMinutes: this.intervalMinutes}
+            }
+            console.log(data)
+            this.registerRestaurant( data)
             // todo fix prevent submit
         },
         cancel(){

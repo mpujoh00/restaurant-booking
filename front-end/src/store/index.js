@@ -59,6 +59,7 @@ export default new Vuex.Store({
 
       UserService.login(loginData)
       .then(response => {
+        console.log('Correctly logged in')
         // saves token to local storage
         localStorage.setItem('token', response.data.token)
         // correct login
@@ -73,6 +74,7 @@ export default new Vuex.Store({
         router.push('/account')
       })
       .catch(() => {
+        console.log('Couldn\'t log in')
         commit('loginStop', "Incorrect credentials")
         // incorrect login
         commit('logout')
@@ -91,7 +93,7 @@ export default new Vuex.Store({
       router.push('/login')
     },
     // Registration
-    registerUser({ dispatch, commit }, user){
+    registerUser({ dispatch }, user){
       console.log("Registering user with email " + user.email + " and role " + user.role)
       // registers user
       UserService.register({
@@ -101,7 +103,6 @@ export default new Vuex.Store({
         role: user.role
       })
       .then(() => {
-        commit('saveTempUser', null)
         // login
         dispatch('login', {
           email: user.email,
@@ -185,19 +186,45 @@ export default new Vuex.Store({
       console.log('Removing temporary user')
       commit('saveTempUser', null)
     },
-    async registerRestaurant({ dispatch }, user, restaurant){
-      console.log('Registering restaurant')
-      await dispatch('registerUser', user)
-      RestaurantService.registerRestaurant(restaurant)
+    registerRestaurant({ dispatch, commit }, data){
+
+      console.log('Registering user')
+      UserService.register(data.user)
       .then(() => {
-        console.log('Restaurant registered')
-        dispatch('login', {
-          email: restaurant.restaurantAdminEmail,
-          password: user.password
+        commit('saveTempUser', null)
+        UserService.login({
+          email: data.user.email,
+          password: data.user.password
         })
+        .then(response => {
+          console.log('logged in')
+          localStorage.setItem('token', response.data.token)
+          commit('updateToken', response.data.token)
+          commit('updateCurrentUser', {
+            email: response.data.user.email,
+            fullname: response.data.user.fullname,
+            role: response.data.user.roles[0].name
+          })
+          console.log('Registering restaurant')
+          RestaurantService.registerRestaurant(data.restaurant)
+          .then(() => {
+            console.log('Restaurant registered')
+            dispatch('login', {
+              email: data.user.email,
+              password: data.user.password
+            })
+          })
+          .catch(error => {
+            console.log('Couldn\'t register restaurant: ', error)
+          })
+        })
+        .catch(() => {
+          console.log('Couldn\'t log in')
+          commit('logout')
+        })        
       })
       .catch(error => {
-        console.log('Couldn\'t register restaurant: ', error)
+        console.log('Couldn\'t register user: ', error)
       })
     }
   }

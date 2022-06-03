@@ -29,11 +29,11 @@ class RestaurantControllerTest {
         RestaurantRegistrationRequest request = RestaurantRegistrationRequest.builder().build();
         Restaurant restaurant = Restaurant.builder().build();
 
-        Mockito.when(restaurantService.register(request)).thenReturn(restaurant);
+        Mockito.when(restaurantService.register(request, null)).thenReturn(restaurant);
 
-        ResponseEntity<Restaurant> responseEntity = restaurantController.register(request);
+        ResponseEntity<Restaurant> responseEntity = restaurantController.register(request, null);
 
-        Mockito.verify(restaurantService).register(request);
+        Mockito.verify(restaurantService).register(request, null);
         Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         Assertions.assertEquals(restaurant, responseEntity.getBody());
     }

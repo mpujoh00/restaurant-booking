@@ -21,8 +21,8 @@ public class RestaurantControllerImpl implements RestaurantController {
     }
 
     @Override
-    public ResponseEntity<Restaurant> register(RestaurantRegistrationRequest restaurantRegistrationRequest) {
-        return new ResponseEntity<>(restaurantService.register(restaurantRegistrationRequest), HttpStatus.CREATED);
+    public ResponseEntity<Restaurant> register(RestaurantRegistrationRequest restaurantRegistrationRequest, String token) {
+        return new ResponseEntity<>(restaurantService.register(restaurantRegistrationRequest, token), HttpStatus.CREATED);
     }
 
     @Override

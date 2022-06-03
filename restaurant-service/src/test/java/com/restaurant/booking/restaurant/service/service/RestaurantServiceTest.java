@@ -44,7 +44,7 @@ class RestaurantServiceTest {
 
         Mockito.when(restaurantRepository.save(restaurant)).thenReturn(restaurant);
 
-        Restaurant obtainedRestaurant = restaurantService.register(request);
+        Restaurant obtainedRestaurant = restaurantService.register(request, null);
 
         Mockito.verify(restaurantRepository).save(restaurant);
         Assertions.assertEquals(restaurant, obtainedRestaurant);
@@ -59,10 +59,10 @@ class RestaurantServiceTest {
         restaurant.setReservationHours(reservationHours);
 
         Mockito.when(restaurantRepository.save(restaurant)).thenReturn(restaurant);
-        doThrow(new BadRequestException()).when(userProxy).addRestaurant("chef@gmail.com", null);
+        doThrow(new BadRequestException()).when(userProxy).addRestaurant(null, "chef@gmail.com", null);
 
         RestaurantAlreadyExistsException exception = Assertions.assertThrows(
-                RestaurantAlreadyExistsException.class, () -> restaurantService.register(request));
+                RestaurantAlreadyExistsException.class, () -> restaurantService.register(request, null));
         Assertions.assertEquals("User with email chef@gmail.com already has a restaurant", exception.getMessage());
 
         Mockito.verify(restaurantRepository).save(restaurant);
@@ -77,10 +77,10 @@ class RestaurantServiceTest {
         restaurant.setReservationHours(reservationHours);
 
         Mockito.when(restaurantRepository.save(restaurant)).thenReturn(restaurant);
-        doThrow(new NotFoundException()).when(userProxy).addRestaurant("chef@gmail.com", null);
+        doThrow(new NotFoundException()).when(userProxy).addRestaurant(null, "chef@gmail.com", null);
 
         UserNotFoundException exception = Assertions.assertThrows(
-                UserNotFoundException.class, () -> restaurantService.register(request));
+                UserNotFoundException.class, () -> restaurantService.register(request, null));
         Assertions.assertEquals("User with email: chef@gmail.com not found", exception.getMessage());
 
         Mockito.verify(restaurantRepository).save(restaurant);
@@ -132,9 +132,6 @@ class RestaurantServiceTest {
         Mockito.verify(restaurantRepository).findByStatus(RestaurantStatus.DISABLED);
         Assertions.assertEquals(restaurants, obtainedRestaurants);
     }
-
-
-
 
     @Test
     void deleteRestaurant(){

@@ -5,6 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient(name = "user-service")
 public interface UserProxy {
@@ -13,5 +14,5 @@ public interface UserProxy {
     User getUserByEmail(@PathVariable(value = "email") String email);
 
     @PutMapping("api/v1/users/add-restaurant/{restaurantId}/user/{userEmail}")
-    void addRestaurant(@PathVariable(value = "userEmail") String userEmail, @PathVariable(value = "restaurantId")  String restaurantId);
+    void addRestaurant(@RequestHeader(value = "Authorization", required = true) String authorizationHeader, @PathVariable(value = "userEmail") String userEmail, @PathVariable(value = "restaurantId")  String restaurantId);
 }

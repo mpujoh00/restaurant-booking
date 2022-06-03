@@ -18,22 +18,21 @@ import java.util.List;
 @RequestMapping("/api/v1/restaurants")
 public interface RestaurantController {
 
-    @PreAuthorize("hasAuthority('ROLE_RESTAURANT')")
     @Operation(description = "Registers restaurant and returns created restaurant", operationId = "register")
     @PostMapping("/register")
-    ResponseEntity<Restaurant> register(@RequestBody @Valid RestaurantRegistrationRequest restaurantRegistrationRequest);
+    ResponseEntity<Restaurant> register(@RequestBody @Valid RestaurantRegistrationRequest restaurantRegistrationRequest, @RequestHeader (name="Authorization") String token);
 
-    @PreAuthorize("hasAuthority('ROLE_RESTAURANT') and hasAuthority('ROLE_CLIENT')")
+    @PreAuthorize("hasAuthority('ROLE_RESTAURANT') or hasAuthority('ROLE_CLIENT')")
     @Operation(description = "Gets the restaurant given its id", operationId = "getRestaurant")
     @GetMapping("/{restaurantId}")
     ResponseEntity<Restaurant> getRestaurant(@PathVariable String restaurantId);
 
-    @PreAuthorize("hasAuthority('ROLE_RESTAURANT') and hasAuthority('ROLE_CLIENT')")
+    @PreAuthorize("hasAuthority('ROLE_RESTAURANT') or hasAuthority('ROLE_CLIENT')")
     @Operation(description = "Gets all enabled restaurants", operationId = "getEnabledRestaurants")
     @GetMapping
     ResponseEntity<List<Restaurant>> getEnabledRestaurants();
 
-    @PreAuthorize("hasAuthority('ROLE_RESTAURANT') and hasAuthority('ROLE_CLIENT')")
+    @PreAuthorize("hasAuthority('ROLE_RESTAURANT') or hasAuthority('ROLE_CLIENT')")
     @Operation(description = "Gets the restaurant's reservation hours", operationId = "getRestaurantsReservationHours")
     @GetMapping("/reservation-hours/{restaurantId}")
     ResponseEntity<List<LocalTime>> getRestaurantsReservationHours(@PathVariable String restaurantId);

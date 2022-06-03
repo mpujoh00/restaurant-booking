@@ -13,11 +13,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@CrossOrigin(origins = "http://localhost:8080", maxAge = 3600)
 @RestController
 public class UserControllerImpl implements UserController{
 
