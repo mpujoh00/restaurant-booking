@@ -2,7 +2,6 @@ package com.restaurant.booking.restaurant.service.service;
 
 import com.restaurant.booking.feign.client.UserProxy;
 import com.restaurant.booking.feign.client.exception.BadRequestException;
-import com.restaurant.booking.feign.client.exception.NotFoundException;
 import com.restaurant.booking.jwt.utils.JwtUtils;
 import com.restaurant.booking.restaurant.model.*;
 import com.restaurant.booking.restaurant.service.exception.RestaurantAlreadyExistsException;
@@ -39,14 +38,16 @@ class RestaurantServiceTest {
     private RestaurantServiceImpl restaurantService;
 
     @Test
-    void register(){
+    void register() {
         RestaurantRegistrationRequest request = new RestaurantRegistrationRequest("restaurant", "leon", "chef@gmail.com",
                 LocalTime.of(9, 0), LocalTime.of(10, 0), Interval.getIntervalFromMinutes(30));
         List<LocalTime> reservationHours = List.of(LocalTime.of(9, 0), LocalTime.of(9, 30));
         Restaurant restaurant = new Restaurant(request);
+        restaurant.setRestaurantAdminEmail("chef@gmail.com");
         restaurant.setReservationHours(reservationHours);
 
         Mockito.when(restaurantRepository.save(restaurant)).thenReturn(restaurant);
+        Mockito.when(jwtUtils.getAuthorizationHeader()).thenReturn("HEADER");
 
         Restaurant obtainedRestaurant = restaurantService.register(request);
 
@@ -55,11 +56,12 @@ class RestaurantServiceTest {
     }
 
     @Test
-    void register_restaurantAlreadyExists(){
+    void register_restaurantAlreadyExists() {
         RestaurantRegistrationRequest request = new RestaurantRegistrationRequest("restaurant", "leon", "chef@gmail.com",
                 LocalTime.of(9, 0), LocalTime.of(10, 0), Interval.getIntervalFromMinutes(30));
         List<LocalTime> reservationHours = List.of(LocalTime.of(9, 0), LocalTime.of(9, 30));
         Restaurant restaurant = new Restaurant(request);
+        restaurant.setRestaurantAdminEmail("chef@gmail.com");
         restaurant.setReservationHours(reservationHours);
 
         Mockito.when(restaurantRepository.save(restaurant)).thenReturn(restaurant);
@@ -74,16 +76,17 @@ class RestaurantServiceTest {
     }
 
     @Test
-    void register_userNotFound(){
+    void register_userNotFound() {
         RestaurantRegistrationRequest request = new RestaurantRegistrationRequest("restaurant", "leon", "chef@gmail.com",
                 LocalTime.of(9, 0), LocalTime.of(10, 0), Interval.getIntervalFromMinutes(30));
         List<LocalTime> reservationHours = List.of(LocalTime.of(9, 0), LocalTime.of(9, 30));
         Restaurant restaurant = new Restaurant(request);
+        restaurant.setRestaurantAdminEmail("chef@gmail.com");
         restaurant.setReservationHours(reservationHours);
 
         Mockito.when(restaurantRepository.save(restaurant)).thenReturn(restaurant);
         Mockito.when(jwtUtils.getAuthorizationHeader()).thenReturn("HEADER");
-        doThrow(new NotFoundException()).when(userProxy).addRestaurant("HEADER", "chef@gmail.com", null);
+        doThrow(new UserNotFoundException("chef@gmail.com")).when(userProxy).addRestaurant("HEADER", "chef@gmail.com", null);
 
         UserNotFoundException exception = Assertions.assertThrows(
                 UserNotFoundException.class, () -> restaurantService.register(request));
@@ -93,7 +96,7 @@ class RestaurantServiceTest {
     }
 
     @Test
-    void findRestaurant(){
+    void findRestaurant() {
         Restaurant restaurant = Restaurant.builder().id("id").build();
 
         Mockito.when(restaurantRepository.findById("id")).thenReturn(Optional.of(restaurant));
@@ -105,7 +108,7 @@ class RestaurantServiceTest {
     }
 
     @Test
-    void findRestaurant_restaurantNotFound(){
+    void findRestaurant_restaurantNotFound() {
         Mockito.when(restaurantRepository.findById("id")).thenReturn(Optional.empty());
 
         RestaurantNotFoundException exception = Assertions.assertThrows(
@@ -116,7 +119,7 @@ class RestaurantServiceTest {
     }
 
     @Test
-    void findAllRestaurants(){
+    void findAllRestaurants() {
         List<Restaurant> restaurants = List.of(Restaurant.builder().id("id").build(), Restaurant.builder().id("id2").build());
 
         Mockito.when(restaurantRepository.findAll()).thenReturn(restaurants);
@@ -128,7 +131,7 @@ class RestaurantServiceTest {
     }
 
     @Test
-    void findRestaurantsByStatus(){
+    void findRestaurantsByStatus() {
         List<Restaurant> restaurants = List.of(Restaurant.builder().id("id").build(), Restaurant.builder().id("id2").build());
 
         Mockito.when(restaurantRepository.findByStatus(RestaurantStatus.DISABLED)).thenReturn(restaurants);
@@ -140,14 +143,14 @@ class RestaurantServiceTest {
     }
 
     @Test
-    void deleteRestaurant(){
+    void deleteRestaurant() {
         restaurantService.deleteRestaurant("id");
 
         Mockito.verify(restaurantRepository).deleteById("id");
     }
 
     @Test
-    void updateRestaurant(){
+    void updateRestaurant() {
         RestaurantUpdateRequest request = new RestaurantUpdateRequest("id", "restaurant", "leon");
         Restaurant restaurant = Restaurant.builder().id("id").name("restaurant").location("leon").build();
 
@@ -162,7 +165,7 @@ class RestaurantServiceTest {
     }
 
     @Test
-    void updateRestaurantReservationHours(){
+    void updateRestaurantReservationHours() {
         RestaurantReservHoursUpdateRequest request = new RestaurantReservHoursUpdateRequest("id", LocalTime.of(9, 0),
                 LocalTime.of(10, 0), Interval.getIntervalFromMinutes(30));
         List<LocalTime> reservationHours = List.of(LocalTime.of(9, 0), LocalTime.of(9, 30));
@@ -180,7 +183,7 @@ class RestaurantServiceTest {
     }
 
     @Test
-    void changeRestaurantStatus(){
+    void changeRestaurantStatus() {
         Restaurant restaurant = Restaurant.builder().id("id").status(RestaurantStatus.ENABLED).build();
 
         Mockito.when(restaurantRepository.save(restaurant)).thenReturn(restaurant);

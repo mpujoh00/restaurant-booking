@@ -19,7 +19,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"chef2@gmail.com\",\r\n    \"password\": \"soy chef2\",\r\n    \"fullname\": \"Chef\",\r\n    \"role\": \"ROLE_RESTAURANT\"\r\n}",
+									"raw": "{\r\n    \"email\": \"chef@gmail.com\",\r\n    \"password\": \"soy chef\",\r\n    \"fullname\": \"Chef\",\r\n    \"role\": \"ROLE_RESTAURANT\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -69,15 +69,11 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8765/api/v1/auth/login",
-									"protocol": "http",
+									"raw": "{{baseUserServiceURL}}/auth/login",
 									"host": [
-										"localhost"
+										"{{baseUserServiceURL}}"
 									],
-									"port": "8765",
 									"path": [
-										"api",
-										"v1",
 										"auth",
 										"login"
 									]
@@ -107,7 +103,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"dylan@gmail.com\",\r\n    \"password\": \"soy dylan\"\r\n}",
+									"raw": "{\r\n    \"email\": \"louis@gmail.com\",\r\n    \"password\": \"soy louis\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -379,7 +375,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"nuevo restaurante\",\r\n    \"location\": \"León\",\r\n    \"restaurantAdminEmail\": \"chef2@gmail.com\",\r\n    \"openTime\": \"09:00\",\r\n    \"closeTime\": \"10:00\",\r\n    \"intervalMinutes\": \"60\"\r\n}",
+									"raw": "{\r\n    \"name\": \"nuevo restaurante\",\r\n    \"location\": \"León\",\r\n    \"restaurantAdminEmail\": \"louis@gmail.com\",\r\n    \"openTime\": \"09:00\",\r\n    \"closeTime\": \"10:00\",\r\n    \"intervalMinutes\": \"60\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -404,12 +400,12 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseRestaurantServiceURL}}/62697029ab722e6a8d6b20b2",
+									"raw": "{{baseRestaurantServiceURL}}/629a2d1818cbd82f02688286",
 									"host": [
 										"{{baseRestaurantServiceURL}}"
 									],
 									"path": [
-										"62697029ab722e6a8d6b20b2"
+										"629a2d1818cbd82f02688286"
 									]
 								}
 							},
@@ -595,12 +591,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseTableServiceURL}}/6288fb6b3d2ff80747568812",
+							"raw": "{{baseTableServiceURL}}/629a1d770cae3e436c7b9202",
 							"host": [
 								"{{baseTableServiceURL}}"
 							],
 							"path": [
-								"6288fb6b3d2ff80747568812"
+								"629a1d770cae3e436c7b9202"
 							]
 						}
 					},

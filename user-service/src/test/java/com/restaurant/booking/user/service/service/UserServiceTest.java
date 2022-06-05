@@ -75,6 +75,20 @@ class UserServiceTest {
     }
 
     @Test
+    void findById(){
+        User user = User.builder().email("micaela@gmail.com").build();
+
+        Mockito.when(userRepository.findById("id")).thenReturn(Optional.of(user));
+
+        User result = userService.findById("id");
+
+        // checks if the method was executed
+        Mockito.verify(userRepository).findById("id");
+        // compares expected output with actual output
+        Assertions.assertEquals("micaela@gmail.com", result.getEmail());
+    }
+
+    @Test
     void findByEmail_userNotFound(){
         Mockito.when(userRepository.findByEmail("micaela@gmail.com")).thenReturn(Optional.empty());
 

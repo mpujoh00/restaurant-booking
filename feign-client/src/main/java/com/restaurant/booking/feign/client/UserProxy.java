@@ -2,7 +2,6 @@ package com.restaurant.booking.feign.client;
 
 import com.restaurant.booking.user.model.User;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,5 +17,5 @@ public interface UserProxy {
     String getUsername(@RequestHeader(value = "Authorization") String authorizationHeader, @PathVariable(value = "id") String id);
 
     @PutMapping("api/v1/admin/users/change-status/{email}")
-    ResponseEntity<User> updateUserStatus(@RequestHeader(value = "Authorization") String authorizationHeader, @PathVariable(value = "email") String email);
+    User updateUserStatus(@RequestHeader(value = "Authorization") String authorizationHeader, @PathVariable(value = "email") String email);
 }

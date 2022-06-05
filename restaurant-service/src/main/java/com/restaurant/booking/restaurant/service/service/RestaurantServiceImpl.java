@@ -43,6 +43,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         log.info("Registering new restaurant: {}", restaurantRegistrationRequest.getName());
 
         Restaurant restaurant = new Restaurant(restaurantRegistrationRequest);
+        restaurant.setRestaurantAdminEmail(restaurantRegistrationRequest.getRestaurantAdminEmail());
         restaurant.setReservationHours(
                 getReservationHours(restaurantRegistrationRequest.getOpenTime(), restaurantRegistrationRequest.getCloseTime(), restaurantRegistrationRequest.getIntervalMinutes()));
         restaurant = save(restaurant);
@@ -123,6 +124,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         log.info("Changing restaurant's with id {} status", restaurant.getId());
 
         restaurant.setStatus(restaurant.getStatus().nextStatus());
+        userProxy.updateUserStatus(jwtUtils.getAuthorizationHeader(), restaurant.getRestaurantAdminEmail());
         return save(restaurant);
     }
 

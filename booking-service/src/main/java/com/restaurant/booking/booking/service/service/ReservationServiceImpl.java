@@ -90,7 +90,7 @@ public class ReservationServiceImpl implements ReservationService{
                 .filter(reservation ->
                         reservation.getReservationSlot().getDate().isAfter(LocalDate.now()) ||
                         reservation.getReservationSlot().getDate().isEqual(LocalDate.now())
-                )
+                ).peek(this::populateUserReservations)
                 .collect(Collectors.toList());
     }
 
@@ -104,7 +104,7 @@ public class ReservationServiceImpl implements ReservationService{
                 .filter(reservation ->
                         reservation.getReservationSlot().getDate().isBefore(LocalDate.now()) ||
                         reservation.getStatus().equals(ReservationStatus.CANCELED)
-                )
+                ).peek(this::populateUserReservations)
                 .collect(Collectors.toList());
     }
 

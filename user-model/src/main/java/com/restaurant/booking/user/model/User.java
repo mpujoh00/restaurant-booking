@@ -1,5 +1,6 @@
 package com.restaurant.booking.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.restaurant.booking.restaurant.model.Restaurant;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -47,6 +48,7 @@ public class User implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
     }
