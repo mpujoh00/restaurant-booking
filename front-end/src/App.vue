@@ -44,13 +44,17 @@ export default {
   data() {
     return {
       restaurantMenus:[
-        {title: 'Home', route:'/home'}
+        {title: 'Bookings', route:'/restaurant/admin/bookings'},
+        {title: 'Restaurant administration', route:'/restaurant/admin'},
+        {title: 'Tables administration', route:'/restaurant/admin/tables'}
       ],
       clientMenus:[
         {title: 'Home', route:'/home'},
+        {title: 'Bookings', route:'/bookings'},
       ],
       adminMenus:[
-        {title: 'Restaurants', route:'/admin/restaurants'},
+        {title: 'Restaurants administration', route:'/admin/restaurants'},
+        {title: 'Users administration', route:'/admin/users'},
       ]
     }
   },

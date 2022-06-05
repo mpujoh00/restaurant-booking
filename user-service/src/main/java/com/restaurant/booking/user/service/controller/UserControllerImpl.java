@@ -84,11 +84,11 @@ public class UserControllerImpl implements UserController{
         log.info("Deleting user with email {}", email);
 
         // checks if it is the current user
-        if(isNotCurrentUser(email)){
+        /*if(isNotCurrentUser(email)){
             // can't update another user
             log.error("Can't delete another user different than self");
             return ResponseEntity.badRequest().build();
-        }
+        }*/
 
         userService.delete(userService.findByEmail(email));
         return ResponseEntity.ok().build();
@@ -102,8 +102,15 @@ public class UserControllerImpl implements UserController{
         return ResponseEntity.ok().build();
     }
 
+    @Override
+    public ResponseEntity<String> getUsername(String id) {
+
+        log.info("Getting username with id {}", id);
+        return ResponseEntity.ok(userService.findById(id).getFullname());
+    }
+
     private boolean isNotCurrentUser(String emailRequest){
-        String userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return !userEmail.equals(emailRequest);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return !user.getEmail().equals(emailRequest);
     }
 }

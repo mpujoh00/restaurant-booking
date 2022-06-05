@@ -31,6 +31,7 @@ export default new Vuex.Store({
     logout: state => {
       state.token = null
       state.currentUser = null
+      state.currentRestaurant = null
     },
     updateCurrentUser: (state, user) => {
       state.currentUser = user
@@ -45,7 +46,7 @@ export default new Vuex.Store({
     saveTempUser: (state, user) => {
       state.tempUser = user
     },
-    saveCurrentRestaurant: (state, restaurant) => {
+    updateCurrentRestaurant: (state, restaurant) => {
       state.currentRestaurant = restaurant
       localStorage.setItem('currentRestaurant', JSON.stringify(restaurant))
     }
@@ -61,7 +62,9 @@ export default new Vuex.Store({
       .then(response => {
         console.log('Correctly logged in')
         // saves token to local storage
+        console.log(response.data.token)
         localStorage.setItem('token', response.data.token)
+        console.log(localStorage.getItem('token'))
         // correct login
         commit('updateToken', response.data.token)
         commit('loginStop', null)
@@ -69,8 +72,11 @@ export default new Vuex.Store({
           id: response.data.user.id,
           email: response.data.user.email,
           fullname: response.data.user.fullname,
-          role: response.data.user.roles[0].name
+          role: response.data.user.roles[0].name,
         })
+        if(response.data.user.restaurant !== null){
+          commit('updateCurrentRestaurant', response.data.user.restaurant)
+        }
         // redirects to account page
         router.push('/account')
       })
@@ -85,11 +91,13 @@ export default new Vuex.Store({
     fetchToken({ commit }) {
       commit('updateToken', localStorage.getItem('token'))
       commit('updateCurrentUser', JSON.parse(localStorage.getItem('currentUser')))
+      commit('updateCurrentRestaurant', JSON.parse(localStorage.getItem('currentRestaurant')))
     },
     logout({ commit }) {
       // removes user's token
       localStorage.removeItem('token')
       localStorage.removeItem('currentUser')
+      localStorage.removeItem('currentRestaurant')
       commit('logout')
       router.push('/login')
     },
@@ -149,24 +157,24 @@ export default new Vuex.Store({
           console.log(response)
           // saves updated token
           commit('updateToken', response.data)
-          commit('editPasswordError', null)
+          //commit('editPasswordError', null)
           resolve()
         })
         .catch(error => {
           if(error.response.status === 400){
-            commit('editPasswordError', error.response.data)
+            //commit('editPasswordError', error.response.data)
             reject(error.response.data)
           }
         })
       })      
     }, 
-    deleteUser({ commit }, userEmail) {
+    deleteUser({ commit, dispatch }, userEmail) {
       console.log("Deleting user")
       return new Promise((resolve, reject) => {
         UserService.deleteUser(userEmail)
         .then(() => {
           console.log("User deleted")
-          commit('logout')
+          dispatch('logout')
           resolve()
         })
         .catch(error => {
@@ -219,6 +227,7 @@ export default new Vuex.Store({
           })
           .catch(error => {
             console.log('Couldn\'t register restaurant: ', error)
+            commit('logout')
           })
         })
         .catch(() => {
@@ -229,6 +238,9 @@ export default new Vuex.Store({
       .catch(error => {
         console.log('Couldn\'t register user: ', error)
       })
+    },
+    modifyRestaurant({ commit }, restaurant){
+      commit('updateCurrentRestaurant', restaurant)
     }
   }
 })

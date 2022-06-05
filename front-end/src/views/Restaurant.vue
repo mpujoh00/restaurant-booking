@@ -96,7 +96,7 @@ export default ({
     },
     mounted() {
         RestaurantService.getRestaurant(this.id).then(response => {
-            this.restaurant = response.data[0]
+            this.restaurant = response.data
         })
     },
 })

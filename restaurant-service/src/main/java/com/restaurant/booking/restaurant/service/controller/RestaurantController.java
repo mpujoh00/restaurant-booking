@@ -22,7 +22,6 @@ public interface RestaurantController {
     @PostMapping("/register")
     ResponseEntity<Restaurant> register(@RequestBody @Valid RestaurantRegistrationRequest restaurantRegistrationRequest);
 
-    @PreAuthorize("hasAuthority('ROLE_RESTAURANT') or hasAuthority('ROLE_CLIENT') or hasAuthority('ROLE_ADMIN')")
     @Operation(description = "Gets the restaurant given its id", operationId = "getRestaurant")
     @GetMapping("/{restaurantId}")
     ResponseEntity<Restaurant> getRestaurant(@PathVariable String restaurantId);

@@ -8,6 +8,9 @@ import com.restaurant.booking.booking.service.exception.InvalidReservationStatus
 import com.restaurant.booking.booking.service.exception.NoSlotAvailableException;
 import com.restaurant.booking.booking.service.exception.ReservationNotFoundException;
 import com.restaurant.booking.booking.service.repository.ReservationRepository;
+import com.restaurant.booking.feign.client.RestaurantProxy;
+import com.restaurant.booking.feign.client.UserProxy;
+import com.restaurant.booking.jwt.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,11 +26,18 @@ public class ReservationServiceImpl implements ReservationService{
 
     private final ReservationRepository reservationRepository;
     private final ReservationSlotService slotService;
+    private final UserProxy userProxy;
+    private final RestaurantProxy restaurantProxy;
+    private final JwtUtils jwtUtils;
 
     @Autowired
-    public ReservationServiceImpl(ReservationRepository reservationRepository, ReservationSlotService slotService) {
+    public ReservationServiceImpl(ReservationRepository reservationRepository, ReservationSlotService slotService, UserProxy userProxy,
+                                  RestaurantProxy restaurantProxy, JwtUtils jwtUtils) {
         this.reservationRepository = reservationRepository;
         this.slotService = slotService;
+        this.userProxy = userProxy;
+        this.restaurantProxy = restaurantProxy;
+        this.jwtUtils = jwtUtils;
     }
 
     @Override
@@ -65,7 +75,9 @@ public class ReservationServiceImpl implements ReservationService{
     public List<Reservation> findRestaurantReservations(String restaurantId) {
 
         log.info("Getting all restaurant's with id {} reservations", restaurantId);
-        return reservationRepository.findAllByRestaurantId(restaurantId);
+        List<Reservation> reservations = reservationRepository.findAllByRestaurantId(restaurantId);
+        reservations.forEach(this::populateAdminReservations);
+        return reservations;
     }
 
     @Override
@@ -111,5 +123,29 @@ public class ReservationServiceImpl implements ReservationService{
             slotService.changeStatus(reservation.getReservationSlot());
 
         return save(reservation);
+    }
+
+    private void populateAdminReservations(Reservation reservation){
+
+        String userName = "";
+        try{
+            userName = userProxy.getUsername(jwtUtils.getAuthorizationHeader(), reservation.getUserId());
+        }
+        catch(Exception e){
+            log.warn("User fo reservation {} not found", reservation.getId());
+        }
+        reservation.setUserName(userName);
+    }
+
+    private void populateUserReservations(Reservation reservation){
+
+        String restaurantName = "";
+        try{
+            restaurantName = restaurantProxy.getRestaurant(jwtUtils.getAuthorizationHeader(), reservation.getRestaurantId()).getName();
+        }
+        catch(Exception e){
+            log.warn("Restaurant for reservation {} not found", reservation.getId());
+        }
+        reservation.setRestaurantName(restaurantName);
     }
 }

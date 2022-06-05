@@ -23,6 +23,13 @@ public interface UserService {
     User findByEmail(String email);
 
     /**
+     *
+     * @param id
+     * @return
+     */
+    User findById(String id);
+
+    /**
      * Saves new user or updates existing one
      * @param user
      * @return

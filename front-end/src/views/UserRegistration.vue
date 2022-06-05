@@ -49,7 +49,6 @@
                         <span class="buttonText">Cancel</span>    
                     </v-btn>               
                 </v-form>
-                <!--<v-snackbar v-model="registrationError">{{ registrationError }}</v-snackbar>-->
             </v-card>
         </v-col>
         

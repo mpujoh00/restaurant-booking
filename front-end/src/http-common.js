@@ -10,11 +10,13 @@ const authAxios = axios.create({
         'Authorization': 'Bearer ' + localStorage.getItem('token')
     }
 })
+console.log(authAxios.defaults.headers)
 
 // for requests where there is no need to be authenticated
 const noAuthAxios = axios.create()
 
 export {
     authAxios,
-    noAuthAxios
+    noAuthAxios,
+    axios
 }

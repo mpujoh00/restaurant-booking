@@ -51,6 +51,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public User findById(String id) {
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    @Override
     public User save(User user){
         log.info("Saving new user with email: {} and roles: {}", user.getEmail(), user.getRoles().toString());
         user.setPassword(passwordEncoder.encode(user.getPassword()));

@@ -27,16 +27,16 @@
                             color="grey" class="mb-5" prepend-inner-icon="mdi-at"/>
                         <!-- default mode buttons -->
                         <div v-if="nonEditable">
-                            <v-btn v-if="nonEditable" @click="editUser" class="button" color="#ff99a8">
+                            <v-btn @click="editUser" class="button" color="#ff99a8">
                                 <span class="buttonText">Edit</span>    
                             </v-btn>
-                            <v-btn v-if="nonEditable" @click="changePassword" class="button" color="#ff99a8">
+                            <v-btn @click="changePassword" class="button" color="#ff99a8">
                                 <span class="buttonText">Change password</span>    
                             </v-btn>
-                            <v-btn v-if="nonEditable" @click="deleteUserDialog" class="button" color="#ff99a8">
+                            <v-btn @click="deleteUserDialog" class="button" color="#ff99a8">
                                 <span class="buttonText">Delete</span>    
                             </v-btn>
-                            <v-btn v-if="nonEditable" @click="logout" class="button" color="#ff99a8">
+                            <v-btn @click="logout" class="button" color="#ff99a8">
                                 <span class="buttonText">Logout</span>    
                             </v-btn>
                         </div>    
@@ -128,6 +128,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import router from '@/router'
 
 export default {
     components: {
@@ -217,6 +218,9 @@ export default {
                 // if clicked on yes
                 console.log("Deleting account")
                 this.deleteUser(this.currentUser.email)
+                .then(() => {
+                    router.push('/')
+                })
                 .catch(() => {
                     console.log(this.deleteUserError)
                 })
