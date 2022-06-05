@@ -7,6 +7,7 @@ import com.restaurant.booking.user.model.*;
 import com.restaurant.booking.user.service.exception.*;
 import com.restaurant.booking.user.service.repository.RoleRepository;
 import com.restaurant.booking.user.service.repository.UserRepository;
+import com.restaurant.booking.user.service.security.JwtUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,6 +39,9 @@ class UserServiceTest {
     @Mock
     private RestaurantProxy restaurantProxy;
 
+    @Mock
+    private JwtUtils jwtUtils;
+
     @InjectMocks
     private UserServiceImpl userService;
 
@@ -66,6 +70,20 @@ class UserServiceTest {
 
         // checks if the method was executed
         Mockito.verify(userRepository).findByEmail("micaela@gmail.com");
+        // compares expected output with actual output
+        Assertions.assertEquals("micaela@gmail.com", result.getEmail());
+    }
+
+    @Test
+    void findById(){
+        User user = User.builder().email("micaela@gmail.com").build();
+
+        Mockito.when(userRepository.findById("id")).thenReturn(Optional.of(user));
+
+        User result = userService.findById("id");
+
+        // checks if the method was executed
+        Mockito.verify(userRepository).findById("id");
         // compares expected output with actual output
         Assertions.assertEquals("micaela@gmail.com", result.getEmail());
     }
@@ -263,12 +281,13 @@ class UserServiceTest {
                 .email("micaela@gmail.com").roles(Set.of(new Role(RoleName.ROLE_RESTAURANT)))
                 .restaurant(restaurant).build();
 
-        Mockito.when(restaurantProxy.getRestaurant("restaurantId")).thenReturn(restaurant);
+        Mockito.when(jwtUtils.getAuthorizationHeader()).thenReturn("HEADER");
+        Mockito.when(restaurantProxy.getRestaurant("HEADER", "restaurantId")).thenReturn(restaurant);
         Mockito.when(userRepository.save(userAfter)).thenReturn(userAfter);
 
         userService.addRestaurant(user, "restaurantId");
 
-        Mockito.verify(restaurantProxy).getRestaurant("restaurantId");
+        Mockito.verify(restaurantProxy).getRestaurant("HEADER", "restaurantId");
         Mockito.verify(userRepository).save(userAfter);
     }
 
@@ -295,12 +314,13 @@ class UserServiceTest {
     void addRestaurant_restaurantNotFound(){
         User user = User.builder().email("micaela@gmail.com").roles(Set.of(new Role(RoleName.ROLE_RESTAURANT))).build();
 
-        Mockito.when(restaurantProxy.getRestaurant("restaurantId")).thenThrow(new NotFoundException());
+        Mockito.when(jwtUtils.getAuthorizationHeader()).thenReturn("HEADER");
+        Mockito.when(restaurantProxy.getRestaurant("HEADER", "restaurantId")).thenThrow(new NotFoundException());
 
         RestaurantNotFoundException exception = Assertions.assertThrows(
                 RestaurantNotFoundException.class, () -> userService.addRestaurant(user, "restaurantId"));
         Assertions.assertEquals("Restaurant with id restaurantId not found", exception.getMessage());
 
-        Mockito.verify(restaurantProxy).getRestaurant("restaurantId");
+        Mockito.verify(restaurantProxy).getRestaurant("HEADER", "restaurantId");
     }
 }

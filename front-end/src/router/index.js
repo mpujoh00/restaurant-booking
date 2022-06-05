@@ -14,14 +14,53 @@ const routes = [
     component: () => import(/* webpackChunkName: "login" */ '@/views/Login.vue')
   },
   {
-    name: 'registration',
+    name: 'userRegistration',
     path: '/registration-:role',
-    component: () => import(/* webpackChunkName: "login" */ '@/views/Registration.vue'),
+    component: () => import(/* webpackChunkName: "login" */ '@/views/UserRegistration.vue'),
     props: true
+  },{
+    path: '/restaurant-registration',
+    component: () => import(/* webpackChunkName: "login" */ '@/views/RestaurantRegistration.vue'),
   },
   {
     path: '/account',
     component: () => import(/* webpackChunkName: "account" */ '@/views/Account.vue')
+  },
+  {
+    name: 'restaurant',
+    path: '/restaurant-:id',
+    component: () => import(/* webpackChunkName: "login" */ '@/views/Restaurant.vue'),
+    props: true
+  },
+  {
+    path: '/restaurant/admin/bookings',
+    component: () => import(/* webpackChunkName: "login" */ '@/views/RestaurantBookings.vue'),
+  },
+  {
+    path: '/restaurant/admin',
+    component: () => import(/* webpackChunkName: "login" */ '@/views/RestaurantAdministration.vue'),
+  },
+  {
+    path: '/restaurant/admin/tables',
+    component: () => import(/* webpackChunkName: "login" */ '@/views/RestaurantTablesAdministration.vue'),
+  },
+  {
+    path: '/bookings',
+    component: () => import(/* webpackChunkName: "login" */ '@/views/ClientBookings.vue'),
+  },
+  {
+    path: '/admin/restaurants',
+    component: () => import(/* webpackChunkName: "account" */ '@/views/RestaurantsAdmin.vue')
+  },
+  {
+    path: '/admin/users',
+    component: () => import(/* webpackChunkName: "account" */ '@/views/UsersAdmin.vue')
+  },
+  {
+    name: 'restaurantAdmin',
+    path: '/admin/restaurant-:id',
+    component: () => import(/* webpackChunkName: "account" */ '@/views/RestaurantAdministration.vue'),
+    props: true
   },
   {
     // "wildcard path" that matches everything, used as a Catch-all or Fallback (important to place it the last, if not it might redirect even if route is available)

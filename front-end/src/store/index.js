@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import UserService from '@/services/UserService'
+import RestaurantService from '@/services/RestaurantService'
 import router from '@/router'
 
 Vue.use(Vuex)
@@ -13,7 +14,9 @@ export default new Vuex.Store({
     token: null,
     currentUser: null,
     editPasswordError: null,
-    deleteUserError: null
+    deleteUserError: null,
+    tempUser: null,
+    currentRestaurant: null,
   },
   mutations: {
     // Login
@@ -28,6 +31,7 @@ export default new Vuex.Store({
     logout: state => {
       state.token = null
       state.currentUser = null
+      state.currentRestaurant = null
     },
     updateCurrentUser: (state, user) => {
       state.currentUser = user
@@ -38,6 +42,13 @@ export default new Vuex.Store({
     },
     deleteUserError: (state, errorMessage) => {
       state.deleteUserError = errorMessage
+    },
+    saveTempUser: (state, user) => {
+      state.tempUser = user
+    },
+    updateCurrentRestaurant: (state, restaurant) => {
+      state.currentRestaurant = restaurant
+      localStorage.setItem('currentRestaurant', JSON.stringify(restaurant))
     }
   },
   actions: {
@@ -49,35 +60,44 @@ export default new Vuex.Store({
 
       UserService.login(loginData)
       .then(response => {
+        console.log('Correctly logged in')
         // saves token to local storage
+        console.log(response.data.token)
         localStorage.setItem('token', response.data.token)
+        console.log(localStorage.getItem('token'))
         // correct login
         commit('updateToken', response.data.token)
         commit('loginStop', null)
         commit('updateCurrentUser', {
+          id: response.data.user.id,
           email: response.data.user.email,
           fullname: response.data.user.fullname,
-          role: response.data.user.roles[0].name
+          role: response.data.user.roles[0].name,
         })
+        if(response.data.user.restaurant !== null){
+          commit('updateCurrentRestaurant', response.data.user.restaurant)
+        }
         // redirects to account page
         router.push('/account')
       })
       .catch(() => {
+        console.log('Couldn\'t log in')
         commit('loginStop', "Incorrect credentials")
         // incorrect login
-        commit('updateToken', null)
-        commit('updateCurrentUser', null)
+        commit('logout')
       })
     },
     // executed everytime the application is loaded (in App.vue created())
     fetchToken({ commit }) {
       commit('updateToken', localStorage.getItem('token'))
       commit('updateCurrentUser', JSON.parse(localStorage.getItem('currentUser')))
+      commit('updateCurrentRestaurant', JSON.parse(localStorage.getItem('currentRestaurant')))
     },
     logout({ commit }) {
       // removes user's token
       localStorage.removeItem('token')
       localStorage.removeItem('currentUser')
+      localStorage.removeItem('currentRestaurant')
       commit('logout')
       router.push('/login')
     },
@@ -112,6 +132,7 @@ export default new Vuex.Store({
           console.log(response.data)
           // updates user
           commit('updateCurrentUser', {
+            id: response.data.user.id,
             email: response.data.email,
             fullname: response.data.fullname,
             role: response.data.roles[0].name
@@ -136,24 +157,24 @@ export default new Vuex.Store({
           console.log(response)
           // saves updated token
           commit('updateToken', response.data)
-          commit('editPasswordError', null)
+          //commit('editPasswordError', null)
           resolve()
         })
         .catch(error => {
           if(error.response.status === 400){
-            commit('editPasswordError', error.response.data)
+            //commit('editPasswordError', error.response.data)
             reject(error.response.data)
           }
         })
       })      
     }, 
-    deleteUser({ commit }, userEmail) {
+    deleteUser({ commit, dispatch }, userEmail) {
       console.log("Deleting user")
       return new Promise((resolve, reject) => {
         UserService.deleteUser(userEmail)
         .then(() => {
           console.log("User deleted")
-          commit('logout')
+          dispatch('logout')
           resolve()
         })
         .catch(error => {
@@ -166,6 +187,60 @@ export default new Vuex.Store({
           reject()
         })
       })
+    },
+    saveTempUser({ commit }, user){
+      console.log('Saving temporary user')
+      commit('saveTempUser', user)
+    },
+    removeTempUser({ commit }){
+      console.log('Removing temporary user')
+      commit('saveTempUser', null)
+    },
+    registerRestaurant({ dispatch, commit }, data){
+
+      console.log('Registering user')
+      UserService.register(data.user)
+      .then(() => {
+        commit('saveTempUser', null)
+        UserService.login({
+          email: data.user.email,
+          password: data.user.password
+        })
+        .then(response => {
+          console.log('logged in')
+          localStorage.setItem('token', response.data.token)
+          commit('updateToken', response.data.token)
+          commit('updateCurrentUser', {
+            id: response.data.user.id,
+            email: response.data.user.email,
+            fullname: response.data.user.fullname,
+            role: response.data.user.roles[0].name
+          })
+          console.log('Registering restaurant')
+          RestaurantService.registerRestaurant(data.restaurant)
+          .then(() => {
+            console.log('Restaurant registered')
+            dispatch('login', {
+              email: data.user.email,
+              password: data.user.password
+            })
+          })
+          .catch(error => {
+            console.log('Couldn\'t register restaurant: ', error)
+            commit('logout')
+          })
+        })
+        .catch(() => {
+          console.log('Couldn\'t log in')
+          commit('logout')
+        })        
+      })
+      .catch(error => {
+        console.log('Couldn\'t register user: ', error)
+      })
+    },
+    modifyRestaurant({ commit }, restaurant){
+      commit('updateCurrentRestaurant', restaurant)
     }
   }
 })

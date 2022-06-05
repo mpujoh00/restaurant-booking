@@ -43,14 +43,18 @@ import { mapState } from 'vuex'
 export default {
   data() {
     return {
-      menus:[
-        {title: 'Home', route:'/home'}
+      restaurantMenus:[
+        {title: 'Bookings', route:'/restaurant/admin/bookings'},
+        {title: 'Restaurant administration', route:'/restaurant/admin'},
+        {title: 'Tables administration', route:'/restaurant/admin/tables'}
       ],
       clientMenus:[
         {title: 'Home', route:'/home'},
+        {title: 'Bookings', route:'/bookings'},
       ],
       adminMenus:[
-        {title: 'Home', route:'/home'},
+        {title: 'Restaurants administration', route:'/admin/restaurants'},
+        {title: 'Users administration', route:'/admin/users'},
       ]
     }
   },
@@ -61,14 +65,14 @@ export default {
   },
   methods: {
     getMenus() {
-      if(!this.currentUser){
-        return this.menus
-      }
-      else if(this.currentUser.role == "ROLE_ADMIN"){
+      if(this.currentUser !== null && this.currentUser.role == "ROLE_ADMIN"){
         return this.adminMenus
       }
-      else if(this.currentUser.role == "ROLE_CLIENT"){
+      else if(this.currentUser !== null && this.currentUser.role == "ROLE_CLIENT"){
         return this.clientMenus
+      }
+      else if(this.currentUser !== null && this.currentUser.role == "ROLE_RESTAURANT"){
+        return this.restaurantMenus
       }
     }
   },

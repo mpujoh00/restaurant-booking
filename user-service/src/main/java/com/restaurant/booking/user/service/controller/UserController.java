@@ -33,4 +33,8 @@ public interface UserController {
     @Operation(description = "Adds the given restaurant to the user", operationId = "addRestaurant")
     @PutMapping("/add-restaurant/{restaurantId}/user/{userEmail}")
     ResponseEntity<Void> addRestaurant(@PathVariable String restaurantId, @PathVariable String userEmail);
+
+    @Operation(description = "Returns a user's name given its id", operationId = "getUsername")
+    @GetMapping("/username/{id}")
+    ResponseEntity<String> getUsername(@PathVariable String id);
 }

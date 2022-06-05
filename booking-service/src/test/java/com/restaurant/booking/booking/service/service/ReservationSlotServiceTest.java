@@ -6,6 +6,7 @@ import com.restaurant.booking.booking.model.ReservationSlotStatus;
 import com.restaurant.booking.booking.service.exception.ReservationSlotNotFoundException;
 import com.restaurant.booking.booking.service.repository.ReservationSlotRepository;
 import com.restaurant.booking.feign.client.TableProxy;
+import com.restaurant.booking.jwt.utils.JwtUtils;
 import com.restaurant.booking.table.model.Table;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,9 @@ class ReservationSlotServiceTest {
     @Mock
     private TableProxy tableProxy;
 
+    @Mock
+    private JwtUtils jwtUtils;
+
     @InjectMocks
     private ReservationSlotServiceImpl slotService;
 
@@ -40,11 +44,12 @@ class ReservationSlotServiceTest {
                 .build();
         List<Table> tables = List.of(new Table());
 
-        Mockito.when(tableProxy.getRestaurantTables(slotsCreationRequest.getRestaurantId())).thenReturn(tables);
+        Mockito.when(jwtUtils.getAuthorizationHeader()).thenReturn("HEADER");
+        Mockito.when(tableProxy.getRestaurantTables("HEADER", slotsCreationRequest.getRestaurantId())).thenReturn(tables);
 
         slotService.createRestaurantSlots(slotsCreationRequest);
 
-        Mockito.verify(tableProxy).getRestaurantTables(slotsCreationRequest.getRestaurantId());
+        Mockito.verify(tableProxy).getRestaurantTables("HEADER", slotsCreationRequest.getRestaurantId());
         Mockito.verify(slotRepository, Mockito.times(31)).save(Mockito.any(ReservationSlot.class));
     }
 

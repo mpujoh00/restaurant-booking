@@ -6,6 +6,7 @@ import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -62,4 +63,11 @@ public class JwtUtils {
         }
         return false;
     }
+
+    public String getAuthorizationHeader() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String accessToken = user.getJwtToken();
+        return "Bearer " + accessToken;
+    }
+
 }

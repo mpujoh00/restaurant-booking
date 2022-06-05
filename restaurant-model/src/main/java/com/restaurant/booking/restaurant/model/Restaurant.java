@@ -24,6 +24,7 @@ public class Restaurant {
     private String location;
     private List<LocalTime> reservationHours;
     private RestaurantStatus status;
+    private String restaurantAdminEmail;
 
     public Restaurant(RestaurantRegistrationRequest restaurantRegistrationRequest) {
 

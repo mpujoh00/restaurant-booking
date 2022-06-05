@@ -1,11 +1,13 @@
 package com.restaurant.booking.jwt.utils;
 
+import com.restaurant.booking.user.model.User;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -40,6 +42,12 @@ public class JwtUtils {
             log.info("JWT claims string is empty: {}", e.getMessage());
         }
         return false;
+    }
+
+    public String getAuthorizationHeader() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String accessToken = user.getJwtToken();
+        return "Bearer " + accessToken;
     }
 
 }

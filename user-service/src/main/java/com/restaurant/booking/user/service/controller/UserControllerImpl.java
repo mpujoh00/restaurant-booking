@@ -13,11 +13,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@CrossOrigin(origins = "http://localhost:8080", maxAge = 3600)
 @RestController
 public class UserControllerImpl implements UserController{
 
@@ -104,8 +102,15 @@ public class UserControllerImpl implements UserController{
         return ResponseEntity.ok().build();
     }
 
+    @Override
+    public ResponseEntity<String> getUsername(String id) {
+
+        log.info("Getting username with id {}", id);
+        return ResponseEntity.ok(userService.findById(id).getFullname());
+    }
+
     private boolean isNotCurrentUser(String emailRequest){
-        String userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return !userEmail.equals(emailRequest);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return !user.getEmail().equals(emailRequest);
     }
 }

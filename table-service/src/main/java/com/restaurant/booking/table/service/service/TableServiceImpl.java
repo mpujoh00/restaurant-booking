@@ -3,6 +3,7 @@ package com.restaurant.booking.table.service.service;
 import com.restaurant.booking.booking.model.ReservSlotsCreationRequest;
 import com.restaurant.booking.feign.client.BookingProxy;
 import com.restaurant.booking.feign.client.RestaurantProxy;
+import com.restaurant.booking.jwt.utils.JwtUtils;
 import com.restaurant.booking.table.model.Table;
 import com.restaurant.booking.table.model.TableCreationRequest;
 import com.restaurant.booking.table.service.exception.TableNotFoundException;
@@ -21,12 +22,14 @@ public class TableServiceImpl implements TableService {
     private final TableRepository tableRepository;
     private final BookingProxy bookingProxy;
     private final RestaurantProxy restaurantProxy;
+    private final JwtUtils jwtUtils;
 
     @Autowired
-    public TableServiceImpl(TableRepository tableRepository, BookingProxy bookingProxy, RestaurantProxy restaurantProxy) {
+    public TableServiceImpl(TableRepository tableRepository, BookingProxy bookingProxy, RestaurantProxy restaurantProxy, JwtUtils jwtUtils) {
         this.tableRepository = tableRepository;
         this.bookingProxy = bookingProxy;
         this.restaurantProxy = restaurantProxy;
+        this.jwtUtils = jwtUtils;
     }
 
     @Override
@@ -48,7 +51,8 @@ public class TableServiceImpl implements TableService {
         table = save(table);
 
         // generates its reservation slots
-        bookingProxy.generateRestaurantTableSlots(new ReservSlotsCreationRequest(restaurantId, restaurantProxy.getRestaurantsReservationHours(restaurantId), table));
+        bookingProxy.generateRestaurantTableSlots(jwtUtils.getAuthorizationHeader(), new ReservSlotsCreationRequest(restaurantId,
+                restaurantProxy.getRestaurantsReservationHours(jwtUtils.getAuthorizationHeader(), restaurantId), table));
 
         return table;
     }
@@ -72,7 +76,7 @@ public class TableServiceImpl implements TableService {
 
         log.info("Deleting table with id {}", table.getId());
         // deletes its future reservation slots
-        bookingProxy.deleteRestaurantTableSlots(table);
+        bookingProxy.deleteRestaurantTableSlots(jwtUtils.getAuthorizationHeader(), table);
         tableRepository.deleteById(table.getId());
     }
 }

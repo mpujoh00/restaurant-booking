@@ -58,7 +58,7 @@ class UserControllerTest {
         UpdateRequest updateRequest = new UpdateRequest("micaela@gmail.com", "contraseña", "Micaela");
         User user = User.builder().email("micaela@gmail.com").build();
 
-        Mockito.when(authentication.getPrincipal()).thenReturn("micaela@gmail.com");
+        Mockito.when(authentication.getPrincipal()).thenReturn(user);
         Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
         Mockito.when(userService.findByEmail("micaela@gmail.com")).thenReturn(user);
@@ -75,8 +75,9 @@ class UserControllerTest {
     @Test
     void updateUser_notCurrentUser(){
         UpdateRequest updateRequest = new UpdateRequest("another@gmail.com", "contraseña", "Micaela Pujol");
+        User user = User.builder().email("micaela@gmail.com").build();
 
-        Mockito.when(authentication.getPrincipal()).thenReturn("micaela@gmail.com");
+        Mockito.when(authentication.getPrincipal()).thenReturn(user);
         Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
 
@@ -141,7 +142,7 @@ class UserControllerTest {
     void deleteUser(){
         User user = User.builder().email("micaela@gmail.com").build();
 
-        Mockito.when(authentication.getPrincipal()).thenReturn("micaela@gmail.com");
+        Mockito.when(authentication.getPrincipal()).thenReturn(user);
         Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
         Mockito.when(userService.findByEmail("micaela@gmail.com")).thenReturn(user);
@@ -157,7 +158,9 @@ class UserControllerTest {
 
     @Test
     void deleteUser_notCurrentUser(){
-        Mockito.when(authentication.getPrincipal()).thenReturn("micaela@gmail.com");
+        User user = User.builder().email("micaela@gmail.com").build();
+
+        Mockito.when(authentication.getPrincipal()).thenReturn(user);
         Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
 
@@ -181,16 +184,16 @@ class UserControllerTest {
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 
-    /*@Test
-    void isNotCurrentUser(){
-        Mockito.when(authentication.getPrincipal()).thenReturn("micaela@gmail.com");
-        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
-        SecurityContextHolder.setContext(securityContext);
+    @Test
+    void getUsername() {
+        User user = User.builder().fullname("micaela").build();
 
-        boolean isNotCurrentUser = userController.isNotCurrentUser("another@gmail.com");
+        Mockito.when(userService.findById("id")).thenReturn(user);
 
-        Mockito.verify(securityContext).getAuthentication();
-        Mockito.verify(authentication).getPrincipal();
-        Assertions.assertTrue(isNotCurrentUser);
-    }*/
+        ResponseEntity<String> responseEntity = userController.getUsername("id");
+
+        Mockito.verify(userService).findById("id");
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assertions.assertEquals("micaela", responseEntity.getBody());
+    }
 }
