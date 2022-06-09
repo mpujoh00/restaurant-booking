@@ -13,41 +13,48 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-                <v-icon
-                    v-if="item.status === 'PENDING'"
-                    small
-                    class="ml-1"
-                    @click="acceptBooking(item.id)"
-                    color="#65ad63"
-                >
-                    mdi-check-bold
-                </v-icon>
-                <v-icon
-                    v-if="item.status === 'PENDING'"
-                    small
-                    class="ml-1"
-                    @click="rejectBooking(item.id)"
-                    color="#ff365a"
-                >
-                    mdi-close-thick
-                </v-icon>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                            v-if="item.status === 'PENDING'"
+                            small
+                            class="ml-1"
+                            @click="acceptBooking(item.id)"
+                            color="#65ad63"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            mdi-check-bold
+                        </v-icon>
+                    </template>
+                    <span>Accept</span>
+                </v-tooltip> 
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                            v-if="item.status === 'PENDING'"
+                            small
+                            class="ml-1"
+                            @click="rejectBooking(item.id)"
+                            color="#ff365a"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            mdi-close-thick
+                        </v-icon>
+                    </template>
+                    <span>Reject</span>
+                </v-tooltip>
             </template>
         </v-data-table>
     </div>
 </template>
 
-<style>
-.container {
-    margin-top: 2%;
-    margin-left: 19%;
-    margin-right: 19%;
-    width: auto;
-}
-</style>
-
 <script>
 import { mapState } from 'vuex'
 import BookingService from '@/services/BookingService'
+
+require('@/assets/main.css')
 
 export default {
     name: 'RestaurantBookings',

@@ -38,6 +38,9 @@
 <script>
 export default {
     name: "ConfirmationDialog",
+    props: [
+        'question'
+    ],
     data() {
         return {
             dialog: false,
@@ -62,11 +65,11 @@ export default {
         },
         agree() {
             this.dialog = false
-            this.resolve(true)
+            this.resolve()
         },
         cancel() {
             this.dialog = false
-            this.resolve(false)
+            this.reject()
         }
     }
 }

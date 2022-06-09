@@ -3,7 +3,6 @@
     <br/>
     <h1>Welcome to Restaurant Booking!!</h1>
     <br/>
-
     <v-container>
       <v-row dense>
         <v-col v-for="(restaurant, index) in restaurants" cols="12" :key="index">
@@ -39,7 +38,7 @@ export default {
   },
   mounted() {
     console.log('getting restaurants')
-    RestaurantService.getRestaurants().then(response => {
+    RestaurantService.getEnabledRestaurants().then(response => {
       this.restaurants = response.data
     })
   },

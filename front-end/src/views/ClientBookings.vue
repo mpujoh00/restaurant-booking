@@ -17,31 +17,31 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-                <v-icon
-                    v-if="item.status !== 'CANCELED'"
-                    small
-                    class="ml-1"
-                    @click="cancelBooking(item.id)"
-                    color="#ff365a"
-                >
-                    mdi-close-thick
-                </v-icon>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                            v-if="item.status !== 'CANCELED'"
+                            small
+                            class="ml-1"
+                            @click="cancelBooking(item.id)"
+                            color="#ff365a"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            mdi-close-thick
+                        </v-icon>
+                    </template>
+                    <span>Cancel</span>
+                </v-tooltip>  
             </template>
         </v-data-table>
+        <ConfirmationDialog ref="confirm"/>
     </div>
 </template>
 
-<style>
-.container {
-    margin-top: 2%;
-    margin-left: 19%;
-    margin-right: 19%;
-    width: auto;
-}
+<style scoped>
 .selector {
-    margin-top: 2%;
-    max-width: 130px;
-    max-height: 50px;
+    max-width: 8rem;
 }
 </style>
 
@@ -49,8 +49,13 @@
 import { mapState } from 'vuex'
 import BookingService from '@/services/BookingService'
 
+require('@/assets/main.css')
+
 export default {
     name: 'RestaurantBookings',
+    components: {
+        ConfirmationDialog: () => import("@/components/ConfirmationDialog.vue")
+    },
     computed: {
         ...mapState([
             'currentUser',
@@ -96,14 +101,17 @@ export default {
     },
     methods: {
         cancelBooking(reservationId){
-            console.log('Canceling reservation' + reservationId)
-            BookingService.cancelReservation(reservationId)
+            this.$refs.confirm.open("Confirm", "Are you sure you want to cancel your booking?")
             .then(() => {
-                console.log('Status correctly changed')
-                this.$router.go()
-            })
-            .catch(() => {
-                console.log('Status couldn\'t be changed')
+                console.log('Canceling reservation' + reservationId)
+                BookingService.cancelReservation(reservationId)
+                .then(() => {
+                    console.log('Status correctly changed')
+                    this.$router.go()
+                })
+                .catch(() => {
+                    console.log('Status couldn\'t be changed')
+                })
             })
         },
         updateBookings(){

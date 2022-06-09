@@ -123,8 +123,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         log.info("Changing restaurant's with id {} status", restaurant.getId());
 
+        if(restaurant.getStatus() != RestaurantStatus.PENDING)
+            userProxy.updateUserStatus(jwtUtils.getAuthorizationHeader(), restaurant.getRestaurantAdminEmail());
         restaurant.setStatus(restaurant.getStatus().nextStatus());
-        userProxy.updateUserStatus(jwtUtils.getAuthorizationHeader(), restaurant.getRestaurantAdminEmail());
         return save(restaurant);
     }
 

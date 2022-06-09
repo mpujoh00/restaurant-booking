@@ -64,8 +64,6 @@
 <!-- TO DO: extract style from template -->
 <style scoped>
 .layout {
-    align-content: center;
-    justify-content: center;
     height: 80vh;
 }
 .card {
@@ -73,24 +71,9 @@
     margin: 2%;
     height: 47vh;
 }
-.cardHeader {
-    text-align: center;
-    padding: 2%;
-}
-.cardTitle {
-    padding: 1%;
-    color: #ff99a8;
-}
-.form {
-    padding-top: 2%;
-}
 .button {
     margin: 3%;
     width: 25vh;
-}
-.buttonText {
-    padding-left: 8%;
-    padding-right: 8%;
 }
 .registrationButtons {
     padding-top: 5vh;
@@ -100,6 +83,8 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import router from '@/router'
+
+require('@/assets/main.css')
 
 export default {
     data() {

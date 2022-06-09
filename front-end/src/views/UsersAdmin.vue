@@ -10,7 +10,7 @@
                         vertical
                     ></v-divider>
                     <v-spacer></v-spacer>
-                    <div class="adminButton">
+                    <div class="tableIconButton">
                         <admin-dialog></admin-dialog>
                     </div>
                     <div class="selector">
@@ -19,53 +19,63 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-                <v-icon
-                    v-if="item.status === 'DISABLED'"
-                    small
-                    class="ml-1"
-                    @click="changeUserStatus(item.email)"
-                    color="#65ad63"
-                >
-                    mdi-check-bold
-                </v-icon>
-                <v-icon
-                    v-if="item.status === 'ENABLED'"
-                    small
-                    class="ml-1"
-                    @click="changeUserStatus(item.email)"
-                    color="#ff365a"
-                >
-                    mdi-close-thick
-                </v-icon>
-                <v-icon
-                    v-if="item.roles[0].name === 'ROLE_ADMIN'"
-                    small
-                    class="ml-1"
-                    color="black"
-                    @click="deleteAdmin(item.email)"
-                >
-                    mdi-delete
-                </v-icon>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                            v-if="item.status === 'PENDING' || item.status === 'DISABLED'"
+                            small
+                            class="ml-1"
+                            @click="changeUserStatus(item.email)"
+                            color="#65ad63"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            mdi-check-bold
+                        </v-icon>
+                    </template>
+                    <span>Enable</span>
+                </v-tooltip> 
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                            v-if="item.status === 'ENABLED'"
+                            small
+                            class="ml-1"
+                            @click="changeUserStatus(item.email)"
+                            color="#ff365a"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            mdi-close-thick
+                        </v-icon>
+                    </template>
+                    <span>Disable</span>
+                </v-tooltip>        
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                            v-if="item.roles[0].name === 'ROLE_ADMIN'"
+                            small
+                            class="ml-1"
+                            color="black"
+                            v-bind="attrs"
+                            v-on="on"
+                            @click="deleteAdmin(item.email)"
+                        >
+                            mdi-delete
+                        </v-icon>
+                    </template>
+                    <span>Delete</span>
+                </v-tooltip>  
             </template>
         </v-data-table>
+        <ConfirmationDialog ref="confirm"/>
     </div>
 </template>
 
-<style>
-.container {
-    margin-top: 2%;
-    margin-left: 19%;
-    margin-right: 19%;
-    width: auto;
-}
+<style scoped>
 .selector {
-    margin-top: 2%;
-    max-width: 170px;
-    max-height: 50px;
-}
-.adminButton {
-    margin-right: 3%;
-    margin-bottom: 1.5%;
+    max-width: 10.5rem;
 }
 </style>
 
@@ -73,10 +83,13 @@
 import { mapState } from 'vuex'
 import UserService from '@/services/UserService'
 
+require('@/assets/main.css')
+
 export default {
     name: 'RestaurantBookings',
     components: {
-        AdminDialog: () => import("@/components/AdminDialog")
+        AdminDialog: () => import("@/components/AdminDialog"),
+        ConfirmationDialog: () => import("@/components/ConfirmationDialog.vue")
     },
     computed: {
         ...mapState([
@@ -132,14 +145,17 @@ export default {
             })
         },
         deleteAdmin(adminEmail){
-            console.log('Deleting admin')
-            UserService.deleteAdmin(adminEmail)
+            this.$refs.confirm.open("Confirm", "Are you sure you want to delete the account?")
             .then(() => {
-              console.log('Correctly deleted admin')
-              this.$router.go()
-            })
-            .catch(() => {
-              console.log('Couldn\'t delete the admin')
+                console.log('Deleting admin')
+                UserService.deleteAdmin(adminEmail)
+                .then(() => {
+                console.log('Correctly deleted admin')
+                this.$router.go()
+                })
+                .catch(() => {
+                console.log('Couldn\'t delete the admin')
+                })
             })
         },
         updateUsers(){

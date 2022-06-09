@@ -75,7 +75,7 @@ class UserService {
     }
 
     updateUserStatus(userEmail){
-        return authAxios.put('/admin/users/change-status/' + userEmail, {
+        return authAxios.put('/admin/users/change-status/' + userEmail, null, {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem('token')
             }

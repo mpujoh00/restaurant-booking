@@ -26,7 +26,7 @@ public interface RestaurantController {
     @GetMapping("/{restaurantId}")
     ResponseEntity<Restaurant> getRestaurant(@PathVariable String restaurantId);
 
-    @PreAuthorize("hasAuthority('ROLE_RESTAURANT') or hasAuthority('ROLE_CLIENT')")
+    @PreAuthorize("hasAuthority('ROLE_ENABLED') or hasAuthority('ROLE_CLIENT')")
     @Operation(description = "Gets all enabled restaurants", operationId = "getEnabledRestaurants")
     @GetMapping
     ResponseEntity<List<Restaurant>> getEnabledRestaurants();

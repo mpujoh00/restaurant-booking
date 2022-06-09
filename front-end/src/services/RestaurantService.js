@@ -1,4 +1,5 @@
 import {authAxios} from '@/http-common'
+import {noAuthAxios} from '../http-common'
 
 class RestaurantService {
 
@@ -10,7 +11,7 @@ class RestaurantService {
         })
     }
 
-    getRestaurants(){
+    getEnabledRestaurants(){
         return authAxios.get('/restaurants', {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem('token')
@@ -56,10 +57,10 @@ class RestaurantService {
                 Authorization: "Bearer " + localStorage.getItem('token')
             }
         })
-    }s
+    }
 
     updateRestaurantStatus(id){
-        return authAxios.put('/admin/restaurants/change-status/' + id, {
+        return noAuthAxios.put('/admin/restaurants/change-status/' + id, null, {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem('token')
             }

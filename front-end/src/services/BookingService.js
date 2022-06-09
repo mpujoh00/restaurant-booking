@@ -27,7 +27,7 @@ class BookingService {
     }
 
     changeReservationStatus(reservationId, status){
-        return authAxios.put('/admin/reservations/' + reservationId + '/status/' + status, {
+        return authAxios.put('/admin/reservations/' + reservationId + '/status/' + status, null, {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem('token')
             }
@@ -51,7 +51,7 @@ class BookingService {
     }
 
     cancelReservation(reservationId){
-        return authAxios.put('/reservations/' + reservationId, {
+        return authAxios.put('/reservations/' + reservationId, null, {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem('token')
             }

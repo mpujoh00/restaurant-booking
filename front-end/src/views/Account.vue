@@ -96,39 +96,11 @@
     </v-layout>
 </template>
 
-<style scoped>
-.layout {
-    align-content: center;
-    justify-content: center;
-    padding-top: 5%;
-}
-.card {
-    padding: 4%;
-}
-.cardHeader {
-    text-align: center;
-    padding: 2%;
-}
-.cardTitle {
-    padding: 1%;
-    color: #ff99a8;
-}
-.form {
-    padding-top: 2%;
-}
-.button {
-    margin-left: 3%;
-    margin-right: 3%;
-}
-.buttonText {
-    padding-left: 8%;
-    padding-right: 8%;
-}
-</style>
-
 <script>
 import { mapState, mapActions } from 'vuex'
 import router from '@/router'
+
+require('@/assets/main.css')
 
 export default {
     components: {
@@ -225,7 +197,6 @@ export default {
                     console.log(this.deleteUserError)
                 })
             })
-
         },
         resetUser(){
             this.user = JSON.parse(JSON.stringify(this.currentUser))

@@ -16,46 +16,48 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-                <v-icon
-                    v-if="item.status === 'PENDING' || item.status === 'DISABLED'"
-                    small
-                    class="ml-1"
-                    @click="changeRestaurantStatus(item.id)"
-                    color="#65ad63"
-                >
-                    mdi-check-bold
-                </v-icon>
-                <v-icon
-                    v-if="item.status === 'ENABLED'"
-                    small
-                    class="ml-1"
-                    @click="changeRestaurantStatus(item.id)"
-                    color="#ff365a"
-                >
-                    mdi-close-thick
-                </v-icon>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                            v-if="item.status === 'PENDING' || item.status === 'DISABLED'"
+                            small
+                            class="ml-1"
+                            @click="changeRestaurantStatus(item.id)"
+                            color="#65ad63"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            mdi-check-bold
+                        </v-icon>
+                    </template>
+                    <span>Enable</span>
+                </v-tooltip> 
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                            v-if="item.status === 'ENABLED'"
+                            small
+                            class="ml-1"
+                            @click="changeRestaurantStatus(item.id)"
+                            color="#ff365a"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            mdi-close-thick
+                        </v-icon>
+                    </template>
+                    <span>Disable</span>
+                </v-tooltip>                              
             </template>
         </v-data-table>
     </div>
 </template>
 
-<style>
-.container {
-    margin-top: 2%;
-    margin-left: 19%;
-    margin-right: 19%;
-    width: auto;
-}
-.selector {
-    margin-top: 2%;
-    max-width: 150px;
-    max-height: 50px;
-}
-</style>
-
 <script>
 import { mapState } from 'vuex'
 import RestaurantService from '@/services/RestaurantService'
+
+require('@/assets/main.css')
 
 export default {
     name: 'RestaurantBookings',
@@ -70,6 +72,7 @@ export default {
             restaurantsStatuses: [
                 'All',
                 'Pending',
+                'Enabled',
                 'Disabled'
             ],
             restaurantsStatus: 'All',
@@ -104,17 +107,24 @@ export default {
             console.log('Changing restaurant\'s status')
             RestaurantService.updateRestaurantStatus(restaurantId)
             .then(() => {
-              console.log('Correctly changed')
-              this.$router.go()
+                console.log('Correctly changed')
+                this.$router.go()
             })
             .catch(() => {
-              console.log('Couldn\'t change the status')
+                console.log('Couldn\'t change the status')
             })
         },
         updateRestaurants(){
             if(this.restaurantsStatus === 'All'){
                 console.log('Getting all restaurants')
                 RestaurantService.getAllRestaurants()
+                .then(response => {
+                    this.restaurants = response.data
+                })
+            }
+            else if(this.restaurantsStatus === 'Enabled'){
+                console.log('Getting enabled restaurants')
+                RestaurantService.getEnabledRestaurants()
                 .then(response => {
                     this.restaurants = response.data
                 })

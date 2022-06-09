@@ -1,9 +1,14 @@
 <template>
     <v-dialog v-model="dialog" :max-width="600">
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn class="button mt-5" color="#ff99a8" v-bind="attrs" v-on="on">
-                <span class="buttonText">Add table</span>
-            </v-btn>
+        <template v-slot:activator="{ on: dialog, attrs }">
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on: tooltip }">
+                    <v-btn class="button mt-5" icon color="#ff99a8" v-bind="attrs" v-on="{...tooltip, ...dialog}">
+                        <v-icon>mdi-plus-circle-outline</v-icon>
+                    </v-btn>
+                </template>
+                <span>Add table</span>
+            </v-tooltip> 
         </template>
         <v-card class="card">
             <div class="cardHeader">
@@ -31,7 +36,7 @@
                     required
                     :rules="maxPeopleRules"
                     color="grey"/>
-                <v-btn class="button mt-4" color="#ff99a8" @click="saveTable">
+                <v-btn class="button mt-4" color="#ff99a8" :loading="loading" @click="saveTable">
                     <span class="buttonText">Save</span>
                 </v-btn>
             </v-form>
@@ -39,34 +44,11 @@
     </v-dialog>
 </template>
 
-<style scoped>
-.card {
-    padding: 4%;
-}
-.cardHeader {
-    text-align: center;
-    padding: 2%;
-}
-.cardTitle {
-    padding: 1%;
-    color: #ff99a8;
-}
-.form {
-    padding-top: 2%;
-}
-.button {
-    margin-left: 3%;
-    margin-right: 3%;
-}
-.buttonText {
-    padding-left: 8%;
-    padding-right: 8%;
-}
-</style>
-
 <script>
 import { mapState } from 'vuex'
 import TableService from '@/services/TableService'
+
+require('@/assets/main.css')
 
 export default {
     name: 'TableDialog',
@@ -88,14 +70,17 @@ export default {
                 v => !!v || 'Minimum number of people is required'
             ],
             maxPeopleRules: [
-                v => !!v || 'Maximum number of people is required'
+                v => !!v || 'Maximum number of people is required',
+                v => v >= this.minPeople || 'The maximum number of people can\'t be smaller than the minimum' 
             ],
+            loading: false
         }
     },
     methods: {
         saveTable(){
             if(this.$refs.form.validate()){
                 console.log('Creating table...')
+                this.loading = true
                 TableService.createTable(this.currentRestaurant.id, {
                     number: this.number,
                     minPeople: this.minPeople,
@@ -103,12 +88,21 @@ export default {
                 })
                 .then(() => {
                     console.log('Table created')
+                    this.dialog = false
                     this.$router.go()
                 })
                 .catch(() => {
                     console.log('Couldn\'t create table')
                 })
+                this.dialog = false
+                this.loading = false
+                this.reset()
             }
+        },
+        reset() {
+            this.number = null
+            this.minPeople = null
+            this.maxPeople = null
         }
     },
 }

@@ -132,7 +132,7 @@ export default new Vuex.Store({
           console.log(response.data)
           // updates user
           commit('updateCurrentUser', {
-            id: response.data.user.id,
+            id: response.data.id,
             email: response.data.email,
             fullname: response.data.fullname,
             role: response.data.roles[0].name
