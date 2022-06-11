@@ -1,6 +1,7 @@
 package com.restaurant.booking.restaurant.service.controller;
 
 import com.restaurant.booking.restaurant.model.*;
+import com.restaurant.booking.restaurant.service.service.CategoryService;
 import com.restaurant.booking.restaurant.service.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,10 +15,12 @@ import java.util.List;
 public class RestaurantControllerImpl implements RestaurantController {
 
     private final RestaurantService restaurantService;
+    private final CategoryService categoryService;
 
     @Autowired
-    public RestaurantControllerImpl(RestaurantService restaurantService) {
+    public RestaurantControllerImpl(RestaurantService restaurantService, CategoryService categoryService) {
         this.restaurantService = restaurantService;
+        this.categoryService = categoryService;
     }
 
     @Override
@@ -54,5 +57,20 @@ public class RestaurantControllerImpl implements RestaurantController {
     @Override
     public ResponseEntity<Restaurant> updateRestaurantReservationHours(RestaurantReservHoursUpdateRequest restaurantReservHoursUpdateRequest) {
         return ResponseEntity.ok(restaurantService.updateRestaurantReservationHours(restaurantReservHoursUpdateRequest));
+    }
+
+    @Override
+    public ResponseEntity<Restaurant> addCategory(String restaurantId, String categoryName) {
+        return ResponseEntity.ok(restaurantService.addCategory(restaurantService.findRestaurant(restaurantId), categoryService.getCategory(categoryName)));
+    }
+
+    @Override
+    public ResponseEntity<Restaurant> removeCategory(String restaurantId, String categoryName) {
+        return ResponseEntity.ok(restaurantService.removeCategory(restaurantService.findRestaurant(restaurantId), categoryService.getCategory(categoryName)));
+    }
+
+    @Override
+    public ResponseEntity<List<Restaurant>> searchRestaurants(SearchRestaurantsRequest searchRestaurantsRequest) {
+        return ResponseEntity.ok(restaurantService.searchRestaurants(searchRestaurantsRequest));
     }
 }

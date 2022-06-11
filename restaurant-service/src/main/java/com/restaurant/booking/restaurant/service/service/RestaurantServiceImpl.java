@@ -141,4 +141,32 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
         return reservationHours;
     }
+
+    @Override
+    public Restaurant addCategory(Restaurant restaurant, Category category) {
+        log.info("Adding category {} to restaurant {}", category.getName(), restaurant.getName());
+        restaurant.getCategories().add(category);
+        return save(restaurant);
+    }
+
+    @Override
+    public Restaurant removeCategory(Restaurant restaurant, Category category) {
+        log.info("Removing category {} from restaurant {}", category.getName(), restaurant.getName());
+        restaurant.getCategories().remove(category);
+        return save(restaurant);
+    }
+
+    @Override
+    public List<Restaurant> searchRestaurants(SearchRestaurantsRequest searchRestaurantsRequest) {
+
+        log.info("Looking for restaurants");
+
+        List<Restaurant> restaurants;
+        if (searchRestaurantsRequest.getCategories() == null || searchRestaurantsRequest.getCategories().isEmpty())
+            restaurants = restaurantRepository.findAllByLocation(searchRestaurantsRequest.getLocation());
+        else
+            restaurants = restaurantRepository.findAllByLocationAndCategoriesIn(searchRestaurantsRequest.getLocation(), searchRestaurantsRequest.getCategories());
+
+        return restaurants;
+    }
 }

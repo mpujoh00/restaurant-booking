@@ -66,4 +66,10 @@ public interface RestaurantService {
      * @return
      */
     Restaurant changeRestaurantStatus(Restaurant restaurant);
+
+    Restaurant addCategory(Restaurant restaurant, Category category);
+
+    Restaurant removeCategory(Restaurant restaurant, Category category);
+
+    List<Restaurant> searchRestaurants(SearchRestaurantsRequest searchRestaurantsRequest);
 }
