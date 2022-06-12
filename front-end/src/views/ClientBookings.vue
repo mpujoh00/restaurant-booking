@@ -52,7 +52,7 @@ import BookingService from '@/services/BookingService'
 require('@/assets/main.css')
 
 export default {
-    name: 'RestaurantBookings',
+    name: 'ClientBookings',
     components: {
         ConfirmationDialog: () => import("@/components/ConfirmationDialog.vue")
     },

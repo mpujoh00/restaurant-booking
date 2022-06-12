@@ -66,6 +66,24 @@ class RestaurantService {
             }
         })
     }
+
+    addCategory(id, categoryName){
+        return authAxios.put('/restaurants/' + id + '/add-category', categoryName, {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem('token'),
+                'Content-Type': 'text/plain'
+            }
+        })
+    }
+
+    removeCategory(id, categoryName){
+        return authAxios.put('/restaurants/' + id + '/remove-category', categoryName, {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem('token'),
+                'Content-Type': 'text/plain'
+            }
+        })
+    }
 }
 
 export default new RestaurantService()

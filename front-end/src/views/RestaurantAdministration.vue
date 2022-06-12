@@ -22,10 +22,22 @@
                         required
                         :readonly="nonEditable"
                         color="grey"/>
+                    <div>
+                        <v-chip v-for="(category, index) in currentRestaurant.categories" 
+                        :key="index"
+                        close
+                        @click:close="removeCategory(category)"
+                        return-object
+                        color="#ffe6e9"
+                        class="mr-2 mb-5">
+                            {{ category.name }}
+                        </v-chip>
+                    </div>
                     <div v-if="nonEditable">
                         <v-btn @click="editRestaurant" class="button" color="#ff99a8">
                             <span class="buttonText">Edit</span>    
                         </v-btn>
+                        <add-category-dialog></add-category-dialog>
                     </div>  
                     <div v-if="!nonEditable">
                         <v-btn @click="saveRestaurant" class="button" color="#ff99a8">
@@ -50,6 +62,9 @@ import RestaurantService from '@/services/RestaurantService'
 require('@/assets/main.css')
 
 export default {
+    components: { 
+        AddCategoryDialog: () => import("@/components/AddCategoryDialog.vue")
+    },
     computed: {
         ...mapState([
             'currentRestaurant',
@@ -58,6 +73,8 @@ export default {
     data() {
         return {
             nonEditable: true,
+            name: '',
+            location: ''
         }
     },
     methods: {
@@ -71,16 +88,32 @@ export default {
             console.log('Saving restaurant...')
             RestaurantService.updateRestaurant({
                 restaurantId: this.currentRestaurant.id,
-                name: this.currentRestaurant.name,
-                location: this.currentRestaurant.location
+                name: this.name,
+                location: this.location
             })
             .then(response => {
                 this.modifyRestaurant(response.data)
-                this.nonEditable = !this.nonEditable
+            })
+            .catch(() => {
+                this.reset()
+            })
+            this.nonEditable = !this.nonEditable
+        },
+        removeCategory(category){
+            console.log('Removing category')
+            RestaurantService.removeCategory(this.currentRestaurant.id, category.name)
+            .then(response => {
+                console.log('Category removed')
+                this.modifyRestaurant(response.data)
             })
         },
+        reset(){
+            this.name = this.currentRestaurant.name,
+            this.location = this.currentRestaurant.location
+        },
         cancel(){
-
+            console.log('Canceling')
+            this.reset()
         }
     },
 }

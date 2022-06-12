@@ -42,7 +42,7 @@ public class ApiGatewayConfig {
                 .route(p -> p.path("/api/v1/admin/restaurants/**")
                         .filters(f -> f.filter(authenticationFilter))
                         .uri(RESTAURANT_SERVICE))
-                .route(p -> p.path("/api/v1/admin/categories/**")
+                .route(p -> p.path("/api/v1/categories/**")
                         .filters(f -> f.filter(authenticationFilter))
                         .uri(RESTAURANT_SERVICE))
                 .route(p -> p.path("/api/v1/tables/**")

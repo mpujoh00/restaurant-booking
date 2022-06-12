@@ -137,11 +137,11 @@ export default {
             console.log('Changing user\'s status')
             UserService.updateUserStatus(userEmail)
             .then(() => {
-              console.log('Correctly changed')
-              this.$router.go()
+                console.log('Correctly changed')
+                this.$router.go()
             })
             .catch(() => {
-              console.log('Couldn\'t change the status')
+                console.log('Couldn\'t change the status')
             })
         },
         deleteAdmin(adminEmail){

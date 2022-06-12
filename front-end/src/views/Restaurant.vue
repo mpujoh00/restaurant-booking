@@ -62,11 +62,6 @@ export default ({
             restaurant: null,
         }
     },
-    methods: {
-        book() {
-
-        }
-    },
     mounted() {
         RestaurantService.getRestaurant(this.id).then(response => {
             this.restaurant = response.data

@@ -55,6 +55,7 @@ export default {
       adminMenus:[
         {title: 'Restaurants administration', route:'/admin/restaurants'},
         {title: 'Users administration', route:'/admin/users'},
+        {title: 'Categories administration', route:'/admin/categories'},
       ]
     }
   },

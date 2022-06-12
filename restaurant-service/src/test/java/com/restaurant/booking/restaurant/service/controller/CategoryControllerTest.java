@@ -13,13 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @ExtendWith(MockitoExtension.class)
-class CategoryAdministrationControllerTest {
+class CategoryControllerTest {
 
     @Mock
     private CategoryServiceImpl categoryService;
 
     @InjectMocks
-    private CategoryAdministrationControllerImpl categoryController;
+    private CategoryControllerImpl categoryController;
 
     @Test
     void createCategory(){
