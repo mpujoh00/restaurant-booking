@@ -17,7 +17,7 @@ public class ExceptionAdvice {
     }
 
     @ResponseBody
-    @ExceptionHandler({RestaurantAlreadyExistsException.class, CategoryAlreadyExistsException.class})
+    @ExceptionHandler({RestaurantAlreadyExistsException.class, CategoryAlreadyExistsException.class, InvalidImageException.class, InvalidImageTypeException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String badRequestHandler(RuntimeException e) {
         return e.getMessage();

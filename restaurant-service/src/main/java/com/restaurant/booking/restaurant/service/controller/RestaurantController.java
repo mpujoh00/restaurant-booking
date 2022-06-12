@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.time.LocalTime;
@@ -62,4 +63,9 @@ public interface RestaurantController {
     @Operation(description = "Gets all restaurants given the parameters", operationId = "searchRestaurants")
     @GetMapping("/search")
     ResponseEntity<List<Restaurant>> searchRestaurants(@RequestBody @Valid SearchRestaurantsRequest searchRestaurantsRequest);
+
+    @PreAuthorize("hasAuthority('ROLE_RESTAURANT')")
+    @Operation(description = "Updates restaurant's logo", operationId = "saveLogo")
+    @PutMapping("/{restaurantId}/logo")
+    ResponseEntity<Restaurant> saveLogo(@PathVariable String restaurantId, @RequestParam("file") MultipartFile logo);
 }

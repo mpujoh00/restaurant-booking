@@ -1,6 +1,7 @@
 package com.restaurant.booking.restaurant.model;
 
 import lombok.*;
+import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -28,6 +29,7 @@ public class Restaurant {
     private List<LocalTime> reservationHours;
     private RestaurantStatus status;
     private String restaurantAdminEmail;
+    private Binary logo;
 
     @DBRef
     private Set<Category> categories;

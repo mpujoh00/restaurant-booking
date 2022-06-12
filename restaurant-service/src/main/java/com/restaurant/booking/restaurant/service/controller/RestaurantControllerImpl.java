@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -72,5 +73,10 @@ public class RestaurantControllerImpl implements RestaurantController {
     @Override
     public ResponseEntity<List<Restaurant>> searchRestaurants(SearchRestaurantsRequest searchRestaurantsRequest) {
         return ResponseEntity.ok(restaurantService.searchRestaurants(searchRestaurantsRequest));
+    }
+
+    @Override
+    public ResponseEntity<Restaurant> saveLogo(String restaurantId, MultipartFile logo) {
+        return ResponseEntity.ok(restaurantService.saveRestaurantLogo(restaurantService.findRestaurant(restaurantId), logo));
     }
 }
