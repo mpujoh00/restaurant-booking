@@ -4,10 +4,13 @@ import com.restaurant.booking.feign.client.UserProxy;
 import com.restaurant.booking.feign.client.exception.BadRequestException;
 import com.restaurant.booking.jwt.utils.JwtUtils;
 import com.restaurant.booking.restaurant.model.*;
+import com.restaurant.booking.restaurant.service.exception.InvalidImageTypeException;
 import com.restaurant.booking.restaurant.service.exception.RestaurantAlreadyExistsException;
 import com.restaurant.booking.restaurant.service.exception.RestaurantNotFoundException;
 import com.restaurant.booking.restaurant.service.exception.UserNotFoundException;
 import com.restaurant.booking.restaurant.service.repository.RestaurantRepository;
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,8 +18,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
 
+import java.io.IOException;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -192,5 +198,85 @@ class RestaurantServiceTest {
 
         Mockito.verify(restaurantRepository).save(restaurant);
         Assertions.assertEquals(restaurant, obtainedRestaurant);
+    }
+
+    @Test
+    void addCategory(){
+        Restaurant restaurant = Restaurant.builder().categories(new HashSet<>()).build();
+        Category category = new Category("category");
+        Restaurant restaurantAfter = Restaurant.builder().categories(new HashSet<>()).build();
+        restaurantAfter.getCategories().add(category);
+
+        Mockito.when(restaurantRepository.save(restaurantAfter)).thenReturn(restaurantAfter);
+
+        Restaurant obtainedRestaurant = restaurantService.addCategory(restaurant, category);
+
+        Mockito.verify(restaurantRepository).save(restaurantAfter);
+        Assertions.assertEquals(restaurantAfter, obtainedRestaurant);
+    }
+
+    @Test
+    void removeCategory(){
+        Restaurant restaurant = Restaurant.builder().categories(new HashSet<>()).build();
+        Category category = new Category("category");
+        Restaurant restaurantBefore = Restaurant.builder().categories(new HashSet<>()).build();
+        restaurantBefore.getCategories().add(category);
+
+        Mockito.when(restaurantRepository.save(restaurant)).thenReturn(restaurant);
+
+        Restaurant obtainedRestaurant = restaurantService.removeCategory(restaurantBefore, category);
+
+        Mockito.verify(restaurantRepository).save(restaurant);
+        Assertions.assertEquals(restaurant, obtainedRestaurant);
+    }
+
+    @Test
+    void searchRestaurants_location(){
+        SearchRestaurantsRequest request = new SearchRestaurantsRequest("city", null);
+
+        Mockito.when(restaurantRepository.findAllByLocation("city")).thenReturn(List.of(Restaurant.builder().build()));
+
+        List<Restaurant> restaurants = restaurantService.searchRestaurants(request);
+
+        Mockito.verify(restaurantRepository).findAllByLocation("city");
+        Assertions.assertEquals(1, restaurants.size());
+    }
+
+    @Test
+    void searchRestaurants_locationAndCategories(){
+        List<Category> categories = List.of(new Category("category"));
+        SearchRestaurantsRequest request = new SearchRestaurantsRequest("city", categories);
+
+        Mockito.when(restaurantRepository.findAllByLocationAndCategoriesIn("city", categories)).thenReturn(List.of(Restaurant.builder().build()));
+
+        List<Restaurant> restaurants = restaurantService.searchRestaurants(request);
+
+        Mockito.verify(restaurantRepository).findAllByLocationAndCategoriesIn("city", categories);
+        Assertions.assertEquals(1, restaurants.size());
+    }
+
+    @Test
+    void saveRestaurantLogo() throws IOException {
+        Restaurant restaurant = Restaurant.builder().build();
+        MockMultipartFile file = new MockMultipartFile("file", "file.jpg", "", "".getBytes());
+        Binary logo = new Binary(BsonBinarySubType.BINARY, file.getBytes());
+        Restaurant restaurantAfter = Restaurant.builder().logo(logo).build();
+
+        Mockito.when(restaurantRepository.save(restaurantAfter)).thenReturn(restaurantAfter);
+
+        Restaurant obtainedRestaurant = restaurantService.saveRestaurantLogo(restaurant, file);
+
+        Mockito.verify(restaurantRepository).save(restaurantAfter);
+        Assertions.assertEquals(restaurantAfter, obtainedRestaurant);
+    }
+
+    @Test
+    void saveRestaurantLogo_invalidType() throws IOException {
+        Restaurant restaurant = Restaurant.builder().build();
+        MockMultipartFile file = new MockMultipartFile("file", "file.gif", "", "".getBytes());
+
+        InvalidImageTypeException exception = Assertions.assertThrows(
+                InvalidImageTypeException.class, () -> restaurantService.saveRestaurantLogo(restaurant, file));
+        Assertions.assertEquals("Couldn't upload image file.gif, valid extensions are: *.jpg, *.png, *.jpeg", exception.getMessage());
     }
 }
