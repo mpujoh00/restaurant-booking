@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ExceptionAdvice {
 
     @ResponseBody
-    @ExceptionHandler({RestaurantNotFoundException.class, UserNotFoundException.class})
+    @ExceptionHandler({RestaurantNotFoundException.class, UserNotFoundException.class, CategoryNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String notFoundHandler(RuntimeException e) {
         return e.getMessage();
     }
 
     @ResponseBody
-    @ExceptionHandler({RestaurantAlreadyExistsException.class})
+    @ExceptionHandler({RestaurantAlreadyExistsException.class, CategoryAlreadyExistsException.class, InvalidImageException.class, InvalidImageTypeException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String badRequestHandler(RuntimeException e) {
         return e.getMessage();

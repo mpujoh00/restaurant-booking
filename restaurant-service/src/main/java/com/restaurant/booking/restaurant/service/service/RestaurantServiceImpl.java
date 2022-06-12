@@ -5,14 +5,17 @@ import com.restaurant.booking.feign.client.exception.BadRequestException;
 import com.restaurant.booking.feign.client.exception.NotFoundException;
 import com.restaurant.booking.jwt.utils.JwtUtils;
 import com.restaurant.booking.restaurant.model.*;
-import com.restaurant.booking.restaurant.service.exception.RestaurantAlreadyExistsException;
-import com.restaurant.booking.restaurant.service.exception.RestaurantNotFoundException;
-import com.restaurant.booking.restaurant.service.exception.UserNotFoundException;
+import com.restaurant.booking.restaurant.service.exception.*;
 import com.restaurant.booking.restaurant.service.repository.RestaurantRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -140,5 +143,50 @@ public class RestaurantServiceImpl implements RestaurantService {
             currentInterval = currentInterval.plusMinutes(interval.getMinutes());
         }
         return reservationHours;
+    }
+
+    @Override
+    public Restaurant addCategory(Restaurant restaurant, Category category) {
+        log.info("Adding category {} to restaurant {}", category.getName(), restaurant.getName());
+        restaurant.getCategories().add(category);
+        return save(restaurant);
+    }
+
+    @Override
+    public Restaurant removeCategory(Restaurant restaurant, Category category) {
+        log.info("Removing category {} from restaurant {}", category.getName(), restaurant.getName());
+        restaurant.getCategories().remove(category);
+        return save(restaurant);
+    }
+
+    @Override
+    public List<Restaurant> searchRestaurants(SearchRestaurantsRequest searchRestaurantsRequest) {
+
+        log.info("Looking for restaurants");
+
+        List<Restaurant> restaurants;
+        if (searchRestaurantsRequest.getCategories() == null || searchRestaurantsRequest.getCategories().isEmpty())
+            restaurants = restaurantRepository.findAllByLocation(searchRestaurantsRequest.getLocation());
+        else
+            restaurants = restaurantRepository.findAllByLocationAndCategoriesIn(searchRestaurantsRequest.getLocation(), searchRestaurantsRequest.getCategories());
+
+        return restaurants;
+    }
+
+    @Override
+    public Restaurant saveRestaurantLogo(Restaurant restaurant, MultipartFile logo) {
+
+        log.info("Saving logo of restaurant {}", restaurant.getName());
+
+        if(!List.of("jpg", "png", "jpeg").contains(FilenameUtils.getExtension(logo.getOriginalFilename()))) {
+            throw new InvalidImageTypeException(logo.getOriginalFilename());
+        }
+        try {
+            restaurant.setLogo(new Binary(BsonBinarySubType.BINARY, logo.getBytes()));
+        }
+        catch (IOException exception){
+            throw new InvalidImageException(logo.getOriginalFilename());
+        }
+        return save(restaurant);
     }
 }
