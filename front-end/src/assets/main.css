@@ -19,7 +19,8 @@
 }
 .cardHeader {
     text-align: center;
-    padding: 2%;
+    padding-left: 3%;
+    padding-right: 3%;
 }
 .cardTitle {
     padding: 1%;
@@ -39,4 +40,7 @@
 .tableIconButton {
     margin-right: 3%;
     margin-bottom: 1.5%;
+}
+.categories {
+    display: flex;
 }

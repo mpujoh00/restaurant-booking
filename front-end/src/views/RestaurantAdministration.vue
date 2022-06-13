@@ -22,14 +22,14 @@
                         required
                         :readonly="nonEditable"
                         color="grey"/>
-                    <div>
+                    <div class="categories">
                         <v-chip v-for="(category, index) in currentRestaurant.categories" 
-                        :key="index"
-                        close
-                        @click:close="removeCategory(category)"
-                        return-object
-                        color="#ffe6e9"
-                        class="mr-2 mb-5">
+                            :key="index"
+                            close
+                            @click:close="removeCategory(category)"
+                            return-object
+                            color="#ffe6e9"
+                            class="mr-2 mb-5">
                             {{ category.name }}
                         </v-chip>
                     </div>

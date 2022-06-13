@@ -3,10 +3,12 @@
         <v-col cols="6">
             <v-card class="card">
                 <div class="cardHeader">
-                    <v-avatar size="50" color="#ffe6e9">
-                        <v-icon size="40" color="#ff99a8">mdi-silverware</v-icon>
-                    </v-avatar>
-                    <h2 class="cardTitle">{{ restaurant.name }}</h2>
+                    <v-img 
+                        :src="'data:image/jpg;base64,' + restaurant.logo.data" 
+                        alt="logo"
+                        max-height="300"
+                    ></v-img>
+                    <h2 class="pa-1 mt-2" style="margin-bottom: -3%;">{{ restaurant.name }}</h2>
                 </div>
                 <v-card-text>
                     <div class="location">
@@ -17,6 +19,14 @@
                     </div>
                     <div class="description">
                         Lovely restaurant in the city center
+                    </div>
+                    <div class="categories">
+                        <v-chip v-for="(category, index) in restaurant.categories" 
+                            :key="index"
+                            color="#ffe6e9"
+                            class="mr-2 mb-3">
+                            {{ category.name }}
+                        </v-chip>
                     </div>
                 </v-card-text>
                 <v-divider class="mx-4"></v-divider>
@@ -43,6 +53,7 @@
     text-align: left;
     text-justify: distribute;
     margin: 1%;
+    margin-bottom: 3%;
 }
 </style>
 
