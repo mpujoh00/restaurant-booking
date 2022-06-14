@@ -38,27 +38,27 @@ class TableServiceTest {
 
     @InjectMocks
     private TableServiceImpl tableService;
-
-    @Test
-    void create(){
-        TableCreationRequest request = new TableCreationRequest(12, 2, 4);
-        Table table = new Table(request, "id");
-        List<LocalTime> reservationHours = List.of(LocalTime.now());
-        ReservSlotsCreationRequest slotsCreationRequest = new ReservSlotsCreationRequest("id", reservationHours, table);
-
-        Mockito.when(jwtUtils.getAuthorizationHeader()).thenReturn("HEADER");
-        Mockito.when(tableRepository.findByRestaurantIdAndNumber("id", request.getNumber())).thenReturn(Optional.empty());
-        Mockito.when(tableRepository.save(table)).thenReturn(table);
-        Mockito.when(restaurantProxy.getRestaurantsReservationHours("HEADER", "id")).thenReturn(reservationHours);
-
-        Table obtainedTable = tableService.create("id", request);
-
-        Mockito.verify(tableRepository).findByRestaurantIdAndNumber("id", request.getNumber());
-        Mockito.verify(tableRepository).save(table);
-        Mockito.verify(restaurantProxy).getRestaurantsReservationHours("HEADER", "id");
-        Mockito.verify(bookingProxy).generateRestaurantTableSlots("HEADER", slotsCreationRequest);
-        Assertions.assertEquals(table, obtainedTable);
-    }
+//
+//    @Test
+//    void create(){
+//        TableCreationRequest request = new TableCreationRequest(12, 2, 4);
+//        Table table = new Table(request, "id");
+//        List<LocalTime> reservationHours = List.of(LocalTime.now());
+//        ReservSlotsCreationRequest slotsCreationRequest = new ReservSlotsCreationRequest("id", reservationHours, table);
+//
+//        Mockito.when(jwtUtils.getAuthorizationHeader()).thenReturn("HEADER");
+//        Mockito.when(tableRepository.findByRestaurantIdAndNumber("id", request.getNumber())).thenReturn(Optional.empty());
+//        Mockito.when(tableRepository.save(table)).thenReturn(table);
+//        Mockito.when(restaurantProxy.getRestaurantsReservationHours("HEADER", "id")).thenReturn(reservationHours);
+//
+//        Table obtainedTable = tableService.create("id", request);
+//
+//        Mockito.verify(tableRepository).findByRestaurantIdAndNumber("id", request.getNumber());
+//        Mockito.verify(tableRepository).save(table);
+//        Mockito.verify(restaurantProxy).getRestaurantsReservationHours("HEADER", "id");
+//        Mockito.verify(bookingProxy).generateRestaurantTableSlots("HEADER", slotsCreationRequest);
+//        Assertions.assertEquals(table, obtainedTable);
+//    }
 
     @Test
     void create_alreadyExists(){
