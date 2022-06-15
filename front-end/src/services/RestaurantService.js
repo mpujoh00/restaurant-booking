@@ -84,6 +84,23 @@ class RestaurantService {
             }
         })
     }
+
+    saveLogo(id, logo){
+        return authAxios.put('/restaurants/' + id + '/logo', logo, {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem('token'),
+                'Content-Type': 'text/plain'
+            }
+        })
+    }
+
+    searchRestaurants(data){
+        return authAxios.put('/restaurants/search', data, {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem('token')
+            }
+        })
+    }
 }
 
 export default new RestaurantService()

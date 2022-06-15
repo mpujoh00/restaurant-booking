@@ -12,15 +12,12 @@
                 </div>
                 <v-card-text>
                     <div class="location">
-                        {{ restaurant.location }}, Spain
+                        {{ restaurant.location }}
                     </div>
-                    <div class="extras">
-                        €€ • Restaurant, Coffee
+                    <div class="address">
+                        {{ restaurant.address }}
                     </div>
-                    <div class="description">
-                        Lovely restaurant in the city center
-                    </div>
-                    <div class="categories">
+                    <div class="categories mt-5">
                         <v-chip v-for="(category, index) in restaurant.categories" 
                             :key="index"
                             color="#ffe6e9"
@@ -28,8 +25,56 @@
                             {{ category.name }}
                         </v-chip>
                     </div>
+                    <v-tabs
+                        color="#ff99a8">
+                        <v-tab v-if="restaurant.description">
+                            <v-icon left>mdi-sticker-text-outline</v-icon>
+                            Description
+                        </v-tab>
+                        <v-tab>
+                            <v-icon left>mdi-clock-outline</v-icon>
+                            Schedule
+                        </v-tab>
+                        <v-tab v-if="restaurant.menu">
+                            <v-icon left>mdi-food-outline</v-icon>
+                            Menu
+                        </v-tab>
+                        <v-tab-item v-if="restaurant.description">
+                            <v-card flat>
+                                <v-card-text>
+                                    <v-row
+                                        align="center"
+                                        class="mt-1 ml-1">
+                                        {{ restaurant.description }}
+                                    </v-row>
+                                </v-card-text>
+                            </v-card>
+                        </v-tab-item>
+                        <v-tab-item>
+                            <v-card flat>
+                                <v-card-text>
+                                    <v-row
+                                        align="center"
+                                        class="mt-1 ml-1">
+                                        M - S : {{ restaurant.openingTime }} - {{ restaurant.closingTime }}
+                                    </v-row>
+                                </v-card-text>
+                            </v-card>
+                        </v-tab-item>
+                        <v-tab-item v-if="restaurant.menu">
+                            <v-card flat>
+                                <v-card-text>
+                                    <v-row
+                                        align="center"
+                                        class="mt-1 ml-1">
+                                        {{ restaurant.menu }}
+                                    </v-row>
+                                </v-card-text>
+                            </v-card>
+                        </v-tab-item>
+                    </v-tabs>
                 </v-card-text>
-                <v-divider class="mx-4"></v-divider>
+                <v-divider class="mx-4 mb-4"></v-divider>
                 <booking-dialog :restaurantId="restaurant.id"></booking-dialog>
             </v-card>
         </v-col>
@@ -43,10 +88,9 @@
     text-align: left;
     margin: 1%;
 }
-.extras {    
-    text-align: left;
+.address {
     font-style: italic;
-    color: #979797;
+    text-align: left;
     margin: 1%;
 }
 .description {    

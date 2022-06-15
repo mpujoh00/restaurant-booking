@@ -17,7 +17,7 @@
       </v-btn>
     </v-app-bar>
 
-    <v-main>
+    <v-main class="main">
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -34,6 +34,10 @@
   margin-right: 3%;
   text-align: center;
   font-weight: bold;
+}
+.main {
+  background: url('~@/assets/images/fondo7.jpg') center;
+  background-size: cover;
 }
 </style>
 

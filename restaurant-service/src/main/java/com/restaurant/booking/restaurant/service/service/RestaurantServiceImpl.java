@@ -106,6 +106,10 @@ public class RestaurantServiceImpl implements RestaurantService {
             restaurant.setLocation(restaurantUpdateRequest.getLocation());
         if(restaurantUpdateRequest.getName() != null)
             restaurant.setName(restaurantUpdateRequest.getName());
+        if(restaurantUpdateRequest.getDescription() != null)
+            restaurant.setDescription(restaurantUpdateRequest.getDescription());
+        if(restaurantUpdateRequest.getMenu() != null)
+            restaurant.setMenu(restaurantUpdateRequest.getMenu());
 
         return save(restaurant);
     }
@@ -165,10 +169,14 @@ public class RestaurantServiceImpl implements RestaurantService {
         log.info("Looking for restaurants");
 
         List<Restaurant> restaurants;
-        if (searchRestaurantsRequest.getCategories() == null || searchRestaurantsRequest.getCategories().isEmpty())
-            restaurants = restaurantRepository.findAllByLocation(searchRestaurantsRequest.getLocation());
+        if ((searchRestaurantsRequest.getCategories() == null || searchRestaurantsRequest.getCategories().isEmpty()) && searchRestaurantsRequest.getLocation() != null)
+            restaurants = restaurantRepository.findAllByLocationIgnoreCase(searchRestaurantsRequest.getLocation());
+        else if (searchRestaurantsRequest.getLocation() != null && !searchRestaurantsRequest.getLocation().isEmpty())
+            restaurants = restaurantRepository.findAllByLocationIgnoreCaseAndCategoriesIn(searchRestaurantsRequest.getLocation(), searchRestaurantsRequest.getCategories());
+        else if(searchRestaurantsRequest.getCategories() != null || !searchRestaurantsRequest.getCategories().isEmpty())
+            restaurants = restaurantRepository.findAllByCategoriesIn(searchRestaurantsRequest.getCategories());
         else
-            restaurants = restaurantRepository.findAllByLocationAndCategoriesIn(searchRestaurantsRequest.getLocation(), searchRestaurantsRequest.getCategories());
+            restaurants = restaurantRepository.findAll();
 
         return restaurants;
     }

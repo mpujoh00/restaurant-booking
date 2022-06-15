@@ -11,7 +11,9 @@ public interface RestaurantRepository extends MongoRepository<Restaurant, String
 
     List<Restaurant> findByStatus(RestaurantStatus restaurantStatus);
 
-    List<Restaurant> findAllByLocation(String location);
+    List<Restaurant> findAllByLocationIgnoreCase(String location);
 
-    List<Restaurant> findAllByLocationAndCategoriesIn(String location, List<Category> categories);
+    List<Restaurant> findAllByLocationIgnoreCaseAndCategoriesIn(String location, List<Category> categories);
+
+    List<Restaurant> findAllByCategoriesIn(List<Category> categories);
 }

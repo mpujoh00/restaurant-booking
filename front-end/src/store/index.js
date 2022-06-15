@@ -218,11 +218,20 @@ export default new Vuex.Store({
           })
           console.log('Registering restaurant')
           RestaurantService.registerRestaurant(data.restaurant)
-          .then(() => {
+          .then(response => {
             console.log('Restaurant registered')
             dispatch('login', {
               email: data.user.email,
               password: data.user.password
+            })
+            RestaurantService.saveLogo(response.data.id, data.logo)
+            .then(response => {
+              console.log('Restaurant\'s logo saved')
+              commit('updateCurrentRestaurant', response.data)
+            })
+            .catch(error => {
+              console.log('Couldn\'t save restaurant\'s logo: ', error)
+              commit('logout')
             })
           })
           .catch(error => {

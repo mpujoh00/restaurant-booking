@@ -9,16 +9,24 @@
                     </v-avatar>
                     <h2 class="cardTitle">Restaurant information</h2>
                 </div>
-                <v-form class="form" @submit.prevent="registrationSubmit"> 
+                <v-form class="form" ref="form" @submit.prevent="registrationSubmit"> 
                     <v-text-field 
                         v-model="name" 
                         label="Name" 
                         required
+                        :rules="nameRules"
                         color="grey"/>
                     <v-text-field 
                         v-model="city" 
                         label="City" 
                         required
+                        :rules="cityRules"
+                        color="grey"/>
+                    <v-text-field 
+                        v-model="address" 
+                        label="Address" 
+                        required
+                        :rules="addressRules"
                         color="grey"/>
                     <v-menu
                         ref="openTimeMenuRef"
@@ -34,6 +42,7 @@
                             <v-text-field
                                 v-model="openTime"
                                 label="Opening time"
+                                :rules="openTimeRules"
                                 prepend-inner-icon="mdi-clock-time-four-outline"
                                 readonly
                                 v-bind="attrs"
@@ -62,6 +71,7 @@
                             <v-text-field
                                 v-model="closeTime"
                                 label="Closing time"
+                                :rules="closeTimeRules"
                                 prepend-inner-icon="mdi-clock-time-four-outline"
                                 readonly
                                 v-bind="attrs"
@@ -79,12 +89,23 @@
                     <v-select 
                         v-model="intervalMinutes"
                         label="Time between reservations"
+                        :rules="intervalMinutesRules"
                         :items="intervalMinutesOptions"
                         item-text="label"
                         item-value="value"
-                        class="mb-5"
                         color="grey"/>
-                    
+                    <v-file-input
+                        label="Logo"
+                        accept="image/jpg, image/jpeg, image/png"
+                        placeholder="Choose your restaurant's logo"
+                        prepend-icon="mdi-file-image"
+                        small-chips
+                        :rules="logoRules"
+                        @change="selectLogo"
+                        color="grey"
+                        class="mb-5"
+                    ></v-file-input>
+
                     <v-btn type="submit" color="#ff99a8" class="button">
                         <span class="buttonText">Register</span>    
                     </v-btn>
@@ -116,22 +137,27 @@ export default ({
         return {
             name: '',
             city: '',
+            address: '',
             openTime: null,
             openTimeMenu: false,
             closeTime: null,
             closeTimeMenu: false,
             intervalMinutes: null,
             intervalMinutesOptions: [
-                {label: '15 minutes', value: '15'},
                 {label: '30 minutes', value: '30'},
                 {label: '45 minutes', value: '45'},
                 {label: '60 minutes', value: '60'},
+                {label: '15 minutes', value: '90'},
             ],
+            logo: null,
             nameRules: [
                 v => !!v || 'Name is required',
             ],
             cityRules: [
                 v => !!v || 'City is required',
+            ],
+            addressRules: [
+                v => !!v || 'Address is required',
             ],
             openTimeRules: [
                 v => !!v || 'Opening time is required',
@@ -141,6 +167,9 @@ export default ({
             ],
             intervalMinutesRules: [
                 v => !!v || 'Time between reservations is required',
+            ],
+            logoRules: [
+                v => !!v || 'Logo is required',
             ],
         }
     },
@@ -156,20 +185,29 @@ export default ({
             'registerRestaurant'
         ]),
         registrationSubmit(){
-            console.log('registering restaurant...')
-            const data = {
-                user: this.tempUser,
-                restaurant: {
-                    name: this.name,
-                    location: this.city,
-                    restaurantAdminEmail: this.tempUser.email,
-                    openTime: this.openTime,
-                    closeTime: this.closeTime,
-                    intervalMinutes: this.intervalMinutes}
+            if(this.$refs.form.validate()){
+                console.log('registering restaurant...')
+                const data = {
+                    user: this.tempUser,
+                    restaurant: {
+                        name: this.name,
+                        location: this.city,
+                        address: this.address,
+                        restaurantAdminEmail: this.tempUser.email,
+                        openTime: this.openTime,
+                        closeTime: this.closeTime,
+                        intervalMinutes: this.intervalMinutes,
+                    },
+                    logo: this.logo
+                }
+                console.log(data)
+                this.registerRestaurant( data)
             }
-            console.log(data)
-            this.registerRestaurant( data)
-            // todo fix prevent submit
+        },
+        selectLogo(image){
+            console.log('Obteniendo logo')
+            this.logo = new FormData()
+            this.logo.append('file', image, image.name)
         },
         cancel(){
             console.log('canceling restaurant registration...')

@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
 @Getter
 @AllArgsConstructor
@@ -13,8 +12,13 @@ import javax.validation.constraints.Size;
 public class RestaurantUpdateRequest {
 
     @NotEmpty
-    @Size(min = 10)
     private String restaurantId;
+    @NotEmpty
     private String name;
+    @NotEmpty
     private String location;
+    @NotEmpty
+    private String address;
+    private String description;
+    private String menu;
 }

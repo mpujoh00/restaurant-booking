@@ -61,7 +61,7 @@ public interface RestaurantController {
 
     @PreAuthorize("hasAuthority('ROLE_CLIENT')")
     @Operation(description = "Gets all restaurants given the parameters", operationId = "searchRestaurants")
-    @GetMapping("/search")
+    @PutMapping("/search")
     ResponseEntity<List<Restaurant>> searchRestaurants(@RequestBody @Valid SearchRestaurantsRequest searchRestaurantsRequest);
 
     @PreAuthorize("hasAuthority('ROLE_RESTAURANT')")

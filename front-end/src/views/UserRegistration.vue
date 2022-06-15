@@ -9,7 +9,7 @@
                     </v-avatar>
                     <h2 class="cardTitle">User information</h2>
                 </div>
-                <v-form class="form" @submit.prevent="registrationSubmit"> 
+                <v-form class="form" @submit.prevent="registrationSubmit" ref="form"> 
                     <v-text-field 
                         v-model="fullname" 
                         label="Fullname" 
@@ -84,7 +84,8 @@ export default ({
             ],
             emailRules: [
                 v => !!v || 'Email is required',
-                v => v.length >= 10 || 'Email must be at least 10 characters'
+                v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Email must have a valid format',
+                v => v.length >= 10 || 'Email must be at least 10 characters',
             ],
             showPassword: false,
             showConfirmationPassword: false,
@@ -103,23 +104,25 @@ export default ({
             'registerUser',
             'saveTempUser'
         ]),
-        registrationSubmit(){       
-            const user = {
-                fullname: this.fullname,
-                email: this.email,
-                password: this.password,
-                role: this.role
-            }  
-            if(this.roleName !== 'restaurant')   {
-                this.registerUser(user)
-                router.push('/account')
+        registrationSubmit(){     
+            if(this.$refs.form.validate()){
+                console.log('Registering user')  
+                const user = {
+                    fullname: this.fullname,
+                    email: this.email,
+                    password: this.password,
+                    role: this.role
+                }  
+                if(this.roleName !== 'restaurant')   {
+                    this.registerUser(user)
+                    router.push('/account')
+                }
+                // if role is restaurant, a next page will appear to register the restaurant
+                if(this.roleName === 'restaurant'){
+                    this.saveTempUser(user)
+                    router.push('/restaurant-registration')
+                }
             }
-            // if role is restaurant, a next page will appear to register the restaurant
-            if(this.roleName === 'restaurant'){
-                this.saveTempUser(user)
-                router.push('/restaurant-registration')
-            }
-            // todo review prevent ¿?
         },
         cancel(){
             router.push('/login')

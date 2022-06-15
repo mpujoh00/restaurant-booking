@@ -4,25 +4,65 @@
         <v-col cols="6">
             <v-card class="card">
                 <div class="cardHeader">
-                    <v-avatar size="50" color="#ffe6e9">
-                        <v-icon size="40" color="#ff99a8">mdi-silverware</v-icon>
+                    <v-avatar size="150" color="#ffe6e9" class="mt-4">
+                        <v-img 
+                            :src="'data:image/jpg;base64,' + currentRestaurant.logo.data" 
+                            alt="logo"
+                            max-height="300"
+                        ></v-img>
                     </v-avatar>
                     <h2 class="cardTitle">Restaurant</h2>
                 </div>
-                <v-form class="form">
+                <v-form class="form" ref="form">
                     <v-text-field 
-                        v-model="currentRestaurant.name" 
+                        v-model="name" 
                         label="Name" 
                         required
                         :readonly="nonEditable"
+                        :rules="nameRules"
+                        prepend-inner-icon="mdi-silverware"
                         color="grey"/>
                     <v-text-field 
-                        v-model="currentRestaurant.location" 
+                        v-model="location" 
                         label="City" 
                         required
                         :readonly="nonEditable"
+                        :rules="locationRules"
+                        prepend-inner-icon="mdi-city-variant"
                         color="grey"/>
-                    <div class="categories">
+                    <v-text-field 
+                        v-model="address" 
+                        label="Address" 
+                        required
+                        :readonly="nonEditable"
+                        :rules="addressRules"
+                        prepend-inner-icon="mdi-map-marker"
+                        color="grey"/>
+                    <v-textarea
+                        v-if="currentRestaurant.description || !nonEditable"
+                        :readonly="nonEditable"
+                        name="input-7-1"
+                        label="Description"
+                        auto-grow
+                        rows="1"
+                        v-model="description"
+                        prepend-inner-icon="mdi-sticker-text-outline"
+                        color="grey"
+                        background-color="white"
+                    ></v-textarea>
+                    <v-textarea
+                        v-if="currentRestaurant.menu || !nonEditable"
+                        :readonly="nonEditable"
+                        name="input-7-1"
+                        label="Menu"
+                        auto-grow
+                        rows="1"
+                        v-model="menu"
+                        prepend-inner-icon="mdi-food"
+                        color="grey"
+                        background-color="white"
+                    ></v-textarea>
+                    <div class="categories" v-if="nonEditable">
                         <v-chip v-for="(category, index) in currentRestaurant.categories" 
                             :key="index"
                             close
@@ -74,7 +114,19 @@ export default {
         return {
             nonEditable: true,
             name: '',
-            location: ''
+            location: '',
+            address: '',
+            description: '',
+            menu: '',
+            nameRules: [
+                v => !!v || 'Name is required'
+            ],
+            locationRules: [
+                v => !!v || 'Location is required'
+            ],
+            addressRules: [
+                v => !!v || 'Address is required'
+            ],
         }
     },
     methods: {
@@ -84,20 +136,25 @@ export default {
         editRestaurant(){
             this.nonEditable = !this.nonEditable
         },
-        saveRestaurant(){
-            console.log('Saving restaurant...')
-            RestaurantService.updateRestaurant({
-                restaurantId: this.currentRestaurant.id,
-                name: this.name,
-                location: this.location
-            })
-            .then(response => {
-                this.modifyRestaurant(response.data)
-            })
-            .catch(() => {
-                this.reset()
-            })
-            this.nonEditable = !this.nonEditable
+        saveRestaurant(){            
+            if(this.$refs.form.validate()){
+                console.log('Saving restaurant...')
+                RestaurantService.updateRestaurant({
+                    restaurantId: this.currentRestaurant.id,
+                    name: this.name,
+                    location: this.location,
+                    address: this.address,
+                    description: this.description != '' ? this.description : null,
+                    menu: this.menu != '' ? this.menu : null,
+                })
+                .then(response => {
+                    this.modifyRestaurant(response.data)
+                })
+                .catch(() => {
+                    this.reset()
+                })
+                this.nonEditable = !this.nonEditable
+            }
         },
         removeCategory(category){
             console.log('Removing category')
@@ -108,12 +165,36 @@ export default {
             })
         },
         reset(){
-            this.name = this.currentRestaurant.name,
+            this.name = this.currentRestaurant.name
             this.location = this.currentRestaurant.location
+            this.address = this.currentRestaurant.address
+            if(this.currentRestaurant.description != null){
+                this.description = this.currentRestaurant.description
+            }
+            else{
+                this.description = ''
+            }
+            if(this.currentRestaurant.menu != null){
+                this.menu = this.currentRestaurant.menu
+            }
+            else{
+                this.menu = ''
+            }
         },
         cancel(){
             console.log('Canceling')
             this.reset()
+            this.nonEditable = !this.nonEditable
+        }
+    },
+    mounted() {
+        this.reset()
+        if(this.currentRestaurant.logo == null){
+            RestaurantService.getRestaurant(this.currentRestaurant.id)
+            .then(response => {
+                console.log('Restaurante actualizado')
+                this.modifyRestaurant(response.data)
+            })
         }
     },
 }
