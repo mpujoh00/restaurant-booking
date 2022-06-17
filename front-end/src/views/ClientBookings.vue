@@ -20,7 +20,7 @@
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                         <v-icon
-                            v-if="item.status !== 'CANCELED'"
+                            v-if="item.status !== 'CANCELED' && reservTypeSelected !== 'Past'"
                             small
                             class="ml-1"
                             @click="cancelBooking(item.id)"
@@ -33,6 +33,7 @@
                     </template>
                     <span>Cancel</span>
                 </v-tooltip>  
+                <RateBookingDialog v-if="reservTypeSelected === 'Past' && !item.rated" :reservation="item"/>
             </template>
         </v-data-table>
         <ConfirmationDialog ref="confirm"/>
@@ -54,7 +55,8 @@ require('@/assets/main.css')
 export default {
     name: 'ClientBookings',
     components: {
-        ConfirmationDialog: () => import("@/components/ConfirmationDialog.vue")
+        ConfirmationDialog: () => import("@/components/ConfirmationDialog.vue"),
+        RateBookingDialog: () => import("@/components/RateBookingDialog.vue")
     },
     computed: {
         ...mapState([

@@ -36,8 +36,9 @@
   font-weight: bold;
 }
 .main {
-  background: url('~@/assets/images/fondo7.jpg') center;
-  background-size: cover;
+  //background: url('~@/assets/images/fondo9.png') center;
+  background-color: #FFDFE4;
+  //background-size: cover;
 }
 </style>
 
@@ -50,7 +51,8 @@ export default {
       restaurantMenus:[
         {title: 'Bookings', route:'/restaurant/admin/bookings'},
         {title: 'Restaurant administration', route:'/restaurant/admin'},
-        {title: 'Tables administration', route:'/restaurant/admin/tables'}
+        {title: 'Tables administration', route:'/restaurant/admin/tables'},
+        {title: 'Ratings', route:'/restaurant/admin/ratings'},
       ],
       clientMenus:[
         {title: 'Home', route:'/home'},

@@ -17,7 +17,7 @@ public class ExceptionAdvice {
     }
 
     @ResponseBody
-    @ExceptionHandler({InvalidReservationStatusException.class, NoSlotAvailableException.class})
+    @ExceptionHandler({InvalidReservationStatusException.class, NoSlotAvailableException.class, ReservationAlreadyRatedException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String badRequestHandler(RuntimeException e) {
         return e.getMessage();

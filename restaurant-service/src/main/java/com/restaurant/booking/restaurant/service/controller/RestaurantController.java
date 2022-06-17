@@ -68,4 +68,9 @@ public interface RestaurantController {
     @Operation(description = "Updates restaurant's logo", operationId = "saveLogo")
     @PutMapping("/{restaurantId}/logo")
     ResponseEntity<Restaurant> saveLogo(@PathVariable String restaurantId, @RequestParam("file") MultipartFile logo);
+
+    @PreAuthorize("hasAuthority('ROLE_CLIENT')")
+    @Operation(description = "Gets restaurant's name", operationId = "getRestaurantName")
+    @GetMapping("/name/{restaurantId}")
+    ResponseEntity<String> getRestaurantName(@PathVariable String restaurantId);
 }

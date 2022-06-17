@@ -19,4 +19,8 @@ public interface RestaurantProxy {
     @GetMapping("/api/v1/restaurants/reservation-hours/{restaurantId}")
     List<LocalTime> getRestaurantsReservationHours(@RequestHeader(value = "Authorization") String authorizationHeader,
                                                    @PathVariable(value = "restaurantId") String restaurantId);
+
+    @GetMapping("/api/v1/restaurants/name/{restaurantId}")
+    String getRestaurantName(@RequestHeader(value = "Authorization") String authorizationHeader,
+                             @PathVariable(value = "restaurantId") String restaurantId);
 }

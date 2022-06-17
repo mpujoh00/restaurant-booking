@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -89,7 +90,7 @@ public class ReservationServiceImpl implements ReservationService{
                 .stream()
                 .filter(reservation ->
                         reservation.getReservationSlot().getDate().isAfter(LocalDate.now()) ||
-                        reservation.getReservationSlot().getDate().isEqual(LocalDate.now())
+                        (reservation.getReservationSlot().getDate().isEqual(LocalDate.now()) && reservation.getReservationSlot().getTime().isAfter(LocalTime.now()))
                 ).peek(this::populateUserReservations)
                 .collect(Collectors.toList());
     }
@@ -103,6 +104,7 @@ public class ReservationServiceImpl implements ReservationService{
                 .stream()
                 .filter(reservation ->
                         reservation.getReservationSlot().getDate().isBefore(LocalDate.now()) ||
+                        (reservation.getReservationSlot().getDate().isEqual(LocalDate.now()) && reservation.getReservationSlot().getTime().isBefore(LocalTime.now())) ||
                         reservation.getStatus().equals(ReservationStatus.CANCELED)
                 ).peek(this::populateUserReservations)
                 .collect(Collectors.toList());
@@ -125,6 +127,13 @@ public class ReservationServiceImpl implements ReservationService{
         return save(reservation);
     }
 
+    @Override
+    public void addRating(Reservation reservation) {
+        log.info("Rating added to reservation {}", reservation.getId());
+        reservation.setRated(true);
+        save(reservation);
+    }
+
     private void populateAdminReservations(Reservation reservation){
 
         String userName = "";
@@ -141,7 +150,7 @@ public class ReservationServiceImpl implements ReservationService{
 
         String restaurantName = "";
         try{
-            restaurantName = restaurantProxy.getRestaurant(jwtUtils.getAuthorizationHeader(), reservation.getRestaurantId()).getName();
+            restaurantName = restaurantProxy.getRestaurantName(jwtUtils.getAuthorizationHeader(), reservation.getRestaurantId());
         }
         catch(Exception e){
             log.warn("Restaurant for reservation {} not found", reservation.getId());
