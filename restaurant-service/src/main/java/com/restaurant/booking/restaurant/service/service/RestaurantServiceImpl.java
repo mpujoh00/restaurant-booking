@@ -197,4 +197,15 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
         return save(restaurant);
     }
+
+    @Override
+    public void updateRestaurantRating(AverageRatingUpdateRequest ratingUpdateRequest) {
+
+        log.info("Updating restaurant's {} average rating to {}", ratingUpdateRequest.getRestaurantId(), ratingUpdateRequest.getRating());
+
+        Restaurant restaurant = findRestaurant(ratingUpdateRequest.getRestaurantId());
+        restaurant.setAverageRating(ratingUpdateRequest.getRating());
+        restaurant.setNumRatings(ratingUpdateRequest.getNumRatings());
+        save(restaurant);
+    }
 }

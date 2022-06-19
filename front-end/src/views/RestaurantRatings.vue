@@ -12,17 +12,22 @@
                                 vertical
                             ></v-divider>
                             <v-spacer></v-spacer>
+                            <v-rating
+                                background-color="#9F71AD"
+                                color="#9F71AD"
+                                empty-icon="mdi-star-outline"
+                                full-icon="mdi-star"
+                                half-icon="mdi-star-half-full"
+                                half-increments
+                                length="5"
+                                readonly
+                                size="1.8vh"
+                                :value="currentRestaurant.averageRating"
+                            ></v-rating>
+                            <h5 class="ml-2">{{ currentRestaurant.averageRating }}  ({{ currentRestaurant.numRatings }})</h5>
                         </v-toolbar>
                     </template>
                 </v-data-table>
-            </v-col>
-            <v-col md="3">
-                <v-card class="average">
-                    <v-card-title>Average rating</v-card-title>
-                    <v-card-text>
-
-                    </v-card-text>
-                </v-card>
             </v-col>
         </v-row>
     </v-container>
@@ -30,12 +35,17 @@
 
 <style scoped>
 .ratings {
-    width: auto;
     align-content: center;
     justify-content: center;
 }
 .average {
-    margin-left: 40%;
+    margin-left: 33% ;
+    padding: 2%;
+}
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>
 
@@ -46,7 +56,7 @@ import RatingService from '@/services/RatingService'
 require('@/assets/main.css')
 
 export default {
-    name: 'RestaurantBookings',
+    name: 'RestaurantRatings',
     computed: {
         ...mapState([
             'currentRestaurant',

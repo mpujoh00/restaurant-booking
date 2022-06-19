@@ -75,4 +75,6 @@ public interface RestaurantService {
     List<Restaurant> searchRestaurants(SearchRestaurantsRequest searchRestaurantsRequest);
 
     Restaurant saveRestaurantLogo(Restaurant restaurant, MultipartFile logo);
+
+    void updateRestaurantRating(AverageRatingUpdateRequest ratingUpdateRequest);
 }

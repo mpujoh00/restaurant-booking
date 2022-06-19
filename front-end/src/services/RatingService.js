@@ -18,13 +18,6 @@ class RatingService {
         })
     }
 
-    getRestaurantAverageRating(restaurantId){
-        return authAxios.get('/ratings/restaurant/' + restaurantId + '/rating', {
-            headers: {
-                Authorization: "Bearer " + localStorage.getItem('token')
-            }
-        })
-    }
 }
 
 export default new RatingService()

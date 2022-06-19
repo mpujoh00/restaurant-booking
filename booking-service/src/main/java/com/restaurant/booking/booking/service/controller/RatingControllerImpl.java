@@ -2,7 +2,6 @@ package com.restaurant.booking.booking.service.controller;
 
 import com.restaurant.booking.booking.model.Rating;
 import com.restaurant.booking.booking.model.RatingRequestCreation;
-import com.restaurant.booking.booking.model.RestaurantRating;
 import com.restaurant.booking.booking.service.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +27,5 @@ public class RatingControllerImpl implements RatingController {
     @Override
     public ResponseEntity<List<Rating>> getRestaurantRatings(String restaurantId) {
         return ResponseEntity.ok(ratingService.getRestaurantRatings(restaurantId));
-    }
-
-    @Override
-    public ResponseEntity<RestaurantRating> getRestaurantAverageRating(String restaurantId) {
-        return ResponseEntity.ok(ratingService.getRestaurantAverageRating(restaurantId));
     }
 }

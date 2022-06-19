@@ -36,6 +36,8 @@ public class Restaurant {
     private Binary logo;
     private String description;
     private String menu;
+    private Double averageRating;
+    private Integer numRatings;
 
     @DBRef
     private Set<Category> categories;
@@ -49,5 +51,7 @@ public class Restaurant {
         this.closingTime = restaurantRegistrationRequest.getCloseTime().format(DateTimeFormatter.ofPattern("HH:mm"));
         this.status = RestaurantStatus.PENDING;
         this.categories = new HashSet<>();
+        this.averageRating = 0.0;
+        this.numRatings = 0;
     }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <v-container class="container">
+    <v-container class="container-home">
       <v-row justify="center" class="mt-5">
         <v-col md="4">
           <v-text-field
@@ -53,22 +53,45 @@
                 class="rounded-lg"
               ></v-img>
               <div class="restaurant">
-                <div>
-                  <v-card-title v-text="restaurant.name" class="text-h4"></v-card-title>
-                </div>
-                <div style="margin-top: -10%;">
-                  <v-card-subtitle style="font-size: large;">
-                    {{ restaurant.address }}, {{ restaurant.location }}
-                  </v-card-subtitle>
-                </div>                
-                <div class="categories ml-3">
+                <v-row>
+                  <v-col>
+                    <v-row>
+                      <v-card-title v-text="restaurant.name" class="text-h4 font-weight-medium"></v-card-title>
+                    </v-row>
+                    <v-row style="margin-top: -5%;">
+                      <v-card-subtitle style="font-size: large;">
+                        {{ restaurant.address }}, {{ restaurant.location }}
+                      </v-card-subtitle>
+                    </v-row>
+                  </v-col>
+                  <v-col md="5">
+                    <v-row class="ml-5 mt-0">
+                      <v-col>
+                        <v-rating
+                          color="#9F71AD"
+                          background-color="#9F71AD"
+                          empty-icon="mdi-star-outline"
+                          full-icon="mdi-star"
+                          half-icon="mdi-star-half-full"
+                          half-increments
+                          length="5"
+                          readonly
+                          size="1.8vh"
+                          :value="restaurant.averageRating"
+                        ></v-rating>
+                        <h5 class="ml-8">({{ restaurant.numRatings }}) review/s</h5>
+                      </v-col>
+                    </v-row>
+                  </v-col> 
+                </v-row> 
+                <v-row class="categories ml-3">
                   <v-chip v-for="(category, index) in restaurant.categories" 
                     :key="index"
                     color="#ffe6e9"
                     class="mr-2 mb-3">
                     {{ category.name }}
                   </v-chip>
-                </div>
+                </v-row>              
               </div>
               <v-spacer></v-spacer>
             </div>
@@ -92,10 +115,16 @@
   align-items: flex-start;
   margin-left: 3%;
 }
-.container {
+.container-home {
   max-width: 80%;
   align-content: center;
   justify-content: center;
+}
+.rating {  
+  align-content: center;
+}
+.numRatings {
+  margin-top: 24%;
 }
 </style>
 

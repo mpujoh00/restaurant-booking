@@ -2,7 +2,6 @@ package com.restaurant.booking.booking.service.controller;
 
 import com.restaurant.booking.booking.model.Rating;
 import com.restaurant.booking.booking.model.RatingRequestCreation;
-import com.restaurant.booking.booking.model.RestaurantRating;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +24,4 @@ public interface RatingController {
     @Operation(description = "Gets all ratings from a restaurant", operationId = "getRestaurantRatings")
     @GetMapping("/restaurant/{restaurantId}")
     ResponseEntity<List<Rating>> getRestaurantRatings(@PathVariable String restaurantId);
-
-    @PreAuthorize("hasAuthority('ROLE_CLIENT') or hasAuthority('ROLE_RESTAURANT')")
-    @Operation(description = "Gets the average rating from a restaurant", operationId = "getRestaurantAverageRating")
-    @GetMapping("/restaurant/{restaurantId}/rating")
-    ResponseEntity<RestaurantRating> getRestaurantAverageRating(@PathVariable String restaurantId);
-
 }

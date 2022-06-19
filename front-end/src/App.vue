@@ -37,7 +37,7 @@
 }
 .main {
   //background: url('~@/assets/images/fondo9.png') center;
-  background-color: #FFDFE4;
+  background-color: #f0e6ef;
   //background-size: cover;
 }
 </style>

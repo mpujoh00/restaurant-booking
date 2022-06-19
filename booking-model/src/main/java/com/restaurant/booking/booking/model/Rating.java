@@ -28,7 +28,7 @@ public class Rating {
 
     public Rating(RatingRequestCreation requestCreation){
         this.value = requestCreation.getValue();
-        if(requestCreation.getComment() != null || !requestCreation.getComment().isEmpty())
+        if(requestCreation.getComment() != null && !requestCreation.getComment().isEmpty())
             this.comment = requestCreation.getComment();
         this.reservationId = requestCreation.getReservationId();
         this.restaurantId = requestCreation.getRestaurantId();
