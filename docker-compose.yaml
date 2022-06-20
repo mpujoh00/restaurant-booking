@@ -1,19 +1,120 @@
 version: '2'
 services:
+  user-service:
+    image: rb/restaurant-booking-user-service:0.0.1-SNAPSHOT
+    mem_limit: 700m
+    ports:
+      - "8000:8000"
+    networks:
+      - booking-network
+    depends_on:
+      - naming-server
+    restart: always
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+
+  table-service:
+    image: rb/restaurant-booking-table-service:0.0.1-SNAPSHOT
+    mem_limit: 700m
+    ports:
+      - "8200:8200"
+    networks:
+      - booking-network
+    depends_on:
+      - naming-server
+      - kafka
+    restart: always
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: http://kafka:9092
+
+  restaurant-service:
+    image: rb/restaurant-booking-restaurant-service:0.0.1-SNAPSHOT
+    mem_limit: 700m
+    ports:
+      - "8100:8100"
+    networks:
+      - booking-network
+    depends_on:
+      - naming-server
+      - kafka
+    restart: always
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: http://kafka:9092
+
+  booking-service:
+    image: rb/restaurant-booking-booking-service:0.0.1-SNAPSHOT
+    mem_limit: 700m
+    ports:
+      - "8300:8300"
+    networks:
+      - booking-network
+    depends_on:
+      - naming-server
+      - kafka
+    restart: always
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: http://kafka:9092
+
+  front-end:
+    image: rb/restaurant-booking-front-end:0.0.1-SNAPSHOT
+    mem_limit: 700m
+    ports:
+      - "8080:8080"
+    networks:
+      - booking-network
+    depends_on:
+      - naming-server
+      - kafka
+    restart: always
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: http://kafka:9092
+
+  api-gateway:
+    image: rb/restaurant-booking-api-gateway:0.0.1-SNAPSHOT
+    mem_limit: 700m
+    ports:
+      - "8765:8765"
+    depends_on:
+      - naming-server
+    networks:
+      - booking-network
+    restart: always
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+
+  naming-server:
+    image: rb/restaurant-booking-naming-server:0.0.1-SNAPSHOT
+    mem_limit: 700m
+    ports:
+      - "8761:8761"
+    networks:
+      - booking-network
+    restart: always
+
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
+    networks:
+      - booking-network
+    restart: always
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     ports:
-      - 22181:2181
+      - "22181:2181"
 
   kafka:
     image: confluentinc/cp-kafka:latest
     depends_on:
       - zookeeper
     ports:
-      - 29092:29092
+      - "29092:29092"
+    networks:
+      - booking-network
+    restart: always
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -21,3 +122,6 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+networks:
+  booking-network:
