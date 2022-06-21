@@ -7,17 +7,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="feign-client" />
         <module name="restaurant-service" />
+        <module name="booking-model" />
+        <module name="restaurant-model" />
+        <module name="user-service" />
+        <module name="cache-support" />
+        <module name="user-model" />
+        <module name="jwt-utils" />
+        <module name="feign-client" />
         <module name="table-model" />
         <module name="booking-service" />
         <module name="api-gateway" />
-        <module name="booking-model" />
-        <module name="restaurant-model" />
         <module name="table-service" />
-        <module name="user-service" />
-        <module name="user-model" />
-        <module name="jwt-utils" />
         <module name="naming-server" />
       </profile>
     </annotationProcessing>
@@ -36,6 +37,7 @@
       <module name="authorization-server" options="-parameters" />
       <module name="booking-model" options="-parameters" />
       <module name="booking-service" options="-parameters" />
+      <module name="cache-support" options="-parameters" />
       <module name="feign-client" options="-parameters" />
       <module name="jwt-support" options="-parameters" />
       <module name="jwt-utils" options="-parameters" />

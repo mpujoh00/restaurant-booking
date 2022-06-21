@@ -32,4 +32,5 @@ Para ejecutar el frontend hay que ejecutar el comando npm run serve desde la car
   - Resto, maven goal: spring-boot:build-image -DskipTests
 
 - **Ejecución docker compose:**
-  docker-compose up
+  - docker-compose up
+  - docker-compose -f dev-docker-compose.yaml up

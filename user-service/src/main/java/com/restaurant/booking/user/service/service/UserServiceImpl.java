@@ -10,6 +10,8 @@ import com.restaurant.booking.user.service.repository.UserRepository;
 import com.restaurant.booking.user.service.security.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -44,6 +46,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @Cacheable(value = "user")
     public User findByEmail(String email){
         // if the user with that email doesn't exist, throws an exception
         log.info("Looking for user with email: {}", email);
@@ -63,6 +66,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @CachePut(value = "user", key = "#user.email")
     public User update(User user, UpdateRequest updateRequest) {
         log.info("Updating user with email: {} and roles: {}", user.getEmail(), user.getRoles());
 
