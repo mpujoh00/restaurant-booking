@@ -63,6 +63,7 @@ public class Restaurant {
     }
 
     public void setLogo(byte[] logo){
-        this.logo = new Binary(BsonBinarySubType.BINARY, logo);
+        if(logo != null)
+            this.logo = new Binary(BsonBinarySubType.BINARY, logo);
     }
 }
