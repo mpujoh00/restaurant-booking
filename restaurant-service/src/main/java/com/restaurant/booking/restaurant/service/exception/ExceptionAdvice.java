@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ExceptionAdvice {
 
     @ResponseBody
-    @ExceptionHandler({RestaurantNotFoundException.class, UserNotFoundException.class, CategoryNotFoundException.class})
+    @ExceptionHandler({RestaurantNotFoundException.class, UserNotFoundException.class, CategoryNotFoundException.class, CourseNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String notFoundHandler(RuntimeException e) {
         return e.getMessage();

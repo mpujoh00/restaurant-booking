@@ -59,7 +59,7 @@ public class Restaurant {
     }
 
     public byte[] getLogo(){
-        return this.logo.getData();
+        return this.logo != null ? this.logo.getData() : null;
     }
 
     public void setLogo(byte[] logo){
