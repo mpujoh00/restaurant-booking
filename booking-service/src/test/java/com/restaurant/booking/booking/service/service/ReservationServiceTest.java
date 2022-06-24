@@ -45,6 +45,7 @@ class ReservationServiceTest {
                 .numPeople(2)
                 .reservationSlot(slotOptional.get())
                 .status(ReservationStatus.PENDING)
+                .rated(false)
                 .build();
 
         Mockito.when(slotService.findFirstAvailableSlotsByPeople("id", 2, LocalDate.now())).thenReturn(slotOptional);
@@ -113,9 +114,9 @@ class ReservationServiceTest {
     void findActiveUserReservations(){
         List<Reservation> reservations = List.of(
                 Reservation.builder().reservationSlot(
-                        ReservationSlot.builder().date(LocalDate.now()).build()).build(),
+                        ReservationSlot.builder().date(LocalDate.now()).time(LocalTime.now().plusMinutes(120)).build()).build(),
                 Reservation.builder().reservationSlot(
-                        ReservationSlot.builder().date(LocalDate.now().minus(Period.ofDays(2))).build()).build()
+                        ReservationSlot.builder().date(LocalDate.now().minus(Period.ofDays(2))).time(LocalTime.now().plusMinutes(120)).build()).build()
         );
 
         Mockito.when(reservationRepository.findAllByUserIdAndStatusIn("id", List.of(ReservationStatus.PENDING, ReservationStatus.CONFIRMED)))
@@ -131,10 +132,10 @@ class ReservationServiceTest {
     void findInactiveUserReservations(){
         List<Reservation> reservations = List.of(
                 Reservation.builder().reservationSlot(
-                        ReservationSlot.builder().date(LocalDate.now()).build())
+                                ReservationSlot.builder().date(LocalDate.now()).time(LocalTime.now().minusMinutes(120)).build())
                         .status(ReservationStatus.CANCELED).build(),
                 Reservation.builder().reservationSlot(
-                        ReservationSlot.builder().date(LocalDate.now().minus(Period.ofDays(2))).build())
+                                ReservationSlot.builder().date(LocalDate.now().minus(Period.ofDays(2))).time(LocalTime.now().plusMinutes(120)).build())
                         .status(ReservationStatus.CONFIRMED).build()
         );
 
