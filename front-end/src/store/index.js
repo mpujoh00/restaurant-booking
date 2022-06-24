@@ -78,7 +78,12 @@ export default new Vuex.Store({
           commit('updateCurrentRestaurant', response.data.user.restaurant)
         }
         // redirects to account page
-        router.push('/account')
+        if(response.data.user.roles[0].name === 'ROLE_CLIENT')
+          router.push('/home')
+        else if(response.data.user.roles[0].name === 'ROLE_RESTAURANT')
+          router.push('/restaurant/admin/bookings')
+        else
+          router.push('/admin/restaurants')
       })
       .catch(() => {
         console.log('Couldn\'t log in')

@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <v-container class="container-home">
+    <v-container>
       <v-row justify="center" class="mt-5">
         <v-col md="4">
           <v-text-field
@@ -46,7 +46,7 @@
           <v-card @click="openRestaurant(restaurant)" class="ma-1 pa-6" color="#f7f7f7">
             <div class="d-flex flex-no-wrap justify-space-between">
               <v-img 
-                :src="'data:image/jpg;base64,' + restaurant.logo.data" 
+                :src="'data:image/jpg;base64,' + restaurant.logo" 
                 alt="logo"
                 height="150"
                 max-width="150"

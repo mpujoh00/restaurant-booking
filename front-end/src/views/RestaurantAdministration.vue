@@ -6,7 +6,7 @@
                 <div class="cardHeader">
                     <v-avatar size="150" color="#ffe6e9" class="mt-4">
                         <v-img 
-                            :src="'data:image/jpg;base64,' + currentRestaurant.logo.data" 
+                            :src="'data:image/jpg;base64,' + currentRestaurant.logo" 
                             alt="logo"
                             max-height="300"
                         ></v-img>

@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    @Cacheable(value = "user")
+    //@Cacheable(value = "user")
     public User findByEmail(String email){
         // if the user with that email doesn't exist, throws an exception
         log.info("Looking for user with email: {}", email);
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    @CachePut(value = "user", key = "#user.email")
+    //@CachePut(value = "user", key = "#user.email")
     public User update(User user, UpdateRequest updateRequest) {
         log.info("Updating user with email: {} and roles: {}", user.getEmail(), user.getRoles());
 

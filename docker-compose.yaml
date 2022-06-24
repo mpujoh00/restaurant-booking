@@ -67,14 +67,7 @@ services:
       - "8080:8080"
     networks:
       - booking-network
-    depends_on:
-      - naming-server
-      - kafka
     restart: always
-    environment:
-      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: http://kafka:9092
-
   api-gateway:
     image: rb/restaurant-booking-api-gateway:0.0.1-SNAPSHOT
     mem_limit: 700m

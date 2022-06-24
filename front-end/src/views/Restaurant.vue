@@ -4,7 +4,7 @@
             <v-card class="card">
                 <div class="cardHeader">
                     <v-img 
-                        :src="'data:image/jpg;base64,' + restaurant.logo.data" 
+                        :src="'data:image/jpg;base64,' + restaurant.logo" 
                         alt="logo"
                         max-height="300"
                     ></v-img>

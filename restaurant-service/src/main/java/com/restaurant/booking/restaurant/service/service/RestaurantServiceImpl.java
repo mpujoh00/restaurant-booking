@@ -71,6 +71,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @Cacheable(value = "restaurant")
     public Restaurant findRestaurant(String restaurantId) {
 
         log.info("Getting restaurant with id {}", restaurantId);
@@ -92,6 +93,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @CacheEvict(value = "restaurant")
     public void deleteRestaurant(String restaurantId) {
 
         log.info("Deleting restaurant with id {}", restaurantId);
@@ -99,6 +101,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @CachePut(value = "restaurant", key = "#restaurantUpdateRequest.restaurantId")
     public Restaurant updateRestaurant(RestaurantUpdateRequest restaurantUpdateRequest) {
 
         log.info("Updating restaurant with id {}", restaurantUpdateRequest.getRestaurantId());
@@ -118,6 +121,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @CachePut(value = "restaurant", key = "#restaurantReservHoursUpdateRequest.restaurantId")
     public Restaurant updateRestaurantReservationHours(RestaurantReservHoursUpdateRequest restaurantReservHoursUpdateRequest) {
 
         log.info("Updating restaurant with id {}", restaurantReservHoursUpdateRequest.getRestaurantId());
@@ -129,6 +133,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @CachePut(value = "restaurant", key = "#restaurant.id")
     public Restaurant changeRestaurantStatus(Restaurant restaurant) {
 
         log.info("Changing restaurant's with id {} status", restaurant.getId());
@@ -153,6 +158,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @CachePut(value = "restaurant", key = "#restaurant.id")
     public Restaurant addCategory(Restaurant restaurant, Category category) {
         log.info("Adding category {} to restaurant {}", category.getName(), restaurant.getName());
         restaurant.getCategories().add(category);
@@ -160,6 +166,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @CachePut(value = "restaurant", key = "#restaurant.id")
     public Restaurant removeCategory(Restaurant restaurant, Category category) {
         log.info("Removing category {} from restaurant {}", category.getName(), restaurant.getName());
         restaurant.getCategories().remove(category);
@@ -185,6 +192,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @CachePut(value = "restaurant", key = "#restaurant.id")
     public Restaurant saveRestaurantLogo(Restaurant restaurant, MultipartFile logo) {
 
         log.info("Saving logo of restaurant {}", restaurant.getName());
@@ -193,7 +201,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             throw new InvalidImageTypeException(logo.getOriginalFilename());
         }
         try {
-            restaurant.setLogo(new Binary(BsonBinarySubType.BINARY, logo.getBytes()));
+            restaurant.setLogo(logo.getBytes());
         }
         catch (IOException exception){
             throw new InvalidImageException(logo.getOriginalFilename());
