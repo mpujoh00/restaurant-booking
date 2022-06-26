@@ -33,7 +33,7 @@
                     </template>
                     <span>Cancel</span>
                 </v-tooltip>  
-                <RateBookingDialog v-if="reservTypeSelected === 'Past' && !item.rated" :reservation="item"/>
+                <RateBookingDialog v-if="reservTypeSelected === 'Past' && item.status === 'ATTENDED' && !item.rated" :reservation="item"/>
             </template>
         </v-data-table>
         <ConfirmationDialog ref="confirm"/>

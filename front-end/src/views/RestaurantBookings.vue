@@ -45,6 +45,22 @@
                     </template>
                     <span>Reject</span>
                 </v-tooltip>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                            v-if="canConfirmAttendance(item)"
+                            small
+                            class="ml-1"
+                            @click="confirmAttendance(item.id)"
+                            color="#5BBFCC"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            mdi-check-all
+                        </v-icon>
+                    </template>
+                    <span>Confirm attendance</span>
+                </v-tooltip>
             </template>
         </v-data-table>
     </div>
@@ -118,6 +134,15 @@ export default {
             .catch(() => {
                 console.log('Status couldn\'t be changed')
             })
+        },
+        canConfirmAttendance(reservation){
+            const reservationDate = new Date(reservation.reservationSlot.date + ' ' + reservation.reservationSlot.time)
+            const today = new Date()
+            return reservation.status === 'CONFIRMED' && reservationDate < today
+        },
+        confirmAttendance(reservationId){
+            console.log('Confirming attendance to reservation ' + reservationId)
+            this.changeReservation(reservationId, 'ATTENDED')
         }
     },
     mounted() {
