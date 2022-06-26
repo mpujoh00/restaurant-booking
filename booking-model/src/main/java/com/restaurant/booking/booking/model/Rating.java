@@ -18,15 +18,16 @@ public class Rating {
 
     @Id
     private String id;
-    private Integer value;
+    private Double value;
     private String comment;
     private String reservationId;
     private String restaurantId;
     private String userId;
     private String userName;
     private LocalDate date;
+    private RatingStatus ratingStatus;
 
-    public Rating(RatingRequestCreation requestCreation){
+    public Rating(RatingCreationRequest requestCreation){
         this.value = requestCreation.getValue();
         if(requestCreation.getComment() != null && !requestCreation.getComment().isEmpty())
             this.comment = requestCreation.getComment();
@@ -35,5 +36,6 @@ public class Rating {
         this.userId = requestCreation.getUserId();
         this.userName = requestCreation.getUserName();
         this.date = LocalDate.now();
+        this.ratingStatus = RatingStatus.OK;
     }
 }

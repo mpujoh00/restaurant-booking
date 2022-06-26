@@ -105,6 +105,7 @@ export default {
                 })
                 .then(() => {
                     console.log('Rating submitted')
+                    this.$router.go()
                     this.dialog = false
                 })
                 .catch(() => {

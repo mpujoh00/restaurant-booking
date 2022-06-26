@@ -27,6 +27,31 @@
                             <h5 class="ml-2">{{ currentRestaurant.averageRating }}  ({{ currentRestaurant.numRatings }})</h5>
                         </v-toolbar>
                     </template>
+                    <template v-slot:item.ratingStatus="{ item }">
+                        <v-chip
+                            :color="getColor(item.ratingStatus)"
+                            dark>
+                            {{ item.ratingStatus }}
+                        </v-chip>
+                    </template>
+                    <template v-slot:item.actions="{ item }">
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-icon
+                                    v-if="item.ratingStatus === 'OK'"
+                                    small
+                                    class="ml-1"
+                                    @click="flagRating(item.id)"
+                                    color="#ff365a"
+                                    v-bind="attrs"
+                                    v-on="on"
+                                >
+                                    mdi-flag-variant-outline
+                                </v-icon>
+                            </template>
+                            <span>Mark as offensive</span>
+                        </v-tooltip> 
+                    </template>
                 </v-data-table>
             </v-col>
         </v-row>
@@ -83,7 +108,35 @@ export default {
                     text: 'Client',
                     value: 'userName',
                 },
+                {
+                    text: 'Status',
+                    value: 'ratingStatus',
+                },
+                {
+                    text: 'Actions',
+                    value: 'actions',
+                    sortable: false
+                }
             ],
+        }
+    },
+    methods: {
+        flagRating(ratingId){
+            console.log('Marking rating as offensive')
+            RatingService.flagRating(ratingId)
+            .then(() => {
+                console.log('Flag rated')
+                this.$router.go()
+            })
+            .catch(() => {
+                console.log('Couldn\'t flag rating')
+            })
+        },
+        getColor(ratingStatus){
+            if(ratingStatus === 'OK')
+                return '#7EB07E'
+            else
+                return '#907474'
         }
     },
     mounted() {

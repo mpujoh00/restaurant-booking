@@ -38,6 +38,7 @@ public interface CourseController {
     @DeleteMapping("/{courseId}")
     ResponseEntity<Void> deleteCourse(@PathVariable String courseId);
 
+    @PreAuthorize("hasAuthority('ROLE_RESTAURANT') or hasAuthority('ROLE_CLIENT')")
     @Operation(description = "Gets all course types", operationId = "getCourseTypes")
     @GetMapping("/types")
     ResponseEntity<List<CourseType>> getCourseTypes();

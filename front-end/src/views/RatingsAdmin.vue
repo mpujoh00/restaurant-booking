@@ -1,9 +1,9 @@
 <template>
     <div class="container">
-        <v-data-table :headers="headers" :items="bookings" sort-by="userName" class="elevation-1">
+        <v-data-table :headers="headers" :items="ratings" sort-by="date" class="elevation-1">
             <template v-slot:top>
                 <v-toolbar flat>
-                    <v-toolbar-title>Bookings</v-toolbar-title>
+                    <v-toolbar-title>Offensive ratings</v-toolbar-title>
                     <v-divider
                         class="mx-4"
                         inset
@@ -16,10 +16,9 @@
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                         <v-icon
-                            v-if="item.status === 'PENDING'"
                             small
                             class="ml-1"
-                            @click="acceptBooking(item.id)"
+                            @click="acceptRating(item.id)"
                             color="#65ad63"
                             v-bind="attrs"
                             v-on="on"
@@ -32,10 +31,9 @@
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                         <v-icon
-                            v-if="item.status === 'PENDING'"
                             small
                             class="ml-1"
-                            @click="rejectBooking(item.id)"
+                            @click="cancelRating(item.id)"
                             color="#ff365a"
                             v-bind="attrs"
                             v-on="on"
@@ -43,7 +41,7 @@
                             mdi-close-thick
                         </v-icon>
                     </template>
-                    <span>Reject</span>
+                    <span>Cancel</span>
                 </v-tooltip>
             </template>
         </v-data-table>
@@ -51,46 +49,28 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import BookingService from '@/services/BookingService'
+import RatingService from '@/services/RatingService'
 
 require('@/assets/main.css')
 
 export default {
-    name: 'RestaurantBookings',
-    computed: {
-        ...mapState([
-            'currentRestaurant',
-        ])
-    },
+    name: 'RatingsAdmin',
     data() {
         return {
-            bookings: [],
+            ratings: [],
             headers: [
                 {
-                    text: 'Client',
+                    text: 'Comment',
                     align: 'start',
-                    value: 'userName'
-                },
+                    value: 'comment',
+                },     
+                {
+                    text: 'Client',
+                    value: 'userName',
+                },           
                 {
                     text: 'Date',
-                    value: 'reservationSlot.date',
-                },                
-                {
-                    text: 'Time',
-                    value: 'reservationSlot.time',
-                },
-                {
-                    text: 'Table',
-                    value: 'reservationSlot.table.number',
-                },
-                {
-                    text: 'Number of people',
-                    value: 'numPeople',
-                },
-                {
-                    text: 'Status',
-                    value: 'status',
+                    value: 'date',
                 },
                 {
                     text: 'Actions',
@@ -101,16 +81,16 @@ export default {
         }
     },
     methods: {
-        acceptBooking(reservationId){
-            console.log('Accepting reservation' + reservationId)
-            this.changeReservation(reservationId, 'CONFIRMED')
+        acceptRating(ratingId){
+            console.log('Accepting rating' + ratingId)
+            this.changeRatingStatus(ratingId, 'OK')
         },
-        rejectBooking(reservationId){
-            console.log('Canceling reservation' + reservationId)
-            this.changeReservation(reservationId, 'CANCELED')
+        cancelRating(ratingId){
+            console.log('Canceling rating' + ratingId)
+            this.changeRatingStatus(ratingId, 'CANCELLED')
         },
-        changeReservation(reservationId, status){
-            BookingService.changeReservationStatus(reservationId, status)
+        changeRatingStatus(ratingId, status){
+            RatingService.changeRatingStatus(ratingId, status)
             .then(() => {
                 console.log('Status correctly changed')
                 this.$router.go()
@@ -121,10 +101,10 @@ export default {
         }
     },
     mounted() {
-        console.log('Getting bookings')
-        BookingService.getAllRestaurantReservations(this.currentRestaurant.id)
+        console.log('Getting flagged ratings')
+        RatingService.getFlaggedRatings()
         .then(response => {
-            this.bookings = response.data
+            this.ratings = response.data
         })
     },
 }

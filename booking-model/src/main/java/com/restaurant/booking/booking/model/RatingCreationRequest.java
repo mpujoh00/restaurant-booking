@@ -9,11 +9,12 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@Builder
 @ToString
-public class RatingRequestCreation {
+public class RatingCreationRequest {
 
     @NotNull
-    private Integer value;
+    private Double value;
     private String comment;
     @NotEmpty
     private String reservationId;

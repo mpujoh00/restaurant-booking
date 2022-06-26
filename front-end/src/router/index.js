@@ -56,11 +56,14 @@ const routes = [
     path: '/admin/users',
     component: () => import(/* webpackChunkName: "account" */ '@/views/UsersAdmin.vue')
   }, 
-  
   {
     path: '/admin/categories',
     component: () => import(/* webpackChunkName: "account" */ '@/views/CategoriesAdmin.vue')
   },  
+  {
+    path: '/admin/ratings',
+    component: () => import(/* webpackChunkName: "account" */ '@/views/RatingsAdmin.vue')
+  }, 
   {
     path: '/restaurant/admin/ratings',
     component: () => import(/* webpackChunkName: "account" */ '@/views/RestaurantRatings.vue')

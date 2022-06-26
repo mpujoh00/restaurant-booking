@@ -18,6 +18,29 @@ class RatingService {
         })
     }
 
+    getFlaggedRatings(){        
+        return authAxios.get('/ratings/flag', {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem('token')
+            }
+        })
+    }
+
+    flagRating(ratingId){        
+        return authAxios.put('/ratings/' + ratingId, {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem('token')
+            }
+        })
+    }
+
+    changeRatingStatus(ratingId, ratingStatus){        
+        return authAxios.put('/ratings/' + ratingId + '/status/' + ratingStatus, {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem('token')
+            }
+        })
+    }
 }
 
 export default new RatingService()

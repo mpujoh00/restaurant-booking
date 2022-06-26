@@ -75,6 +75,7 @@ export default {
         {title: 'Restaurants administration', route:'/admin/restaurants'},
         {title: 'Users administration', route:'/admin/users'},
         {title: 'Categories administration', route:'/admin/categories'},
+        {title: 'Ratings administration', route:'/admin/ratings'},
       ]
     }
   },
