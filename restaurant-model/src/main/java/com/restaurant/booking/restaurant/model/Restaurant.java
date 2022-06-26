@@ -38,7 +38,6 @@ public class Restaurant {
     @Setter(AccessLevel.NONE)
     private Binary logo;
     private String description;
-    private String menu;
     private Double averageRating;
     private Integer numRatings;
 

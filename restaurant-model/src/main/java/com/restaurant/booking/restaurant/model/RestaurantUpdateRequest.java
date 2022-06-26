@@ -20,5 +20,4 @@ public class RestaurantUpdateRequest {
     @NotEmpty
     private String address;
     private String description;
-    private String menu;
 }

@@ -49,7 +49,7 @@
                             <v-icon left>mdi-clock-outline</v-icon>
                             Schedule
                         </v-tab>
-                        <v-tab v-if="restaurant.menu">
+                        <v-tab>
                             <v-icon left>mdi-food-outline</v-icon>
                             Menu
                         </v-tab>
@@ -79,14 +79,10 @@
                                 </v-card-text>
                             </v-card>
                         </v-tab-item>
-                        <v-tab-item v-if="restaurant.menu">
+                        <v-tab-item>
                             <v-card flat>
                                 <v-card-text>
-                                    <v-row
-                                        align="center"
-                                        class="mt-1 ml-1">
-                                        {{ restaurant.menu }}
-                                    </v-row>
+                                    <restaurant-courses-list :restaurantId="restaurant.id"></restaurant-courses-list>
                                 </v-card-text>
                             </v-card>
                         </v-tab-item>
@@ -126,6 +122,11 @@
                                         </v-row>
                                         <v-divider v-if="index !== ratings.length-1"></v-divider>
                                     </div>
+                                    <v-row justify="center" v-if="ratings.length == 0">
+                                        <v-col>
+                                            <h4 class="text-left">No reviews</h4>
+                                        </v-col>
+                                    </v-row>
                                 </v-card-text>
                             </v-card>
                         </v-tab-item>
@@ -178,7 +179,8 @@ import RatingService from '@/services/RatingService'
 export default ({
     name: 'Restaurant',
     components: {
-        BookingDialog: () => import("@/components/BookingDialog")
+        BookingDialog: () => import("@/components/BookingDialog"),
+        RestaurantCoursesList: () => import("@/components/RestaurantCoursesList")
     },
     props: [
         'id'

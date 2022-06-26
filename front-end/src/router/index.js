@@ -64,6 +64,10 @@ const routes = [
   {
     path: '/restaurant/admin/ratings',
     component: () => import(/* webpackChunkName: "account" */ '@/views/RestaurantRatings.vue')
+  }, 
+  {
+    path: '/restaurant/admin/courses',
+    component: () => import(/* webpackChunkName: "account" */ '@/views/RestaurantCourses.vue')
   },
   {
     name: 'restaurantAdmin',

@@ -114,8 +114,6 @@ public class RestaurantServiceImpl implements RestaurantService {
             restaurant.setName(restaurantUpdateRequest.getName());
         if(restaurantUpdateRequest.getDescription() != null)
             restaurant.setDescription(restaurantUpdateRequest.getDescription());
-        if(restaurantUpdateRequest.getMenu() != null)
-            restaurant.setMenu(restaurantUpdateRequest.getMenu());
 
         return save(restaurant);
     }

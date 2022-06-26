@@ -30,13 +30,15 @@ public class Course {
         this.name = courseCreationRequest.getName();
         this.ingredients = courseCreationRequest.getIngredients();
         this.courseType = courseCreationRequest.getCourseType();
+        this.restaurantId = courseCreationRequest.getRestaurantId();
     }
 
     public byte[] getImage(){
-        return this.image.getData();
+        return this.image != null ? this.image.getData() : null;
     }
 
-    public void setImage(byte[] logo){
-        this.image = new Binary(BsonBinarySubType.BINARY, logo);
+    public void setImage(byte[] image){
+        if(image != null)
+            this.image = new Binary(BsonBinarySubType.BINARY, image);
     }
 }

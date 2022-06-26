@@ -37,13 +37,13 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> findByRestaurant(String restaurantId, CourseType courseType) {
-        log.info("Finding courses for restaurant {}", restaurantId);
+        log.info("Finding courses {} for restaurant {}", courseType.name(), restaurantId);
         return courseRepository.findByRestaurantIdAndCourseType(restaurantId, courseType);
     }
 
     @Override
     public Course create(CourseCreationRequest courseCreationRequest) {
-        log.info("Creating a new course with {}", courseCreationRequest);
+        log.info("Creating a new course {}", courseCreationRequest.getName());
         Course course = new Course(courseCreationRequest);
         return courseRepository.save(course);
     }

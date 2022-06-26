@@ -20,6 +20,18 @@
     <v-main class="main">
       <router-view></router-view>
     </v-main>
+    <v-footer padless color="#ffd6dd">
+      <v-col class="text-center" cols="12">
+        <v-btn icon class="mr-2 mb-1">
+          <a href="https://www.linkedin.com/in/micaela-pujol-higueras/" style="text-decoration: none">
+            <v-icon size="26" color="black">
+              mdi-linkedin
+            </v-icon>
+          </a>
+        </v-btn>
+        2022 - <strong>Restaurant Booking</strong>
+      </v-col>
+    </v-footer>
   </v-app>
 </template>
 
@@ -37,7 +49,7 @@
 }
 .main {
   //background: url('~@/assets/images/fondo9.png') center;
-  background-color: #f0e6ef;
+  background-color: #ffebee;
   //background-size: cover;
 }
 </style>
@@ -49,9 +61,10 @@ export default {
   data() {
     return {
       restaurantMenus:[
-        {title: 'Bookings', route:'/restaurant/admin/bookings'},
         {title: 'Restaurant administration', route:'/restaurant/admin'},
+        {title: 'Bookings', route:'/restaurant/admin/bookings'},
         {title: 'Tables administration', route:'/restaurant/admin/tables'},
+        {title: 'Courses administration', route:'/restaurant/admin/courses'},
         {title: 'Ratings', route:'/restaurant/admin/ratings'},
       ],
       clientMenus:[

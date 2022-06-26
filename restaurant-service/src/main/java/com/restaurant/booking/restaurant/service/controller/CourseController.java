@@ -22,8 +22,8 @@ public interface CourseController {
     @PostMapping
     ResponseEntity<Course> createCourse(@RequestBody @Valid CourseCreationRequest courseCreationRequest);
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_CLIENT')")
-    @Operation(description = "Gets all enabled courses", operationId = "getCoursesByRestaurant")
+    @PreAuthorize("hasAuthority('ROLE_RESTAURANT') or hasAuthority('ROLE_CLIENT')")
+    @Operation(description = "Gets all courses", operationId = "getCoursesByRestaurant")
     @GetMapping
     ResponseEntity<List<Course>> getCoursesByRestaurant(@RequestParam("restaurantId") String restaurantId,
                                                         @RequestParam("courseType") CourseType courseType);
@@ -33,4 +33,12 @@ public interface CourseController {
     @PutMapping("/{courseId}/image")
     ResponseEntity<Course> saveImage(@PathVariable String courseId, @RequestParam("file") MultipartFile image);
 
+    @PreAuthorize("hasAuthority('ROLE_RESTAURANT')")
+    @Operation(description = "Deletes the course", operationId = "deleteCourse")
+    @DeleteMapping("/{courseId}")
+    ResponseEntity<Void> deleteCourse(@PathVariable String courseId);
+
+    @Operation(description = "Gets all course types", operationId = "getCourseTypes")
+    @GetMapping("/types")
+    ResponseEntity<List<CourseType>> getCourseTypes();
 }

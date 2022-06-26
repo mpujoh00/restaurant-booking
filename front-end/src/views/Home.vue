@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div>
     <v-container>
       <v-row justify="center" class="mt-5">
         <v-col md="4">
@@ -42,7 +42,7 @@
         </v-col>
       </v-row>
       <v-row dense v-for="(restaurant, index) in restaurants" :key="index" justify="center">
-        <v-col md="6">
+        <v-col cols="8">
           <v-card @click="openRestaurant(restaurant)" class="ma-1 pa-6" color="#f7f7f7">
             <div class="d-flex flex-no-wrap justify-space-between">
               <v-img 
@@ -53,8 +53,8 @@
                 class="rounded-lg"
               ></v-img>
               <div class="restaurant">
-                <v-row>
-                  <v-col>
+                <v-row no-gutters>
+                  <v-col cols="8">
                     <v-row>
                       <v-card-title v-text="restaurant.name" class="text-h4 font-weight-medium"></v-card-title>
                     </v-row>
@@ -64,7 +64,7 @@
                       </v-card-subtitle>
                     </v-row>
                   </v-col>
-                  <v-col md="5">
+                  <v-col cols="4">
                     <v-row class="ml-5 mt-0">
                       <v-col>
                         <v-rating

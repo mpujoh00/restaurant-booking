@@ -201,11 +201,11 @@ export default ({
                     logo: this.logo
                 }
                 console.log(data)
-                this.registerRestaurant( data)
+                this.registerRestaurant(data)
             }
         },
         selectLogo(image){
-            console.log('Obteniendo logo')
+            console.log('Getting logo')
             this.logo = new FormData()
             this.logo.append('file', image, image.name)
         },
