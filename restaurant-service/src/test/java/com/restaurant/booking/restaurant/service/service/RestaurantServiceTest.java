@@ -157,7 +157,7 @@ class RestaurantServiceTest {
 
     @Test
     void updateRestaurant() {
-        RestaurantUpdateRequest request = new RestaurantUpdateRequest("id", "restaurant", "leon", "direccion", null, null);
+        RestaurantUpdateRequest request = new RestaurantUpdateRequest("id", "restaurant", "leon", "direccion", null);
         Restaurant restaurant = Restaurant.builder().id("id").name("restaurant").location("leon").build();
 
         Mockito.when(restaurantRepository.findById("id")).thenReturn(Optional.of(Restaurant.builder().id("id").build()));

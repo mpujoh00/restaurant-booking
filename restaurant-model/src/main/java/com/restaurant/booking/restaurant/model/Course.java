@@ -20,6 +20,7 @@ public class Course {
     private String id;
     private String name;
     private String ingredients;
+    private Double price;
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private Binary image;
@@ -29,6 +30,7 @@ public class Course {
     public Course(CourseCreationRequest courseCreationRequest) {
         this.name = courseCreationRequest.getName();
         this.ingredients = courseCreationRequest.getIngredients();
+        this.price = courseCreationRequest.getPrice();
         this.courseType = courseCreationRequest.getCourseType();
         this.restaurantId = courseCreationRequest.getRestaurantId();
     }

@@ -93,7 +93,7 @@ class RestaurantControllerTest {
 
     @Test
     void updateRestaurant(){
-        RestaurantUpdateRequest request = new RestaurantUpdateRequest("id", "restaurant", "leon", "direccion", null, null);
+        RestaurantUpdateRequest request = new RestaurantUpdateRequest("id", "restaurant", "leon", "direccion", null);
         Restaurant restaurant = Restaurant.builder().id("id").build();
 
         Mockito.when(restaurantService.updateRestaurant(request)).thenReturn(restaurant);

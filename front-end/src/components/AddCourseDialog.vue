@@ -28,6 +28,13 @@
                     required
                     :rules="ingredientsRules"
                     color="grey"/>
+                <v-text-field 
+                    v-model="price" 
+                    label="Price" 
+                    suffix="€"
+                    required
+                    :rules="priceRules"
+                    color="grey"/>
                 <v-select 
                     v-model="courseType" 
                     :items="courseTypes" 
@@ -76,6 +83,7 @@ export default {
             courseTypes: [],
             name: '',
             ingredients: '',
+            price: null,
             courseType: '',
             image: null,
             nameRules: [
@@ -83,6 +91,9 @@ export default {
             ],
             ingredientsRules: [
                 v => !!v || 'Ingredients is required'
+            ],
+            priceRules: [
+                v => !!v || 'Price is required'
             ],
             courseTypeRules: [
                 v => !!v || 'You must select a course type'
@@ -103,30 +114,46 @@ export default {
                     restaurantId: this.currentRestaurant.id,
                     name: this.name,
                     ingredients: this.ingredients,
+                    price: this.price,
                     courseType: this.courseType
                 })
                 .then(response => {
                     console.log('Course added, saving image')
+                    console.log(this.image)
                     CourseService.saveImage(response.data.id, this.image)
                     .then(() => {
                         console.log('Image saved')
                         this.$router.go()
+                        this.dialog = false 
                     })
                     .catch(() => {
                         console.log('Couldn\'t save image')
+                        this.dialog = false
                     })
                 })
                 .catch(() => {
                     console.log('Couldn\'t add course')
+                    this.dialog = false
                 })
-                this.dialog = false
             }
         },
         selectImage(image){
             console.log('Getting image')
             this.image = new FormData()
             this.image.append('file', image, image.name)
-        },
+        },        
+        reset(){
+            this.name = ''
+            this.ingredients = ''
+            this.price = null
+            this.courseType = ''
+            this.image = null
+        }
+    },
+    watch: {
+        dialog(){
+            this.reset()
+        }
     },
     mounted() {
         CourseService.getCourseTypes()

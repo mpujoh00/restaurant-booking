@@ -19,5 +19,7 @@ public class CourseCreationRequest {
     @NotEmpty
     private String ingredients;
     @NotNull
+    private Double price;
+    @NotNull
     private CourseType courseType;
 }

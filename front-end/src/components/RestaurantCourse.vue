@@ -17,9 +17,12 @@
                         {{ course.ingredients }}
                     </v-card-subtitle>
                 </div>
-                <v-btn v-if="currentUser.role == 'ROLE_RESTAURANT'" @click="deleteCourse(course.id)" icon>
-                    <v-icon>mdi-delete</v-icon>
-                </v-btn>
+                <div class="text-subtitle-2 price">
+                    {{ course.price }} €
+                    <v-btn v-if="currentUser.role == 'ROLE_RESTAURANT'" @click="deleteCourse(course.id)" icon class="ml-2 mb-1">
+                        <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                </div>
             </v-col>
         </v-row>
     </v-card>
@@ -32,6 +35,9 @@
     align-items: flex-start;
     margin-top: -1.6%;
     margin-left: -5%;
+}
+.price{
+    margin-top: 2.5%;
 }
 </style>
 
