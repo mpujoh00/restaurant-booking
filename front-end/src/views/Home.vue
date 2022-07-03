@@ -104,7 +104,7 @@
         </v-col>
       </v-row>
     </v-container>
-
+    <v-snackbar v-model="error">{{ error }}</v-snackbar>
   </div>
 </template>
 
@@ -132,6 +132,7 @@
 import RestaurantService from '@/services/RestaurantService'
 import CategoryService from '@/services/CategoryService'
 import router from '@/router'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'Home',
@@ -143,7 +144,15 @@ export default {
       citySearch: '',
     }
   },
+  computed: {
+    ...mapState([
+      'error'
+    ])
+  },
   methods: {
+    ...mapActions([
+        'changeErrorMessage'
+    ]),
     openRestaurant(restaurant){
       console.log('opening restaurant: ' + restaurant.name)
       router.push({name: 'restaurant', params: {id: restaurant.id}})
@@ -161,6 +170,9 @@ export default {
       .then(response => {
         this.restaurants = response.data
       })
+      .catch(() =>
+        this.changeErrorMessage('Something went wrong')
+      )
     }
   },
   mounted() {

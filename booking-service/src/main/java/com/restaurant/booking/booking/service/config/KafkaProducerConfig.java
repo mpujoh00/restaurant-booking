@@ -1,6 +1,5 @@
 package com.restaurant.booking.booking.service.config;
 
-import com.restaurant.booking.booking.model.ReservSlotsCreationRequest;
 import com.restaurant.booking.restaurant.model.AverageRatingUpdateRequest;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -40,3 +39,4 @@ public class KafkaProducerConfig {
         return new KafkaTemplate<>(producerFactory);
     }
 }
+

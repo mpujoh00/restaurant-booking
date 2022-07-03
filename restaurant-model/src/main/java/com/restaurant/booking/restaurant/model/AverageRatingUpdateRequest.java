@@ -2,8 +2,6 @@ package com.restaurant.booking.restaurant.model;
 
 import lombok.*;
 
-import javax.validation.constraints.NotNull;
-
 @Getter
 @Setter
 @AllArgsConstructor

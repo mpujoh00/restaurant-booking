@@ -55,6 +55,7 @@
                 </v-data-table>
             </v-col>
         </v-row>
+        <v-snackbar v-model="error">{{ error }}</v-snackbar>
     </v-container>
 </template>
 
@@ -75,7 +76,7 @@
 </style>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import RatingService from '@/services/RatingService'
 
 require('@/assets/main.css')
@@ -85,6 +86,7 @@ export default {
     computed: {
         ...mapState([
             'currentRestaurant',
+            'error'
         ])
     },
     data() {
@@ -121,6 +123,9 @@ export default {
         }
     },
     methods: {
+        ...mapActions([
+            'changeErrorMessage'
+        ]),
         flagRating(ratingId){
             console.log('Marking rating as offensive')
             RatingService.flagRating(ratingId)
@@ -130,6 +135,7 @@ export default {
             })
             .catch(() => {
                 console.log('Couldn\'t flag rating')
+                this.changeErrorMessage('Couldn\'t flag rating')
             })
         },
         getColor(ratingStatus){

@@ -68,6 +68,7 @@ services:
     networks:
       - booking-network
     restart: always
+
   api-gateway:
     image: rb/restaurant-booking-api-gateway:0.0.1-SNAPSHOT
     mem_limit: 700m

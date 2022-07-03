@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
-public class CourseControllerTest {
+class CourseControllerTest {
 
     @Mock
     private CourseService courseService;

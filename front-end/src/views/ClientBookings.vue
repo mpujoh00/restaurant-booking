@@ -37,6 +37,7 @@
             </template>
         </v-data-table>
         <ConfirmationDialog ref="confirm"/>
+        <v-snackbar v-model="error">{{ error }}</v-snackbar>
     </div>
 </template>
 
@@ -47,7 +48,7 @@
 </style>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import BookingService from '@/services/BookingService'
 
 require('@/assets/main.css')
@@ -61,6 +62,7 @@ export default {
     computed: {
         ...mapState([
             'currentUser',
+            'error'
         ])
     },
     data() {
@@ -102,6 +104,9 @@ export default {
         }
     },
     methods: {
+        ...mapActions([
+            'changeErrorMessage'
+        ]),
         cancelBooking(reservationId){
             this.$refs.confirm.open("Confirm", "Are you sure you want to cancel your booking?")
             .then(() => {
@@ -113,6 +118,7 @@ export default {
                 })
                 .catch(() => {
                     console.log('Status couldn\'t be changed')
+                    this.changeErrorMessage('Couldn\'t cancel booking')
                 })
             })
         },

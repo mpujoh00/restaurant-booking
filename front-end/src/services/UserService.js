@@ -27,19 +27,11 @@ class UserService {
     }
 
     register(data){
-        return noAuthAxios.post('/auth/register', data, {
-            headers: {
-                Authorization: "Bearer " + localStorage.getItem('token')
-            }
-        })
+        return noAuthAxios.post('/auth/register', data)
     }
 
     login(data){
-        return noAuthAxios.post('/auth/login', data, {
-            headers: {
-                Authorization: "Bearer " + localStorage.getItem('token')
-            }
-        })
+        return noAuthAxios.post('/auth/login', data)
     }
 
     modifyPassword(data){

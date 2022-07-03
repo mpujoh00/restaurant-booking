@@ -9,7 +9,6 @@ import lombok.*;
 @ToString
 public class TableCreationRequest {
 
-    // se pueden especificar mensajes
     @NonNull
     private Integer number;
     @NonNull
@@ -17,3 +16,4 @@ public class TableCreationRequest {
     @NonNull
     private Integer maxPeople;
 }
+

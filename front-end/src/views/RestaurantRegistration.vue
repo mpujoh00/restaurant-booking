@@ -115,7 +115,6 @@
                 </v-form>
             </v-card>
         </v-col>
-        
     </v-layout>
 </template>
 
@@ -175,7 +174,8 @@ export default ({
     },
     computed: {
         ...mapState([
-            'tempUser'
+            'tempUser',
+            'error'
         ])
     },
     methods: {

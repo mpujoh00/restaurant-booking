@@ -63,11 +63,12 @@
                 </v-tooltip>
             </template>
         </v-data-table>
+        <v-snackbar v-model="error">{{ error }}</v-snackbar>
     </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import BookingService from '@/services/BookingService'
 
 require('@/assets/main.css')
@@ -77,6 +78,7 @@ export default {
     computed: {
         ...mapState([
             'currentRestaurant',
+            'error'
         ])
     },
     data() {
@@ -117,6 +119,9 @@ export default {
         }
     },
     methods: {
+        ...mapActions([
+            'changeErrorMessage'
+        ]),
         acceptBooking(reservationId){
             console.log('Accepting reservation' + reservationId)
             this.changeReservation(reservationId, 'CONFIRMED')
@@ -133,6 +138,7 @@ export default {
             })
             .catch(() => {
                 console.log('Status couldn\'t be changed')
+                this.changeErrorMessage('Couldn\'t change booking status')
             })
         },
         canConfirmAttendance(reservation){
@@ -143,6 +149,9 @@ export default {
         confirmAttendance(reservationId){
             console.log('Confirming attendance to reservation ' + reservationId)
             this.changeReservation(reservationId, 'ATTENDED')
+            .catch(() =>                 
+                this.changeErrorMessage('Couldn\'t change rating status')
+            )
         }
     },
     mounted() {

@@ -1,9 +1,10 @@
 package com.restaurant.booking.feign.client;
 
-import com.restaurant.booking.restaurant.model.AverageRatingUpdateRequest;
 import com.restaurant.booking.restaurant.model.Restaurant;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.time.LocalTime;
 import java.util.List;

@@ -4,11 +4,7 @@ import {noAuthAxios} from '../http-common'
 class RestaurantService {
 
     registerRestaurant(data) {
-        return authAxios.post('/restaurants/register', data, {
-            headers: {
-                Authorization: "Bearer " + localStorage.getItem('token')
-            }
-        })
+        return authAxios.post('/restaurants/register', data)
     }
 
     getEnabledRestaurants(){

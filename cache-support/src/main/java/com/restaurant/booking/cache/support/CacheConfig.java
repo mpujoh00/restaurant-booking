@@ -33,3 +33,4 @@ public class CacheConfig {
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer(objectMapper)));
     }
 }
+

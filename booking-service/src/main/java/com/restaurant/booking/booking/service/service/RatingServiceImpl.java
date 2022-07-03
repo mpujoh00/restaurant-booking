@@ -21,16 +21,12 @@ public class RatingServiceImpl implements RatingService {
 
     private final RatingRepository ratingRepository;
     private final ReservationService reservationService;
-    private final RestaurantProxy restaurantProxy;
-    private final JwtUtils jwtUtils;
     private final KafkaTemplate<String, AverageRatingUpdateRequest> kafkaTemplate;
 
     @Autowired
-    public RatingServiceImpl(RatingRepository ratingRepository, ReservationService reservationService, RestaurantProxy restaurantProxy, JwtUtils jwtUtils, KafkaTemplate kafkaTemplate) {
+    public RatingServiceImpl(RatingRepository ratingRepository, ReservationService reservationService, KafkaTemplate kafkaTemplate) {
         this.ratingRepository = ratingRepository;
         this.reservationService = reservationService;
-        this.restaurantProxy = restaurantProxy;
-        this.jwtUtils = jwtUtils;
         this.kafkaTemplate = kafkaTemplate;
     }
 

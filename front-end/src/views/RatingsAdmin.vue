@@ -45,16 +45,23 @@
                 </v-tooltip>
             </template>
         </v-data-table>
+        <v-snackbar v-model="error">{{ error }}</v-snackbar>
     </div>
 </template>
 
 <script>
 import RatingService from '@/services/RatingService'
+import { mapState, mapActions } from 'vuex'
 
 require('@/assets/main.css')
 
 export default {
     name: 'RatingsAdmin',
+    computed: {
+        ...mapState([
+            'error'
+        ])
+    },
     data() {
         return {
             ratings: [],
@@ -81,6 +88,9 @@ export default {
         }
     },
     methods: {
+        ...mapActions([
+            'changeErrorMessage'
+        ]),
         acceptRating(ratingId){
             console.log('Accepting rating' + ratingId)
             this.changeRatingStatus(ratingId, 'OK')
@@ -97,6 +107,7 @@ export default {
             })
             .catch(() => {
                 console.log('Status couldn\'t be changed')
+                this.changeErrorMessage('Couldn\'t change rating status')
             })
         }
     },

@@ -1,6 +1,5 @@
 package com.restaurant.booking.restaurant.service.config;
 
-import com.restaurant.booking.booking.model.ReservSlotsCreationRequest;
 import com.restaurant.booking.restaurant.model.AverageRatingUpdateRequest;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -47,3 +46,4 @@ public class KafkaConsumerConfig {
         return factory;
     }
 }
+

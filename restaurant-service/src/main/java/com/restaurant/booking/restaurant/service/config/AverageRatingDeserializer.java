@@ -2,7 +2,6 @@ package com.restaurant.booking.restaurant.service.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.restaurant.booking.booking.model.ReservSlotsCreationRequest;
 import com.restaurant.booking.restaurant.model.AverageRatingUpdateRequest;
 import org.apache.kafka.common.serialization.Deserializer;
 

@@ -150,6 +150,5 @@ export default ({
         else
             this.roleName = 'admin'
     },
-    // TODO cambiar título
 })
 </script>

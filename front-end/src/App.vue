@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <!-- CREAR DISTINTAS BARS PARA NO LOGGED, USER, ADMIN -->
+    <!-- menu, cabecera -->
     <v-app-bar app color="#ff99a8" dense elevation="3">
       <!--icono-->
       <v-app-bar-title class="appBarTitle">Restaurant Booking</v-app-bar-title>
@@ -17,9 +17,12 @@
       </v-btn>
     </v-app-bar>
 
+    <!-- página -->
     <v-main class="main">
       <router-view></router-view>
     </v-main>
+
+    <!-- pie de página -->
     <v-footer padless color="#ffd6dd">
       <v-col class="text-center" cols="12">
         <v-btn icon class="mr-2 mb-1">
@@ -55,7 +58,7 @@
 </style>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   data() {
@@ -85,6 +88,9 @@ export default {
       ])
   },
   methods: {
+    ...mapActions([
+      'changeErrorMessage'
+    ]),
     getMenus() {
       if(this.currentUser !== null && this.currentUser.role == "ROLE_ADMIN"){
         return this.adminMenus
@@ -97,5 +103,10 @@ export default {
       }
     }
   },
+  watch: {
+    $route (){
+      this.changeErrorMessage(null)
+    }
+  }
 }
 </script>

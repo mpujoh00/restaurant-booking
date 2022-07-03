@@ -91,7 +91,7 @@
             </v-card>
         </v-col>
     </v-layout>
-
+    <v-snackbar v-model="error">{{ error }}</v-snackbar>
   </div>
 </template>
 
@@ -108,6 +108,7 @@ export default {
     computed: {
         ...mapState([
             'currentRestaurant',
+            'error'
         ])
     },
     data() {
@@ -131,7 +132,8 @@ export default {
     },
     methods: {
         ...mapActions([
-            'modifyRestaurant'
+            'modifyRestaurant',
+            'changeErrorMessage'
         ]),
         editRestaurant(){
             this.nonEditable = !this.nonEditable
@@ -152,6 +154,7 @@ export default {
                 })
                 .catch(() => {
                     this.reset()
+                    this.changeErrorMessage('Couldn\'t save restaurant')
                 })
                 this.nonEditable = !this.nonEditable
             }
@@ -163,6 +166,9 @@ export default {
                 console.log('Category removed')
                 this.modifyRestaurant(response.data)
             })
+            .catch(() => 
+                this.changeErrorMessage('Couldn\'t remove category')
+            )
         },
         reset(){
             this.name = this.currentRestaurant.name
