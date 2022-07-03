@@ -21,4 +21,6 @@ public interface ReservationService {
     List<Reservation> findInactiveUserReservations(String userId);
 
     Reservation changeReservationStatus(Reservation reservation, ReservationStatus status);
+
+    void addRating(Reservation reservation);
 }

@@ -88,11 +88,10 @@
                         </v-btn>
                     </div>
                 </v-form>
-                <v-snackbar v-model="editPasswordError">{{ editPasswordError }}</v-snackbar>
-                <v-snackbar v-model="deleteUserError">{{ deleteUserError }}</v-snackbar>
             </v-card>
         </v-col>
-        <ConfirmationDialog ref="confirm"/>
+        <ConfirmationDialog ref="confirm"/>        
+        <v-snackbar v-model="error">{{ error }}</v-snackbar>
     </v-layout>
 </template>
 
@@ -135,7 +134,8 @@ export default {
         ...mapState([
             'currentUser',
             'editPasswordError',
-            'deleteUserError'
+            'deleteUserError',
+            'error'
         ])
     },
     methods: {
@@ -143,7 +143,8 @@ export default {
             'logout',
             'modifyUser',
             'modifyPassword',
-            'deleteUser'
+            'deleteUser',
+            'changeErrorMessage'
         ]),
         editUser(){
             this.nonEditable = !this.nonEditable
@@ -156,8 +157,9 @@ export default {
                 email: this.user.email,
                 fullname: this.user.fullname
             })
-            .then(error => {
+            .catch(error => {
                 console.log(error)
+                this.changeErrorMessage('Couldn\'t save user')
                 this.cancel()
             })
             this.nonEditable = !this.nonEditable
@@ -173,16 +175,20 @@ export default {
             })
             .catch(error => {
                 console.log(error)
+                this.changeErrorMessage('Couldn\'t change password')
+                this.cancel()
+                
             })
         },
         cancel(){
-            if(this.editPassword)
+            if(this.editPassword || this.nonEditable)
                 this.resetUser()
             this.nonEditable = true
             this.editPassword = false
             this.currentPassword = ''
             this.currentPasswordConfirmation = ''
             this.newPassword = ''
+            this.sleep(2000).then(() => this.changeErrorMessage(null))            
         },
         async deleteUserDialog() {
             this.$refs.confirm.open("Confirm", "Are you sure you want to delete your account?")
@@ -195,12 +201,16 @@ export default {
                 })
                 .catch(() => {
                     console.log(this.deleteUserError)
+                    this.changeErrorMessage('Couldn\'t delete user')
                 })
             })
         },
         resetUser(){
             this.user = JSON.parse(JSON.stringify(this.currentUser))
-        } 
+        },
+        sleep(ms){
+            return new Promise(resolve => setTimeout(resolve, ms))
+        }
     },
     mounted() {
         this.resetUser()

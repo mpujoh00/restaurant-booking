@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Getter
@@ -12,7 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 public class SearchRestaurantsRequest {
 
-    @NotEmpty
     private String location;
     private List<Category> categories;
 }

@@ -45,7 +45,7 @@ class RestaurantServiceTest {
 
     @Test
     void register() {
-        RestaurantRegistrationRequest request = new RestaurantRegistrationRequest("restaurant", "leon", "chef@gmail.com",
+        RestaurantRegistrationRequest request = new RestaurantRegistrationRequest("restaurant", "leon", "direccion", "chef@gmail.com",
                 LocalTime.of(9, 0), LocalTime.of(10, 0), Interval.getIntervalFromMinutes(30));
         List<LocalTime> reservationHours = List.of(LocalTime.of(9, 0), LocalTime.of(9, 30));
         Restaurant restaurant = new Restaurant(request);
@@ -63,7 +63,7 @@ class RestaurantServiceTest {
 
     @Test
     void register_restaurantAlreadyExists() {
-        RestaurantRegistrationRequest request = new RestaurantRegistrationRequest("restaurant", "leon", "chef@gmail.com",
+        RestaurantRegistrationRequest request = new RestaurantRegistrationRequest("restaurant", "leon", "direccion", "chef@gmail.com",
                 LocalTime.of(9, 0), LocalTime.of(10, 0), Interval.getIntervalFromMinutes(30));
         List<LocalTime> reservationHours = List.of(LocalTime.of(9, 0), LocalTime.of(9, 30));
         Restaurant restaurant = new Restaurant(request);
@@ -83,7 +83,7 @@ class RestaurantServiceTest {
 
     @Test
     void register_userNotFound() {
-        RestaurantRegistrationRequest request = new RestaurantRegistrationRequest("restaurant", "leon", "chef@gmail.com",
+        RestaurantRegistrationRequest request = new RestaurantRegistrationRequest("restaurant", "leon", "direccion", "chef@gmail.com",
                 LocalTime.of(9, 0), LocalTime.of(10, 0), Interval.getIntervalFromMinutes(30));
         List<LocalTime> reservationHours = List.of(LocalTime.of(9, 0), LocalTime.of(9, 30));
         Restaurant restaurant = new Restaurant(request);
@@ -157,7 +157,7 @@ class RestaurantServiceTest {
 
     @Test
     void updateRestaurant() {
-        RestaurantUpdateRequest request = new RestaurantUpdateRequest("id", "restaurant", "leon");
+        RestaurantUpdateRequest request = new RestaurantUpdateRequest("id", "restaurant", "leon", "direccion", null);
         Restaurant restaurant = Restaurant.builder().id("id").name("restaurant").location("leon").build();
 
         Mockito.when(restaurantRepository.findById("id")).thenReturn(Optional.of(Restaurant.builder().id("id").build()));
@@ -234,11 +234,11 @@ class RestaurantServiceTest {
     void searchRestaurants_location(){
         SearchRestaurantsRequest request = new SearchRestaurantsRequest("city", null);
 
-        Mockito.when(restaurantRepository.findAllByLocation("city")).thenReturn(List.of(Restaurant.builder().build()));
+        Mockito.when(restaurantRepository.findAllByLocationIgnoreCase("city")).thenReturn(List.of(Restaurant.builder().build()));
 
         List<Restaurant> restaurants = restaurantService.searchRestaurants(request);
 
-        Mockito.verify(restaurantRepository).findAllByLocation("city");
+        Mockito.verify(restaurantRepository).findAllByLocationIgnoreCase("city");
         Assertions.assertEquals(1, restaurants.size());
     }
 
@@ -247,11 +247,11 @@ class RestaurantServiceTest {
         List<Category> categories = List.of(new Category("category"));
         SearchRestaurantsRequest request = new SearchRestaurantsRequest("city", categories);
 
-        Mockito.when(restaurantRepository.findAllByLocationAndCategoriesIn("city", categories)).thenReturn(List.of(Restaurant.builder().build()));
+        Mockito.when(restaurantRepository.findAllByLocationIgnoreCaseAndCategoriesIn("city", categories)).thenReturn(List.of(Restaurant.builder().build()));
 
         List<Restaurant> restaurants = restaurantService.searchRestaurants(request);
 
-        Mockito.verify(restaurantRepository).findAllByLocationAndCategoriesIn("city", categories);
+        Mockito.verify(restaurantRepository).findAllByLocationIgnoreCaseAndCategoriesIn("city", categories);
         Assertions.assertEquals(1, restaurants.size());
     }
 
@@ -271,7 +271,7 @@ class RestaurantServiceTest {
     }
 
     @Test
-    void saveRestaurantLogo_invalidType() throws IOException {
+    void saveRestaurantLogo_invalidType() {
         Restaurant restaurant = Restaurant.builder().build();
         MockMultipartFile file = new MockMultipartFile("file", "file.gif", "", "".getBytes());
 

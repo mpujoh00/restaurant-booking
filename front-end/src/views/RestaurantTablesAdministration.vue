@@ -34,6 +34,7 @@
             </template>
         </v-data-table>
         <ConfirmationDialog ref="confirm"/>
+        <v-snackbar v-model="error">{{ error }}</v-snackbar>
     </div>
 </template>
 
@@ -45,7 +46,7 @@
 </style>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import TableService from '@/services/TableService'
 
 require('@/assets/main.css')
@@ -59,6 +60,7 @@ export default {
     computed: {
         ...mapState([
             'currentRestaurant',
+            'error'
         ])
     },
     data() {
@@ -87,6 +89,9 @@ export default {
         }
     },
     methods: {
+        ...mapActions([
+            'changeErrorMessage'
+        ]),
         deleteTable(tableId){
             this.$refs.confirm.open("Confirm", "Are you sure you want to delete the table?")
             .then(() => {
@@ -98,6 +103,7 @@ export default {
                 })
                 .catch(() => {
                     console.log('Couldn\'t delete table')
+                    this.changeErrorMessage('Couldn\'t delete table')
                 })
             })
         }

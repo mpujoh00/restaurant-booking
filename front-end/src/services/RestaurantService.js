@@ -4,11 +4,7 @@ import {noAuthAxios} from '../http-common'
 class RestaurantService {
 
     registerRestaurant(data) {
-        return authAxios.post('/restaurants/register', data, {
-            headers: {
-                Authorization: "Bearer " + localStorage.getItem('token')
-            }
-        })
+        return authAxios.post('/restaurants/register', data)
     }
 
     getEnabledRestaurants(){
@@ -61,6 +57,41 @@ class RestaurantService {
 
     updateRestaurantStatus(id){
         return noAuthAxios.put('/admin/restaurants/change-status/' + id, null, {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem('token')
+            }
+        })
+    }
+
+    addCategory(id, categoryName){
+        return authAxios.put('/restaurants/' + id + '/add-category', categoryName, {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem('token'),
+                'Content-Type': 'text/plain'
+            }
+        })
+    }
+
+    removeCategory(id, categoryName){
+        return authAxios.put('/restaurants/' + id + '/remove-category', categoryName, {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem('token'),
+                'Content-Type': 'text/plain'
+            }
+        })
+    }
+
+    saveLogo(id, logo){
+        return authAxios.put('/restaurants/' + id + '/logo', logo, {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem('token'),
+                'Content-Type': 'text/plain'
+            }
+        })
+    }
+
+    searchRestaurants(data){
+        return authAxios.put('/restaurants/search', data, {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem('token')
             }

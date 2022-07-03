@@ -72,11 +72,6 @@
 			<version>2.4.0-b180830.0359</version>
 		</dependency>
 		<dependency>
-			<groupId>de.flapdoodle.embed</groupId>
-			<artifactId>de.flapdoodle.embed.mongo</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>${open-api.version}</version>
@@ -94,6 +89,11 @@
 		<dependency>
 			<groupId>com.restaurant.booking</groupId>
 			<artifactId>restaurant-model</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.restaurant.booking</groupId>
+			<artifactId>cache-support</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 

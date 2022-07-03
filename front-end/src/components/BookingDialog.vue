@@ -74,6 +74,7 @@
 <script>
 import BookingService from '@/services/BookingService'
 import { mapState } from 'vuex'
+import router from '@/router'
 
 require('@/assets/main.css')
 
@@ -134,6 +135,7 @@ export default {
                 .then(response => {
                     console.log(response.data)
                     this.dialog = false
+                    router.push('/bookings')
                 })
                 .catch(error => {
                     console.log(error)

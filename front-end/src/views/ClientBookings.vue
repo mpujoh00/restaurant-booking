@@ -20,7 +20,7 @@
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                         <v-icon
-                            v-if="item.status !== 'CANCELED'"
+                            v-if="item.status !== 'CANCELED' && reservTypeSelected !== 'Past'"
                             small
                             class="ml-1"
                             @click="cancelBooking(item.id)"
@@ -33,9 +33,11 @@
                     </template>
                     <span>Cancel</span>
                 </v-tooltip>  
+                <RateBookingDialog v-if="reservTypeSelected === 'Past' && item.status === 'ATTENDED' && !item.rated" :reservation="item"/>
             </template>
         </v-data-table>
         <ConfirmationDialog ref="confirm"/>
+        <v-snackbar v-model="error">{{ error }}</v-snackbar>
     </div>
 </template>
 
@@ -46,19 +48,21 @@
 </style>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import BookingService from '@/services/BookingService'
 
 require('@/assets/main.css')
 
 export default {
-    name: 'RestaurantBookings',
+    name: 'ClientBookings',
     components: {
-        ConfirmationDialog: () => import("@/components/ConfirmationDialog.vue")
+        ConfirmationDialog: () => import("@/components/ConfirmationDialog.vue"),
+        RateBookingDialog: () => import("@/components/RateBookingDialog.vue")
     },
     computed: {
         ...mapState([
             'currentUser',
+            'error'
         ])
     },
     data() {
@@ -100,6 +104,9 @@ export default {
         }
     },
     methods: {
+        ...mapActions([
+            'changeErrorMessage'
+        ]),
         cancelBooking(reservationId){
             this.$refs.confirm.open("Confirm", "Are you sure you want to cancel your booking?")
             .then(() => {
@@ -111,6 +118,7 @@ export default {
                 })
                 .catch(() => {
                     console.log('Status couldn\'t be changed')
+                    this.changeErrorMessage('Couldn\'t cancel booking')
                 })
             })
         },

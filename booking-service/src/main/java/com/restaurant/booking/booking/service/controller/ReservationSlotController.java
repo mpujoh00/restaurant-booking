@@ -38,6 +38,4 @@ public interface ReservationSlotController {
     @Operation(description = "Deletes all reservation slots of a restaurant's table", operationId = "deleteRestaurantTableSlots")
     @DeleteMapping("/restaurant-table")
     ResponseEntity<Void> deleteRestaurantTableSlots(@RequestBody Table table);
-
-    // TODO delete past restaurant slots
 }

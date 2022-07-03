@@ -8,9 +8,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    // Login state
     logginIn: false,
-    loginError: null,
+    error: null,
     token: null,
     currentUser: null,
     editPasswordError: null,
@@ -23,7 +22,7 @@ export default new Vuex.Store({
     loginStart: state => state.logginIn = true,
     loginStop: (state, errorMessage) => {
       state.logginIn = false
-      state.loginError = errorMessage
+      state.error = errorMessage
     },
     updateToken: (state, token) => {
       state.token = token
@@ -49,6 +48,9 @@ export default new Vuex.Store({
     updateCurrentRestaurant: (state, restaurant) => {
       state.currentRestaurant = restaurant
       localStorage.setItem('currentRestaurant', JSON.stringify(restaurant))
+    },
+    changeErrorMessage: (state, errorMessage) => {
+      state.error = errorMessage
     }
   },
   actions: {
@@ -78,11 +80,19 @@ export default new Vuex.Store({
           commit('updateCurrentRestaurant', response.data.user.restaurant)
         }
         // redirects to account page
-        router.push('/account')
+        if(response.data.user.roles[0].name === 'ROLE_CLIENT')
+          router.push('/home')
+        else if(response.data.user.roles[0].name === 'ROLE_RESTAURANT')
+          router.push('/restaurant/admin/bookings')
+        else
+          router.push('/admin/restaurants')
       })
-      .catch(() => {
+      .catch(error => {
         console.log('Couldn\'t log in')
-        commit('loginStop', "Incorrect credentials")
+        if(error.status === 404)
+          commit('loginStop', "Incorrect credentials")
+        else
+          commit('loginStop', "Internal error")
         // incorrect login
         commit('logout')
       })
@@ -102,7 +112,7 @@ export default new Vuex.Store({
       router.push('/login')
     },
     // Registration
-    registerUser({ dispatch }, user){
+    registerUser({ dispatch, commit }, user){
       console.log("Registering user with email " + user.email + " and role " + user.role)
       // registers user
       UserService.register({
@@ -120,6 +130,10 @@ export default new Vuex.Store({
       })
       .catch(() => {
         console.log("Couldn't register user")
+        router.push('/login')        
+        .then(() => 
+          commit('changeErrorMessage', "Couldn't register user")
+        )
       })
     },
     // Modification of the user
@@ -157,18 +171,14 @@ export default new Vuex.Store({
           console.log(response)
           // saves updated token
           commit('updateToken', response.data)
-          //commit('editPasswordError', null)
           resolve()
         })
-        .catch(error => {
-          if(error.response.status === 400){
-            //commit('editPasswordError', error.response.data)
-            reject(error.response.data)
-          }
+        .catch(() => {
+            reject()
         })
       })      
     }, 
-    deleteUser({ commit, dispatch }, userEmail) {
+    deleteUser({ dispatch }, userEmail) {
       console.log("Deleting user")
       return new Promise((resolve, reject) => {
         UserService.deleteUser(userEmail)
@@ -177,13 +187,7 @@ export default new Vuex.Store({
           dispatch('logout')
           resolve()
         })
-        .catch(error => {
-          if(error.response.status == 404){ // user not found
-            commit('deleteUserError', "Can't delete, user not found")
-          }
-          else{ // user not the same as logged in
-            commit('deleteUserError', "Can't delete other user than self")
-          }
+        .catch(() => {
           reject()
         })
       })
@@ -218,29 +222,59 @@ export default new Vuex.Store({
           })
           console.log('Registering restaurant')
           RestaurantService.registerRestaurant(data.restaurant)
-          .then(() => {
+          .then(response => {
             console.log('Restaurant registered')
             dispatch('login', {
               email: data.user.email,
               password: data.user.password
             })
+            RestaurantService.saveLogo(response.data.id, data.logo)
+            .then(response => {
+              console.log('Restaurant\'s logo saved')
+              commit('updateCurrentRestaurant', response.data)
+              router.push('/account')
+            })
+            .catch(error => {
+              console.log('Couldn\'t save restaurant\'s logo: ', error)
+              dispatch('logout')
+              router.push('/login')
+              .then(() => 
+                commit('changeErrorMessage', 'Couldn\'t register restaurant')
+              )
+            })
           })
           .catch(error => {
             console.log('Couldn\'t register restaurant: ', error)
-            commit('logout')
+            dispatch('logout')
+            router.push('/login')
+            .then(() => 
+              commit('changeErrorMessage', 'Couldn\'t register restaurant')
+            )
           })
         })
         .catch(() => {
-          console.log('Couldn\'t log in')
-          commit('logout')
+          console.log('Couldn\'t log in, deleting user')
+          dispatch('logout')
+          router.push('/login')
+          .then(() => 
+            commit('changeErrorMessage', 'Something went wrong')
+          )
+          // TODO delete user
         })        
       })
       .catch(error => {
         console.log('Couldn\'t register user: ', error)
+        router.push('/login')
+        .then(() => 
+          commit('changeErrorMessage', "Couldn't register user")
+        )        
       })
     },
     modifyRestaurant({ commit }, restaurant){
       commit('updateCurrentRestaurant', restaurant)
+    },
+    changeErrorMessage({ commit }, message){
+      commit('changeErrorMessage', message)
     }
   }
 })

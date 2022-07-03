@@ -24,3 +24,13 @@ Se puede encontrar una colección de llamadas API y la configuración del entorn
 # Frontend
 
 Para ejecutar el frontend hay que ejecutar el comando npm run serve desde la carpeta front-end
+
+# Docker
+
+- **Creación imágenes:**
+  - Front-end (en la carpeta): docker build -t rb/restaurant-booking-front-end:0.0.1-SNAPSHOT .
+  - Resto, maven goal: spring-boot:build-image -DskipTests
+
+- **Ejecución docker compose:**
+  - docker-compose up
+  - docker-compose -f dev-docker-compose.yaml up

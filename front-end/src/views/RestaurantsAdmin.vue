@@ -50,11 +50,12 @@
                 </v-tooltip>                              
             </template>
         </v-data-table>
+        <v-snackbar v-model="error">{{ error }}</v-snackbar>
     </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import RestaurantService from '@/services/RestaurantService'
 
 require('@/assets/main.css')
@@ -64,6 +65,7 @@ export default {
     computed: {
         ...mapState([
             'currentUser',
+            'error'
         ])
     },
     data() {
@@ -103,6 +105,9 @@ export default {
         }
     },
     methods: {
+        ...mapActions([
+            'changeErrorMessage'
+        ]),
         changeRestaurantStatus(restaurantId){
             console.log('Changing restaurant\'s status')
             RestaurantService.updateRestaurantStatus(restaurantId)
@@ -112,6 +117,7 @@ export default {
             })
             .catch(() => {
                 console.log('Couldn\'t change the status')
+                this.changeErrorMessage('Couldn\'t change restaurant status')
             })
         },
         updateRestaurants(){

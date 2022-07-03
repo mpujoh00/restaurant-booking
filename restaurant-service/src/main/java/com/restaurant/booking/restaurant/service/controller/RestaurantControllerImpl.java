@@ -79,4 +79,10 @@ public class RestaurantControllerImpl implements RestaurantController {
     public ResponseEntity<Restaurant> saveLogo(String restaurantId, MultipartFile logo) {
         return ResponseEntity.ok(restaurantService.saveRestaurantLogo(restaurantService.findRestaurant(restaurantId), logo));
     }
+
+    @Override
+    public ResponseEntity<String> getRestaurantName(String restaurantId) {
+        return ResponseEntity.ok(restaurantService.findRestaurant(restaurantId).getName());
+    }
+
 }

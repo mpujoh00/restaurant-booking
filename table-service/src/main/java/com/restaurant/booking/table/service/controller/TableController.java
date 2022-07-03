@@ -5,6 +5,7 @@ import com.restaurant.booking.table.model.TableCreationRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequestMapping("/api/v1/tables")
 public interface TableController {
 
+    @PreAuthorize("hasAuthority('ROLE_RESTAURANT')")
     @Operation(description = "Creates a table for a given restaurant", operationId = "createTable")
     @PostMapping("/{restaurantId}")
     ResponseEntity<Table> createTable(@PathVariable String restaurantId, @RequestBody @Valid TableCreationRequest tableCreationRequest);
@@ -26,6 +28,7 @@ public interface TableController {
     @GetMapping("/restaurant/{restaurantId}")
     ResponseEntity<List<Table>> getRestaurantTables(@PathVariable String restaurantId);
 
+    @PreAuthorize("hasAuthority('ROLE_RESTAURANT')")
     @Operation(description = "Deletes a table", operationId = "deleteTable")
     @DeleteMapping("/delete/{tableId}")
     ResponseEntity<Void> deleteTable(@PathVariable String tableId);

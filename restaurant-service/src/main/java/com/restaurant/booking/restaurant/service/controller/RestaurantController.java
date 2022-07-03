@@ -61,11 +61,17 @@ public interface RestaurantController {
 
     @PreAuthorize("hasAuthority('ROLE_CLIENT')")
     @Operation(description = "Gets all restaurants given the parameters", operationId = "searchRestaurants")
-    @GetMapping("/search")
+    @PutMapping("/search")
     ResponseEntity<List<Restaurant>> searchRestaurants(@RequestBody @Valid SearchRestaurantsRequest searchRestaurantsRequest);
 
     @PreAuthorize("hasAuthority('ROLE_RESTAURANT')")
     @Operation(description = "Updates restaurant's logo", operationId = "saveLogo")
     @PutMapping("/{restaurantId}/logo")
     ResponseEntity<Restaurant> saveLogo(@PathVariable String restaurantId, @RequestParam("file") MultipartFile logo);
+
+    @PreAuthorize("hasAuthority('ROLE_CLIENT')")
+    @Operation(description = "Gets restaurant's name", operationId = "getRestaurantName")
+    @GetMapping("/name/{restaurantId}")
+    ResponseEntity<String> getRestaurantName(@PathVariable String restaurantId);
+
 }

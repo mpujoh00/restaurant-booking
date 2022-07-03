@@ -1,8 +1,14 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib/framework';
 
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+    options: {
+        customProperties: true
+    }
+});
 
 export default new Vuetify({
-    // theme: { dark: true },
+    theme: { 
+        primary: '#f0a6ca'
+    },
 });

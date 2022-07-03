@@ -11,6 +11,7 @@ import com.restaurant.booking.table.service.exception.TableNumberAlreadyExistsEx
 import com.restaurant.booking.table.service.repository.TableRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,13 +24,16 @@ public class TableServiceImpl implements TableService {
     private final BookingProxy bookingProxy;
     private final RestaurantProxy restaurantProxy;
     private final JwtUtils jwtUtils;
+    private final KafkaTemplate<String, ReservSlotsCreationRequest> kafkaTemplate;
 
     @Autowired
-    public TableServiceImpl(TableRepository tableRepository, BookingProxy bookingProxy, RestaurantProxy restaurantProxy, JwtUtils jwtUtils) {
+    public TableServiceImpl(TableRepository tableRepository, BookingProxy bookingProxy, RestaurantProxy restaurantProxy,
+                            JwtUtils jwtUtils, KafkaTemplate<String, ReservSlotsCreationRequest> kafkaTemplate) {
         this.tableRepository = tableRepository;
         this.bookingProxy = bookingProxy;
         this.restaurantProxy = restaurantProxy;
         this.jwtUtils = jwtUtils;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @Override
@@ -51,7 +55,7 @@ public class TableServiceImpl implements TableService {
         table = save(table);
 
         // generates its reservation slots
-        bookingProxy.generateRestaurantTableSlots(jwtUtils.getAuthorizationHeader(), new ReservSlotsCreationRequest(restaurantId,
+        kafkaTemplate.send("reservation-slots", new ReservSlotsCreationRequest(restaurantId,
                 restaurantProxy.getRestaurantsReservationHours(jwtUtils.getAuthorizationHeader(), restaurantId), table));
 
         return table;

@@ -22,6 +22,7 @@ public class Reservation {
     private String restaurantId;
     private Integer numPeople;
     private ReservationStatus status;
+    private Boolean rated;
     @DBRef
     private ReservationSlot reservationSlot;
     @Transient
@@ -35,5 +36,6 @@ public class Reservation {
         this.numPeople = numPeople;
         this.reservationSlot = reservationSlot;
         this.status = ReservationStatus.PENDING;
+        this.rated = false;
     }
 }

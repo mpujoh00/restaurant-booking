@@ -30,13 +30,12 @@
                         <span class="button">Login</span>
                     </v-btn>
                 </v-form>
-                <v-snackbar v-model="loginError">{{ loginError }}</v-snackbar>
+                <v-snackbar v-model="error">{{ error }}</v-snackbar>
             </v-card>
         </v-col>
+        <!-- Registration option -->
         <v-col cols="4">
-            <!-- Registration option -->
             <v-card class="card">
-                <!-- TODO fix diferencia altura headers -->
                 <div class="cardHeader">
                     <v-avatar size="50" color="#ffe6e9">
                         <v-icon size="35" color="#ff99a8">mdi-account-plus</v-icon>
@@ -60,8 +59,6 @@
     </v-layout>
 </template>
 
-
-<!-- TO DO: extract style from template -->
 <style scoped>
 .layout {
     height: 80vh;
@@ -93,7 +90,8 @@ export default {
             email: '',
             emailRules: [
                 v => !!v || 'Email is required',
-                v => (v && v.length >= 10) || 'Email must be at least 10 characters'
+                v => (v && v.length >= 10) || 'Email must be at least 10 characters',
+                v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Email must have a valid format',
             ],
             password: '',
             passwordRules: [
@@ -105,7 +103,7 @@ export default {
     computed: {
         ...mapState([
             'loggingIn',
-            'loginError'
+            'error'
         ])
     },
     methods: {

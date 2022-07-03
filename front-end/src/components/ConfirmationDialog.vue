@@ -38,9 +38,6 @@
 <script>
 export default {
     name: "ConfirmationDialog",
-    props: [
-        'question'
-    ],
     data() {
         return {
             dialog: false,

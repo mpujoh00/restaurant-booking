@@ -20,6 +20,8 @@ public class RestaurantRegistrationRequest {
     @NotEmpty
     private String location;
     @NotEmpty
+    private String address;
+    @NotEmpty
     @Size(min = 10)
     private String restaurantAdminEmail;
     @NotNull

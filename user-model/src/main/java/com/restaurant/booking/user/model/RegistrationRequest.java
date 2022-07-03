@@ -23,6 +23,6 @@ public class RegistrationRequest {
     @NotEmpty
     private String fullname;
     @NotNull
-    // TODO grupo para validar según el controlador
     private RoleName role;
 }
+

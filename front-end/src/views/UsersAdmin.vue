@@ -70,6 +70,7 @@
             </template>
         </v-data-table>
         <ConfirmationDialog ref="confirm"/>
+        <v-snackbar v-model="error">{{ error }}</v-snackbar>
     </div>
 </template>
 
@@ -80,7 +81,7 @@
 </style>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import UserService from '@/services/UserService'
 
 require('@/assets/main.css')
@@ -94,6 +95,7 @@ export default {
     computed: {
         ...mapState([
             'currentUser',
+            'error'
         ])
     },
     data() {
@@ -133,15 +135,19 @@ export default {
         }
     },
     methods: {
+        ...mapActions([
+            'changeErrorMessage'
+        ]),
         changeUserStatus(userEmail){
             console.log('Changing user\'s status')
             UserService.updateUserStatus(userEmail)
             .then(() => {
-              console.log('Correctly changed')
-              this.$router.go()
+                console.log('Correctly changed')
+                this.$router.go()
             })
             .catch(() => {
-              console.log('Couldn\'t change the status')
+                console.log('Couldn\'t change the status')
+                this.changeErrorMessage('Couldn\'t change user status')
             })
         },
         deleteAdmin(adminEmail){
@@ -150,11 +156,12 @@ export default {
                 console.log('Deleting admin')
                 UserService.deleteAdmin(adminEmail)
                 .then(() => {
-                console.log('Correctly deleted admin')
-                this.$router.go()
+                    console.log('Correctly deleted admin')
+                    this.$router.go()
                 })
                 .catch(() => {
-                console.log('Couldn\'t delete the admin')
+                    console.log('Couldn\'t delete the admin')
+                    this.changeErrorMessage('Couldn\'t delete admin')
                 })
             })
         },
