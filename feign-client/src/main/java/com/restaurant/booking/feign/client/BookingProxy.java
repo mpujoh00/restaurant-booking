@@ -11,10 +11,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @FeignClient(name = "booking-service")
 public interface BookingProxy {
 
-    @PostMapping("/api/v1/reservation-slots/restaurant")
-    void generateRestaurantSlots(@RequestHeader(value = "Authorization") String authorizationHeader,
-                                 @RequestBody ReservSlotsCreationRequest slotsCreationRequest);
-
     @PostMapping("/api/v1/reservation-slots/restaurant-table")
     void generateRestaurantTableSlots(@RequestHeader(value = "Authorization") String authorizationHeader,
                                       @RequestBody ReservSlotsCreationRequest slotsCreationRequest);

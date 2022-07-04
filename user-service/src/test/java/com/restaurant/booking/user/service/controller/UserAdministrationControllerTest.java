@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
-public class UserAdministrationControllerTest {
+class UserAdministrationControllerTest {
 
     @Mock
     private UserServiceImpl userService;

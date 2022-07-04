@@ -22,12 +22,6 @@ public class ReservationSlotControllerImpl implements ReservationSlotController 
     }
 
     @Override
-    public ResponseEntity<Void> generateRestaurantSlots(ReservSlotsCreationRequest slotsCreationRequest) {
-        slotService.createRestaurantSlots(slotsCreationRequest);
-        return ResponseEntity.ok().build();
-    }
-
-    @Override
     public ResponseEntity<Void> generateRestaurantTableSlots(ReservSlotsCreationRequest slotsCreationRequest) {
         slotService.createRestaurantSlots(slotsCreationRequest);
         return ResponseEntity.ok().build();

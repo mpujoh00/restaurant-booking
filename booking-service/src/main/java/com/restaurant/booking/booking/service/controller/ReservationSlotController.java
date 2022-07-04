@@ -18,11 +18,6 @@ import java.util.List;
 public interface ReservationSlotController {
 
     @PreAuthorize("hasAuthority('ROLE_RESTAURANT')")
-    @Operation(description = "Creates the reservation slots for a restaurant", operationId = "generateRestaurantSlots")
-    @PostMapping("/restaurant")
-    ResponseEntity<Void> generateRestaurantSlots(@RequestBody ReservSlotsCreationRequest slotsCreationRequest);
-
-    @PreAuthorize("hasAuthority('ROLE_RESTAURANT')")
     @Operation(description = "Creates the reservation slots for a restaurant's table", operationId = "generateRestaurantTableSlots")
     @PostMapping("/restaurant-table")
     ResponseEntity<Void> generateRestaurantTableSlots(@RequestBody ReservSlotsCreationRequest slotsCreationRequest);

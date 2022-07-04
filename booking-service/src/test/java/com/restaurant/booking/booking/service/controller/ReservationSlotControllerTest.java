@@ -27,16 +27,6 @@ class ReservationSlotControllerTest {
     private ReservationSlotControllerImpl reservationSlotController;
 
     @Test
-    void generateRestaurantSlots(){
-        ReservSlotsCreationRequest request = new ReservSlotsCreationRequest();
-
-        ResponseEntity<Void> responseEntity = reservationSlotController.generateRestaurantSlots(request);
-
-        Mockito.verify(slotService).createRestaurantSlots(request);
-        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-    }
-
-    @Test
     void generateRestaurantTableSlots() {
         ReservSlotsCreationRequest slotsCreationRequest = new ReservSlotsCreationRequest();
 

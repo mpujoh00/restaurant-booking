@@ -42,7 +42,7 @@
       <module name="jwt-support" options="-parameters" />
       <module name="jwt-utils" options="-parameters" />
       <module name="naming-server" options="-parameters" />
-      <module name="restaurant-booking" options="-parameters" />
+      <module name="restaurant-booking" options="" />
       <module name="restaurant-model" options="-parameters" />
       <module name="restaurant-service" options="-parameters" />
       <module name="table-model" options="-parameters" />
