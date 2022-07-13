@@ -50,18 +50,6 @@
                         color="grey"
                         background-color="white"
                     ></v-textarea>
-                    <v-textarea
-                        v-if="currentRestaurant.menu || !nonEditable"
-                        :readonly="nonEditable"
-                        name="input-7-1"
-                        label="Menu"
-                        auto-grow
-                        rows="1"
-                        v-model="menu"
-                        prepend-inner-icon="mdi-food"
-                        color="grey"
-                        background-color="white"
-                    ></v-textarea>
                     <div class="categories" v-if="nonEditable">
                         <v-chip v-for="(category, index) in currentRestaurant.categories" 
                             :key="index"
@@ -118,7 +106,6 @@ export default {
             location: '',
             address: '',
             description: '',
-            menu: '',
             nameRules: [
                 v => !!v || 'Name is required'
             ],
@@ -147,7 +134,6 @@ export default {
                     location: this.location,
                     address: this.address,
                     description: this.description != '' ? this.description : null,
-                    menu: this.menu != '' ? this.menu : null,
                 })
                 .then(response => {
                     this.modifyRestaurant(response.data)
@@ -179,12 +165,6 @@ export default {
             }
             else{
                 this.description = ''
-            }
-            if(this.currentRestaurant.menu != null){
-                this.menu = this.currentRestaurant.menu
-            }
-            else{
-                this.menu = ''
             }
         },
         cancel(){
